@@ -107,6 +107,19 @@ async function askQuestions() {
       },
     },
     {
+      name: "versionControl",
+      type: "list",
+      message: "What is your project Version Control?",
+      choices: ["Git", "SVN", "No Version Control"],
+      validate: function (value) {
+        if (value.length) {
+          return true;
+        } else {
+          return "Please select your project Version Control.";
+        }
+      },
+    },
+    {
       name: "templateEngine",
       type: "list",
       message: "What is your project template engine?",
@@ -124,6 +137,40 @@ async function askQuestions() {
           return true;
         } else {
           return "Please select your project template engine.";
+        }
+      },
+    },
+    {
+      name: "cssFramework",
+      type: "list",
+      message: "What is your project CSS Framework?",
+      choices: [
+        "Tailwind CSS",
+        "Bootstrap",
+        "Bulma",
+        "Foundation",
+        "Materialize",
+        "Pure CSS",
+        "No CSS Framework",
+      ],
+      validate: function (value) {
+        if (value.length) {
+          return true;
+        } else {
+          return "Please select your project CSS Framework.";
+        }
+      },
+    },
+    {
+      name: "cssPreprocessor",
+      type: "list",
+      message: "What is your project CSS Preprocessor?",
+      choices: ["Sass", "Less", "Stylus", "No CSS Preprocessor"],
+      validate: function (value) {
+        if (value.length) {
+          return true;
+        } else {
+          return "Please select your project CSS Preprocessor.";
         }
       },
     },
@@ -198,40 +245,7 @@ async function askQuestions() {
         }
       },
     },
-    {
-      name: "cssFramework",
-      type: "list",
-      message: "What is your project CSS Framework?",
-      choices: [
-        "Tailwind CSS",
-        "Bootstrap",
-        "Bulma",
-        "Foundation",
-        "Materialize",
-        "Pure CSS",
-        "No CSS Framework",
-      ],
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please select your project CSS Framework.";
-        }
-      },
-    },
-    {
-      name: "cssPreprocessor",
-      type: "list",
-      message: "What is your project CSS Preprocessor?",
-      choices: ["Sass", "Less", "Stylus", "No CSS Preprocessor"],
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please select your project CSS Preprocessor.";
-        }
-      },
-    },
+
     {
       name: "taskRunner",
       type: "list",
@@ -246,19 +260,6 @@ async function askQuestions() {
       },
     },
 
-    {
-      name: "versionControl",
-      type: "list",
-      message: "What is your project Version Control?",
-      choices: ["Git", "SVN", "No Version Control"],
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please select your project Version Control.";
-        }
-      },
-    },
     {
       name: "apiDocumentation",
       type: "list",
@@ -309,5 +310,6 @@ async function assignAnswers(answers) {
 }
 
 async function generateProject() {
-    folderCreating(packageManager, projectName);
+  console.log(chalk.green("Generating project..."));
+  await folderCreating(packageManager, projectName);
 }
