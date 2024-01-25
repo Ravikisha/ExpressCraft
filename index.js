@@ -6,7 +6,7 @@ import figlet from "figlet";
 import chalkAnimation from "chalk-animation";
 import execSync from "child_process";
 import fs from "fs";
-import createProject from "./modules/createProject.js";
+import folderCreating from "./modules/FolderCreating.js";
 
 /**
  * Trying to make a CLI tool for myself to generate a new project with a template in express js with all the necessary files, folders and dependencies.
@@ -290,32 +290,24 @@ async function askQuestions() {
 }
 
 async function assignAnswers(answers) {
-  projectName = answers.projectName;
-  projectDescription = answers.projectDescription;
-  projectAuthor = answers.projectAuthor;
-  jsOrTs = answers.jsOrTs;
-  templateEngine = answers.templateEngine;
-  database = answers.database;
-  orm = answers.orm;
-  testing = answers.testing;
-  authentication = answers.authentication;
-  cssFramework = answers.cssFramework;
-  cssPreprocessor = answers.cssPreprocessor;
-  taskRunner = answers.taskRunner;
-  packageManager = answers.packageManager;
-  versionControl = answers.versionControl;
-  apiDocumentation = answers.apiDocumentation;
-  hosting = answers.hosting;
+  projectName = answers.projectName.toLowerCase();
+  projectDescription = answers.projectDescription.toLowerCase();
+  projectAuthor = answers.projectAuthor.toLowerCase();
+  jsOrTs = answers.jsOrTs.toLowerCase();
+  templateEngine = answers.templateEngine.toLowerCase();
+  database = answers.database.toLowerCase();
+  orm = answers.orm.toLowerCase();
+  testing = answers.testing.toLowerCase();
+  authentication = answers.authentication.toLowerCase();
+  cssFramework = answers.cssFramework.toLowerCase();
+  cssPreprocessor = answers.cssPreprocessor.toLowerCase();
+  taskRunner = answers.taskRunner.toLowerCase();
+  packageManager = answers.packageManager.toLowerCase();
+  versionControl = answers.versionControl.toLowerCase();
+  apiDocumentation = answers.apiDocumentation.toLowerCase();
+  hosting = answers.hosting.toLowerCase();
 }
 
 async function generateProject() {
-  console.log("Generating Project...");
-  try {
-    fs.mkdirSync(projectName);
-  } catch (err) {
-    console.log(chalk.red("Project already exists."));
-    return;
-  }
-  process.chdir(projectName);
-  createProject(jsOrTs.toLowerCase());
+    folderCreating(packageManager, projectName);
 }
