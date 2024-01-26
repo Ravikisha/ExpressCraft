@@ -67,12 +67,7 @@ async function askQuestions() {
       name: "templateEngine",
       type: "list",
       message: "What is your project template engine?",
-      choices: [
-        "EJS",
-        "Pug",
-        "Twig",
-        "No Template Engine",
-      ],
+      choices: ["No Template Engine", "EJS", "Pug", "Twig", "handlebars"],
       validate: function (value) {
         if (value.length) {
           return true;
@@ -86,13 +81,14 @@ async function askQuestions() {
       type: "list",
       message: "What is your project CSS Framework?",
       choices: [
+        "No CSS Framework",
         "Tailwind CSS",
         "Bootstrap",
         "Bulma",
         "Foundation",
         "Materialize",
         "Pure CSS",
-        "No CSS Framework",
+        
       ],
       validate: function (value) {
         if (value.length) {
@@ -106,7 +102,7 @@ async function askQuestions() {
       name: "cssPreprocessor",
       type: "list",
       message: "What is your project CSS Preprocessor?",
-      choices: ["Sass", "Less", "Stylus", "No CSS Preprocessor"],
+      choices: ["No CSS Preprocessor", "Sass", "Less", "PostCSS", "Stylus"],
       validate: function (value) {
         if (value.length) {
           return true;
@@ -145,8 +141,8 @@ async function askQuestions() {
       type: "list",
       message: "What is your project ORM?",
       choices: [
-        "Sequelize",
         "Prisma",
+        "Sequelize",
         "TypeORM",
         "Mongoose",
         "Drizzle ORM",
@@ -164,7 +160,7 @@ async function askQuestions() {
       name: "testing",
       type: "list",
       message: "What is your project testing?",
-      choices: ["Jest", "Mocha", "Chai", "Jasmine", "No Testing"],
+      choices: ["No Testing", "Jest", "Mocha", "Chai", "Jasmine"],
       validate: function (value) {
         if (value.length) {
           return true;
@@ -177,7 +173,7 @@ async function askQuestions() {
       name: "authentication",
       type: "list",
       message: "What is your project authentication?",
-      choices: ["Passport.js", "JWT", "No Authentication"],
+      choices: ["No Authentication", "Passport.js", "JWT"],
       validate: function (value) {
         if (value.length) {
           return true;
@@ -191,7 +187,7 @@ async function askQuestions() {
       name: "taskRunner",
       type: "list",
       message: "What is your project Task Runner?",
-      choices: ["Gulp", "Grunt", "No Task Runner"],
+      choices: ["No Task Runner", "Gulp", "Grunt"],
       validate: function (value) {
         if (value.length) {
           return true;
@@ -205,7 +201,7 @@ async function askQuestions() {
       name: "apiDocumentation",
       type: "list",
       message: "What is your project API Documentation?",
-      choices: ["Swagger", "Postman", "No API Documentation"],
+      choices: ["No API Documentation", "Swagger", "Postman"],
       validate: function (value) {
         if (value.length) {
           return true;
@@ -218,7 +214,7 @@ async function askQuestions() {
       name: "hosting",
       type: "list",
       message: "What is your project Hosting?",
-      choices: ["Heroku", "Digital Ocean", "AWS", "Google Cloud", "No Hosting"],
+      choices: ["No Hosting", "Heroku", "Digital Ocean", "AWS", "Google Cloud"],
       validate: function (value) {
         if (value.length) {
           return true;
