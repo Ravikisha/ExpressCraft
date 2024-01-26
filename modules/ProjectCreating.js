@@ -3,10 +3,9 @@ import fs from "fs";
 import chalk from "chalk";
 
 export default class ProjectCreating {
-  constructor(packageManager, language, projectName) {
+  constructor(packageManager, language) {
     this.packageManager = packageManager;
     this.language = language;
-    this.projectName = projectName;
   }
 
   // Creating Project

@@ -14,6 +14,7 @@ import askQuestions from "./Phases/askQuestions.js";
 // Modules
 import folderCreating from "./modules/FolderCreating.js";
 import ProjectCreating from "./modules/ProjectCreating.js";
+import VersionControl from "./modules/VersionControl.js";
 
 /**
  * Trying to make a CLI tool for myself to generate a new project with a template in express js with all the necessary files, folders and dependencies.
@@ -80,7 +81,12 @@ async function assignAnswers(answers) {
 
 async function generateProject() {
   console.log(chalk.green("Generating project..."));
+  // Folder Creating
   await folderCreating(packageManager, projectName);
-  let projectCreation = new ProjectCreating(packageManager, jsOrTs, projectName);
+  // Project Creating
+  let projectCreation = new ProjectCreating(packageManager, jsOrTs);
   await projectCreation.creatingProject();
+  // Version Control
+  let vc = new VersionControl(versionControl);
+  await vc.createVC();
 }
