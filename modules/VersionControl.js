@@ -11,8 +11,10 @@ export default class VersionControl {
   createVC() {
     if (this.versionControl === "git") {
       this.git();
+      console.log(chalk.green("Git initialized successfully."));
     } else if (this.versionControl === "svn") {
       this.svn();
+      console.log(chalk.green("SVN initialized successfully."));
     } else if (this.versionControl === "no version control") {
       this.noVersionControl();
     } else {

@@ -70,9 +70,6 @@ async function askQuestions() {
       choices: [
         "EJS",
         "Pug",
-        "Handlebars",
-        "Mustache",
-        "Nunjucks",
         "Twig",
         "No Template Engine",
       ],
