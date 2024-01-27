@@ -87,7 +87,7 @@ async function askQuestions() {
         "Bulma",
         "Foundation",
         "Materialize",
-        "Pure CSS",
+        "Semantic UI",
         
       ],
       validate: function (value) {
