@@ -115,15 +115,15 @@ module.exports = {
       }
 
       const codeSegment = `
-      app.use(
-        "/css",
-        express.static(path.join(__dirname, "node_modules/bootstrap/dist/css"))
-      )
-      app.use(
-        "/js",
-        express.static(path.join(__dirname, "node_modules/bootstrap/dist/js"))
-      )
-      app.use("/js", express.static(path.join(__dirname, "node_modules/jquery/dist")))      
+app.use(
+  "/css",
+  express.static(path.join(__dirname, "node_modules/bootstrap/dist/css"))
+)
+app.use(
+  "/js",
+  express.static(path.join(__dirname, "node_modules/bootstrap/dist/js"))
+)
+app.use("/js", express.static(path.join(__dirname, "node_modules/jquery/dist")))      
       `;
       const code = highlight(codeSegment, {
         language: "javascript",
@@ -149,7 +149,7 @@ module.exports = {
       }
 
       const codeSegment = `
-      <link rel="stylesheet" href="/node_modules/bulma/css/bulma.min.css">
+<link rel="stylesheet" href="/node_modules/bulma/css/bulma.min.css">
       `;
 
       const code = highlight(codeSegment, {
@@ -176,7 +176,7 @@ module.exports = {
       }
 
       const codeSegment = `
-      <link rel="stylesheet" href="/node_modules/foundation-sites/dist/css/foundation.min.css">
+<link rel="stylesheet" href="/node_modules/foundation-sites/dist/css/foundation.min.css">
       `;
 
       const code = highlight(codeSegment, {
@@ -204,7 +204,7 @@ module.exports = {
       }
 
       const codeSegment = `
-      <link rel="stylesheet" href="/node_modules/materialize-css/dist/css/materialize.min.css">
+<link rel="stylesheet" href="/node_modules/materialize-css/dist/css/materialize.min.css">
       `;
 
       const code = highlight(codeSegment, {
@@ -219,7 +219,7 @@ module.exports = {
       console.log(code);
 
       const scriptSegment = `
-      <script src="/node_modules/materialize-css/dist/js/materialize.min.js"></script>
+<script src="/node_modules/materialize-css/dist/js/materialize.min.js"></script>
       `;
 
       const script = highlight(scriptSegment, {
@@ -249,7 +249,7 @@ module.exports = {
       }
 
       const codeSegment = `
-      <link rel="stylesheet" href="/node_modules/semantic-ui/dist/semantic.min.css">
+<link rel="stylesheet" href="/node_modules/semantic-ui/dist/semantic.min.css">
       `;
 
       const code = highlight(codeSegment, {
@@ -264,7 +264,7 @@ module.exports = {
       console.log(code);
 
       const scriptSegment = `
-      <script src="/node_modules/semantic-ui/dist/semantic.min.js"></script>
+<script src="/node_modules/semantic-ui/dist/semantic.min.js"></script>
       `;
 
       const script = highlight(scriptSegment, {
