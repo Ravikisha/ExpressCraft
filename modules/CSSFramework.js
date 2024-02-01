@@ -7,6 +7,8 @@ export default class CssFramework {
   constructor(cssFramework, packageManager) {
     this.cssFramework = cssFramework;
     this.packageManager = packageManager;
+    // create a styles folder
+    fs.mkdirSync("styles");
   }
 
   // CSS Framework
@@ -41,9 +43,9 @@ export default class CssFramework {
   tailwindCss() {
     try {
       if (this.packageManager === "npm") {
-        execSync("npm install tailwindcss");
+        execSync("npm install -D tailwindcss");
       } else if (this.packageManager === "yarn") {
-        execSync("yarn add tailwindcss");
+        execSync("yarn add -D tailwindcss");
       }
       // initialize tailwind css
       execSync("npx tailwindcss init");
@@ -53,7 +55,7 @@ export default class CssFramework {
         `
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{html,js}"],
+  content: ["./**/*.{html,js}"],
   theme: {
     extend: {},
   },
@@ -62,19 +64,18 @@ module.exports = {
         { flag: "w" }
       );
       // create a global css file
+      
       fs.writeFileSync(
-        "src/styles.css",
-        `
+        "styles/global.css",`
 @tailwind base;
 @tailwind components;
 @tailwind utilities;`,
-        { flag: "w" }
       );
 
       // update the package.json file and add the build script
       const packageJson = JSON.parse(fs.readFileSync("package.json"));
       packageJson.scripts.build =
-        "npx tailwindcss build global.css -o output.css";
+        "npx tailwindcss build styles/global.css -o styles/output.css";
       fs.writeFileSync("package.json", JSON.stringify(packageJson, null, 2));
       // Generate Command
       if (
