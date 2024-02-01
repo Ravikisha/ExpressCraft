@@ -146,6 +146,19 @@ module.exports = {
       } else if (this.packageManager === "yarn") {
         execSync("yarn add bulma");
       }
+
+      const codeSegment = `
+      <link rel="stylesheet" href="/node_modules/bulma/css/bulma.min.css">
+      `;
+
+      const code = highlight(codeSegment, {
+        language: "html",
+        ignoreIllegals: true,
+      });
+      console.log(
+        chalk.yellow("Please add the following code to your index.html file.")
+      );
+      console.log(code);
     } catch (err) {
       console.log(chalk.red("Something went wrong to install bulma."));
       return;
@@ -160,6 +173,20 @@ module.exports = {
       } else if (this.packageManager === "yarn") {
         execSync("yarn add foundation-sites");
       }
+
+      const codeSegment = `
+      <link rel="stylesheet" href="/node_modules/foundation-sites/dist/css/foundation.min.css">
+      `;
+
+      const code = highlight(codeSegment, {
+        language: "html",
+        ignoreIllegals: true,
+      });
+
+      console.log(
+        chalk.yellow("Please add the following code to your index.html file.")
+      );
+      console.log(code);
     } catch (err) {
       console.log(chalk.red("Something went wrong to install foundation."));
       return;
@@ -174,6 +201,37 @@ module.exports = {
       } else if (this.packageManager === "yarn") {
         execSync("yarn add materialize-css");
       }
+
+      const codeSegment = `
+      <link rel="stylesheet" href="/node_modules/materialize-css/dist/css/materialize.min.css">
+      `;
+
+      const code = highlight(codeSegment, {
+        language: "html",
+        ignoreIllegals: true,
+      });
+
+      console.log(
+        chalk.yellow("Please add the following code to your index.html file.")
+      );
+
+      console.log(code);
+
+      const scriptSegment = `
+      <script src="/node_modules/materialize-css/dist/js/materialize.min.js"></script>
+      `;
+
+      const script = highlight(scriptSegment, {
+        language: "html",
+        ignoreIllegals: true,
+      });
+
+      console.log(
+        chalk.yellow(
+          "Please add the following code to your index.html file before the closing body tag."
+        )
+      );
+      console.log(script);
     } catch (err) {
       console.log(chalk.red("Something went wrong to install materialize."));
       return;
@@ -184,10 +242,41 @@ module.exports = {
   semanticUi() {
     try {
       if (this.packageManager === "npm") {
-        execSync("npm install semantic-ui-css");
+        execSync("nnpm install semantic-ui");
       } else if (this.packageManager === "yarn") {
-        execSync("yarn add semantic-ui-css");
+        execSync("yarn add semantic-ui");
       }
+
+      const codeSegment = `
+      <link rel="stylesheet" href="/node_modules/semantic-ui/dist/semantic.min.css">
+      `;
+
+      const code = highlight(codeSegment, {
+        language: "html",
+        ignoreIllegals: true,
+      });
+
+      console.log(
+        chalk.yellow("Please add the following code to your index.html file.")
+      );
+
+      console.log(code);
+
+      const scriptSegment = `
+      <script src="/node_modules/semantic-ui/dist/semantic.min.js"></script>
+      `;
+
+      const script = highlight(scriptSegment, {
+        language: "html",
+        ignoreIllegals: true,
+      });
+
+      console.log(
+        chalk.yellow(
+          "Please add the following code to your index.html file before the closing body tag."
+        )
+      );
+      console.log(script);
     } catch (err) {
       console.log(chalk.red("Something went wrong to install semantic ui."));
       return;
