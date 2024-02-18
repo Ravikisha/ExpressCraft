@@ -21,12 +21,12 @@ export default class DatabaseSetup {
    */
 
   /**
-   * Language = javascript
+   * Language = javascript/typescript
    * Package Manager = npm
    * Database = "MySQL"
    * ORM = "Prisma"
    */
-  prismaMySQLNpmJs() {
+  prismaMySQLNpm() {
     try {
       execSync("npm install @prisma/client prisma");
       execSync("npx prisma init --datasource-provider=mysql");
@@ -40,12 +40,12 @@ export default class DatabaseSetup {
   }
 
   /**
-   * Language = javascript
+   * Language = javascript/typescript
    * Package Manager = npm
    * Database = "PostgreSQL"
    * ORM = "Prisma"
    */
-  prismaPostgreSQLNpmJs() {
+  prismaPostgreSQLNpm() {
     try {
       execSync("npm install @prisma/client prisma");
       execSync("npx prisma init --datasource-provider=postgresql");
@@ -59,12 +59,12 @@ export default class DatabaseSetup {
   }
 
   /**
-   * Language = javascript
+   * Language = javascript/typescript
    * Package Manager = npm
    * Database = "SQLite"
    * ORM = "Prisma"
    */
-  prismaSQLiteNpmJs() {
+  prismaSQLiteNpm() {
     try {
       execSync("npm install @prisma/client prisma");
       execSync("npx prisma init --datasource-provider=sqlite");
@@ -77,122 +77,179 @@ export default class DatabaseSetup {
     }
   }
 
-    /**
-     * Language = javascript
-     * Package Manager = npm
-     * Database = "MongoDB"
-     * ORM = "Mongoose"
-     */
-    mongooseNpmJs() {
-        try {
-            execSync("npm install mongoose");
-        } catch (err) {
-            console.log(chalk.red("Something went wrong to install mongoose."));
-            return;
-        }
+  /**
+   * Language = javascript/typescript
+   * Package Manager = npm
+   * Database = "MongoDB"
+   * ORM = "Mongoose"
+   */
+  mongooseNpm() {
+    try {
+      execSync("npm install mongoose");
+    } catch (err) {
+      console.log(chalk.red("Something went wrong to install mongoose."));
+      return;
     }
+  }
 
-    /**
-     * Language = javascript
-     * Package Manager = npm
-     * Database = "Firebase"
-     * ORM = "No ORM"
-     */
-    firebaseNpmJs() {
-        try {
-            execSync("npm install firebase");
-        } catch (err) {
-            console.log(chalk.red("Something went wrong to install firebase."));
-            return;
-        }
+  /**
+   * Language = javascript/typescript
+   * Package Manager = npm
+   * Database = "Firebase"
+   * ORM = "No ORM"
+   */
+  firebaseNpm() {
+    try {
+      execSync("npm install firebase");
+    } catch (err) {
+      console.log(chalk.red("Something went wrong to install firebase."));
+      return;
     }
+  }
 
-    /**
-     * Language = javascript
-     * Package Manager = yarn
-     * Database = "MySQL"
-     * ORM = "Prisma"
-     */
-    prismaMySQLYarnJs() {
-        try {
-            execSync("yarn add @prisma/client prisma");
-            execSync("npx prisma init --datasource-provider=mysql");
-            execSync("npx prisma generate");
-            console.log("Run the following command to pull the database schema:");
-            console.log(highlight("npx prisma db pull", { language: "bash" }));
-        } catch (err) {
-            console.log(chalk.red("Something went wrong to install prisma."));
-            return;
-        }
+  /**
+   * Language = javascript/typescript
+   * Package Manager = yarn
+   * Database = "MySQL"
+   * ORM = "Prisma"
+   */
+  prismaMySQLYarn() {
+    try {
+      execSync("yarn add @prisma/client prisma");
+      execSync("npx prisma init --datasource-provider=mysql");
+      execSync("npx prisma generate");
+      console.log("Run the following command to pull the database schema:");
+      console.log(highlight("npx prisma db pull", { language: "bash" }));
+    } catch (err) {
+      console.log(chalk.red("Something went wrong to install prisma."));
+      return;
     }
+  }
 
-    /**
-     * Language = javascript
-     * Package Manager = yarn
-     * Database = "PostgreSQL"
-     * ORM = "Prisma"
-     */
-    prismaPostgreSQLYarnJs() {
-        try {
-            execSync("yarn add @prisma/client prisma");
-            execSync("npx prisma init --datasource-provider=postgresql");
-            execSync("npx prisma generate");
-            console.log("Run the following command to pull the database schema:");
-            console.log(highlight("npx prisma db pull", { language: "bash" }));
-        } catch (err) {
-            console.log(chalk.red("Something went wrong to install prisma."));
-            return;
-        }
+  /**
+   * Language = javascript/typescript
+   * Package Manager = yarn
+   * Database = "PostgreSQL"
+   * ORM = "Prisma"
+   */
+  prismaPostgreSQLYarn() {
+    try {
+      execSync("yarn add @prisma/client prisma");
+      execSync("npx prisma init --datasource-provider=postgresql");
+      execSync("npx prisma generate");
+      console.log("Run the following command to pull the database schema:");
+      console.log(highlight("npx prisma db pull", { language: "bash" }));
+    } catch (err) {
+      console.log(chalk.red("Something went wrong to install prisma."));
+      return;
     }
+  }
 
-    /**
-     * Language = javascript
-     * Package Manager = yarn
-     * Database = "SQLite"
-     * ORM = "Prisma"
-     */
-    prismaSQLiteYarnJs() {
-        try {
-            execSync("yarn add @prisma/client prisma");
-            execSync("npx prisma init --datasource-provider=sqlite");
-            execSync("npx prisma generate");
-            console.log("Run the following command to pull the database schema:");
-            console.log(highlight("npx prisma db pull", { language: "bash" }));
-        } catch (err) {
-            console.log(chalk.red("Something went wrong to install prisma."));
-            return;
-        }
+  /**
+   * Language = javascript/typescript
+   * Package Manager = yarn
+   * Database = "SQLite"
+   * ORM = "Prisma"
+   */
+  prismaSQLiteYarn() {
+    try {
+      execSync("yarn add @prisma/client prisma");
+      execSync("npx prisma init --datasource-provider=sqlite");
+      execSync("npx prisma generate");
+      console.log("Run the following command to pull the database schema:");
+      console.log(highlight("npx prisma db pull", { language: "bash" }));
+    } catch (err) {
+      console.log(chalk.red("Something went wrong to install prisma."));
+      return;
     }
+  }
 
-    /**
-     * Language = javascript
-     * Package Manager = yarn
-     * Database = "MongoDB"
-     * ORM = "Mongoose"
-     */
-    mongooseYarnJs() {
-        try {
-            execSync("yarn add mongoose");
-        } catch (err) {
-            console.log(chalk.red("Something went wrong to install mongoose."));
-            return;
-        }
+  /**
+   * Language = javascript/typescript
+   * Package Manager = yarn
+   * Database = "MongoDB"
+   * ORM = "Mongoose"
+   */
+  mongooseYarn() {
+    try {
+      execSync("yarn add mongoose");
+    } catch (err) {
+      console.log(chalk.red("Something went wrong to install mongoose."));
+      return;
     }
+  }
 
-    /**
-     * Language = javascript
-     * Package Manager = yarn
-     * Database = "Firebase"
-     * ORM = "No ORM"
-     */
-    firebaseYarnJs() {
-        try {
-            execSync("yarn add firebase");
-        } catch (err) {
-            console.log(chalk.red("Something went wrong to install firebase."));
-            return;
-        }
+  /**
+   * Language = javascript/typescript
+   * Package Manager = yarn
+   * Database = "Firebase"
+   * ORM = "No ORM"
+   */
+  firebaseYarn() {
+    try {
+      execSync("yarn add firebase");
+    } catch (err) {
+      console.log(chalk.red("Something went wrong to install firebase."));
+      return;
     }
+  }
 
+  /**
+   * Language = javascript
+   * Package Manager = npm
+   * Database = "MySQL", "PostgreSQL", "SQLite",
+   * ORM = "Sequelize"
+   */
 
+  sequelizeNpmJs() {
+    try {
+      execSync("npm install sequelize");
+      switch (this.database) {
+        case "MySQL":
+          execSync("npm install mysql2");
+          break;
+        case "PostgreSQL":
+          execSync("npm install pg pg-hstore");
+          break;
+        case "SQLite":
+          execSync("npm install sqlite3");
+          break;
+        default:
+          console.log(chalk.red("Unsupported database."));
+          return;
+      }
+    } catch (err) {
+      console.log(chalk.red("Something went wrong to install sequelize."));
+      return;
+    }
+  }
+
+  /**
+   * Language = typescript
+   * Package Manager = npm
+   * Database = "MySQL", "PostgreSQL", "SQLite",
+   * ORM = "Sequelize"
+   */
+  sequelizeNpmTs() {
+    try {
+      execSync("npm install sequelize @types/sequelize");
+      switch (this.database) {
+        case "MySQL":
+          execSync("npm install mysql2");
+          break;
+        case "PostgreSQL":
+          execSync("npm install pg pg-hstore");
+          break;
+        case "SQLite":
+          execSync("npm install sqlite3");
+          break;
+        default:
+          console.log(chalk.red("Unsupported database."));
+          return;
+      }
+    } catch (err) {
+      console.log(chalk.red("Something went wrong to install sequelize."));
+      return;
+    }
+  }
 }
