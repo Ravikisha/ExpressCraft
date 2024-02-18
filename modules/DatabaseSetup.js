@@ -202,15 +202,15 @@ export default class DatabaseSetup {
    */
   sequelizeNpmTs() {
     try {
-      execSync("npm install sequelize @types/sequelize");
+      execSync("npm install sequelize @types/sequelize sequelize-typescript");
       switch (this.database) {
-        case "MySQL":
+        case "mysql":
           execSync("npm install mysql2");
           break;
-        case "PostgreSQL":
+        case "postgresql":
           execSync("npm install pg pg-hstore");
           break;
-        case "SQLite":
+        case "sqlite":
           execSync("npm install sqlite3");
           break;
         default:
@@ -219,6 +219,122 @@ export default class DatabaseSetup {
       }
     } catch (err) {
       console.log(chalk.red("Something went wrong to install sequelize."));
+      return;
+    }
+  }
+
+  /**
+   * Language = javascript
+   * Package Manager = yarn
+   * Database = "MySQL", "PostgreSQL", "SQLite",
+   * ORM = "Sequelize"
+   */
+  sequelizeYarnJs() {
+    try {
+      execSync("yarn add sequelize");
+      switch (this.database) {
+        case "MySQL":
+          execSync("yarn add mysql2");
+          break;
+        case "PostgreSQL":
+          execSync("yarn add pg pg-hstore");
+          break;
+        case "SQLite":
+          execSync("yarn add sqlite3");
+          break;
+        default:
+          console.log(chalk.red("Unsupported database."));
+          return;
+      }
+    } catch (err) {
+      console.log(chalk.red("Something went wrong to install sequelize."));
+      return;
+    }
+  }
+
+  /**
+   * Language = typescript
+   * Package Manager = yarn
+   * Database = "MySQL", "PostgreSQL", "SQLite",
+   * ORM = "Sequelize"
+   */
+  sequelizeYarnTs() {
+    try {
+      execSync("yarn add sequelize @types/sequelize sequelize-typescript");
+      switch (this.database) {
+        case "mysql":
+          execSync("yarn add mysql2");
+          break;
+        case "postgresql":
+          execSync("yarn add pg pg-hstore");
+          break;
+        case "sqlite":
+          execSync("yarn add sqlite3");
+          break;
+        default:
+          console.log(chalk.red("Unsupported database."));
+          return;
+      }
+    } catch (err) {
+      console.log(chalk.red("Something went wrong to install sequelize."));
+      return;
+    }
+  }
+
+  /**
+   * Language = javascript/typescript
+   * Package Manager = npm
+   * Database = "MySQL", "PostgreSQL", "SQLite",
+   * ORM = "TypeORM"
+   */
+  typeORMNpm() {
+    try {
+      execSync("npm install typeorm reflect-metadata");
+      switch (this.database) {
+        case "mysql":
+          execSync("npm install mysql");
+          break;
+        case "postgresql":
+          execSync("npm install pg");
+          break;
+        case "sqlite":
+          execSync("npm install sqlite3");
+          break;
+        default:
+          console.log(chalk.red("Unsupported database."));
+          return;
+      }
+    } catch (err) {
+      console.log(chalk.red("Something went wrong to install typeorm."));
+      return;
+    }
+  }
+
+  /**
+   * Language = javascript/typescript
+   * Package Manager = yarn
+   * Database = "MySQL", "PostgreSQL", "SQLite",
+   * ORM = "TypeORM"
+   */
+  typeORMYarn() {
+    try {
+      execSync("yarn add typeorm reflect-metadata");
+      switch (this.database) {
+        case "mysql":
+          execSync("yarn add mysql");
+          break;
+        case "postgresql":
+          execSync("yarn add pg");
+          break;
+        case "sqlite":
+          execSync("yarn add sqlite3");
+          break;
+        default:
+          console.log(chalk.red("Unsupported database."));
+          return;
+      }
+    } catch (err) {
+      console.log(chalk.red("Something went wrong to install typeorm."));
       return;
     }
   }

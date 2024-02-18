@@ -114,6 +114,8 @@ export default class ProjectCreating {
           strict: true,
           esModuleInterop: true,
           skipLibCheck: true,
+          emitDecoratorMetadata: true,
+          experimentalDecorators: true,
         },
       };
       fs.writeFileSync("tsconfig.json", JSON.stringify(config, null, 2));
