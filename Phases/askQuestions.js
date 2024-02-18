@@ -120,7 +120,6 @@ async function askQuestions() {
         "PostgreSQL",
         "SQLite",
         "MongoDB",
-        "Firebase",
         "No Database",
       ],
       validate: function (value) {

@@ -16,7 +16,7 @@ export default class DatabaseSetup {
    * This function creates the project folder and initializes it with the package manager.
    * Language = javascript/typescript
    * Package Manager = npm/yarn
-   * Database = "MySQL", "PostgreSQL", "SQLite", "MongoDB", "Firebase", "No Database"
+   * Database = "MySQL", "PostgreSQL", "SQLite", "MongoDB",  "No Database"
    * ORM = "Prisma", "Sequelize", "TypeORM", "Mongoose", "Drizzle ORM", "No ORM"
    */
 
@@ -94,15 +94,15 @@ export default class DatabaseSetup {
 
   /**
    * Language = javascript/typescript
-   * Package Manager = npm
-   * Database = "Firebase"
-   * ORM = "No ORM"
+   * Package Manager = yarn
+   * Database = "MongoDB"
+   * ORM = "Mongoose"
    */
-  firebaseNpm() {
+  mongooseYarn() {
     try {
-      execSync("npm install firebase");
+      execSync("yarn add mongoose");
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install firebase."));
+      console.log(chalk.red("Something went wrong to install mongoose."));
       return;
     }
   }
@@ -160,36 +160,6 @@ export default class DatabaseSetup {
       console.log(highlight("npx prisma db pull", { language: "bash" }));
     } catch (err) {
       console.log(chalk.red("Something went wrong to install prisma."));
-      return;
-    }
-  }
-
-  /**
-   * Language = javascript/typescript
-   * Package Manager = yarn
-   * Database = "MongoDB"
-   * ORM = "Mongoose"
-   */
-  mongooseYarn() {
-    try {
-      execSync("yarn add mongoose");
-    } catch (err) {
-      console.log(chalk.red("Something went wrong to install mongoose."));
-      return;
-    }
-  }
-
-  /**
-   * Language = javascript/typescript
-   * Package Manager = yarn
-   * Database = "Firebase"
-   * ORM = "No ORM"
-   */
-  firebaseYarn() {
-    try {
-      execSync("yarn add firebase");
-    } catch (err) {
-      console.log(chalk.red("Something went wrong to install firebase."));
       return;
     }
   }
