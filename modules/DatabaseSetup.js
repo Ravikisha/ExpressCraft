@@ -107,5 +107,92 @@ export default class DatabaseSetup {
         }
     }
 
-    
+    /**
+     * Language = javascript
+     * Package Manager = yarn
+     * Database = "MySQL"
+     * ORM = "Prisma"
+     */
+    prismaMySQLYarnJs() {
+        try {
+            execSync("yarn add @prisma/client prisma");
+            execSync("npx prisma init --datasource-provider=mysql");
+            execSync("npx prisma generate");
+            console.log("Run the following command to pull the database schema:");
+            console.log(highlight("npx prisma db pull", { language: "bash" }));
+        } catch (err) {
+            console.log(chalk.red("Something went wrong to install prisma."));
+            return;
+        }
+    }
+
+    /**
+     * Language = javascript
+     * Package Manager = yarn
+     * Database = "PostgreSQL"
+     * ORM = "Prisma"
+     */
+    prismaPostgreSQLYarnJs() {
+        try {
+            execSync("yarn add @prisma/client prisma");
+            execSync("npx prisma init --datasource-provider=postgresql");
+            execSync("npx prisma generate");
+            console.log("Run the following command to pull the database schema:");
+            console.log(highlight("npx prisma db pull", { language: "bash" }));
+        } catch (err) {
+            console.log(chalk.red("Something went wrong to install prisma."));
+            return;
+        }
+    }
+
+    /**
+     * Language = javascript
+     * Package Manager = yarn
+     * Database = "SQLite"
+     * ORM = "Prisma"
+     */
+    prismaSQLiteYarnJs() {
+        try {
+            execSync("yarn add @prisma/client prisma");
+            execSync("npx prisma init --datasource-provider=sqlite");
+            execSync("npx prisma generate");
+            console.log("Run the following command to pull the database schema:");
+            console.log(highlight("npx prisma db pull", { language: "bash" }));
+        } catch (err) {
+            console.log(chalk.red("Something went wrong to install prisma."));
+            return;
+        }
+    }
+
+    /**
+     * Language = javascript
+     * Package Manager = yarn
+     * Database = "MongoDB"
+     * ORM = "Mongoose"
+     */
+    mongooseYarnJs() {
+        try {
+            execSync("yarn add mongoose");
+        } catch (err) {
+            console.log(chalk.red("Something went wrong to install mongoose."));
+            return;
+        }
+    }
+
+    /**
+     * Language = javascript
+     * Package Manager = yarn
+     * Database = "Firebase"
+     * ORM = "No ORM"
+     */
+    firebaseYarnJs() {
+        try {
+            execSync("yarn add firebase");
+        } catch (err) {
+            console.log(chalk.red("Something went wrong to install firebase."));
+            return;
+        }
+    }
+
+
 }
