@@ -18,6 +18,7 @@ import VersionControl from "./modules/VersionControl.js";
 import TemplateEngine from "./modules/TemplateEngine.js";
 import CssFramework from "./modules/CSSFramework.js";
 import CSSPreprocessor from "./modules/CSSPreprocessor.js";
+import DatabaseSetup from "./modules/DatabaseSetup.js";
 
 /**
  * Trying to make a CLI tool for myself to generate a new project with a template in express js with all the necessary files, folders and dependencies.
@@ -101,4 +102,7 @@ async function generateProject() {
   // CSS Preprocessor
   // let cp = new CSSPreprocessor(cssPreprocessor, packageManager);
   // await cp.createCssPreprocessor();
+  // Database Setup
+  let db = new DatabaseSetup(packageManager,projectName, database, jsOrTs, orm);
+  await db.databaseSetup();
 }

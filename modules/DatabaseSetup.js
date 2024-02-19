@@ -411,4 +411,372 @@ export default class DatabaseSetup {
     console.log(chalk.yellow("No database and ORM selected."));
   }
 
+  /**
+   * Mapping function to map the database and ORM to the respective functions.
+   */
+  databaseSetup() {
+    switch (this.language) {
+      case "javascript":
+        switch (this.packageManager) {
+          case "npm":
+            switch (this.database) {
+              case "mysql":
+                switch (this.orm) {
+                  case "prisma":
+                    this.prismaMySQLNpm();
+                    break;
+                  case "sequelize":
+                    this.sequelizeNpmJs();
+                    break;
+                  case "typeorm":
+                    this.typeORMNpm();
+                    break;
+                  case "drizzle-orm":
+                    this.drizzleORMNpm();
+                    break;
+                  case "no orm":
+                    this.noDatabaseNoORM();
+                    break;
+                  default:
+                    console.log(chalk.red("Unsupported ORM."));
+                    return;
+                }
+                break;
+              case "postgresql":
+                switch (this.orm) {
+                  case "prisma":
+                    this.prismaPostgreSQLNpm();
+                    break;
+                  case "sequelize":
+                    this.sequelizeNpmJs();
+                    break;
+                  case "typeorm":
+                    this.typeORMNpm();
+                    break;
+                  case "drizzle-orm":
+                    this.drizzleORMNpm();
+                    break;
+                  case "no orm":
+                    this.noDatabaseNoORM();
+                    break;
+                  default:
+                    console.log(chalk.red("Unsupported ORM."));
+                    return;
+                }
+                break;
+              case "sqlite":
+                switch (this.orm) {
+                  case "prisma":
+                    this.prismaSQLiteNpm();
+                    break;
+                  case "sequelize":
+                    this.sequelizeNpmJs();
+                    break;
+                  case "typeorm":
+                    this.typeORMNpm();
+                    break;
+                  case "drizzle-orm":
+                    this.drizzleORMNpm();
+                    break;
+                  case "no orm":
+                    this.noDatabaseNoORM();
+                    break;
+                  default:
+                    console.log(chalk.red("Unsupported ORM."));
+                    return;
+                }
+                break;
+              case "mongodb":
+                switch (this.orm) {
+                  case "mongoose":
+                    this.mongooseNpm();
+                    break;
+                  case "no orm":
+                    this.noDatabaseNoORM();
+                    break;
+                  default:
+                    console.log(chalk.red("Unsupported ORM."));
+                    return;
+                }
+                break;
+              default:
+                console.log(chalk.red("Unsupported database."));
+                return;
+            }
+            break;
+          case "yarn":
+            switch (this.database) {
+              case "mysql":
+                switch (this.orm) {
+                  case "prisma":
+                    this.prismaMySQLYarn();
+                    break;
+                  case "sequelize":
+                    this.sequelizeYarnJs();
+                    break;
+                  case "typeorm":
+                    this.typeORMYarn();
+                    break;
+                  case "drizzle-orm":
+                    this.drizzleORMYarn();
+                    break;
+                  case "no orm":
+                    this.noDatabaseNoORM();
+                    break;
+                  default:
+                    console.log(chalk.red("Unsupported ORM."));
+                    return;
+                }
+                break;
+              case "postgresql":
+                switch (this.orm) {
+                  case "prisma":
+                    this.prismaPostgreSQLYarn();
+                    break;
+                  case "sequelize":
+                    this.sequelizeYarnJs();
+                    break;
+                  case "typeorm":
+                    this.typeORMYarn();
+                    break;
+                  case "drizzle-orm":
+                    this.drizzleORMYarn();
+                    break;
+                  case "no orm":
+                    this.noDatabaseNoORM();
+                    break;
+                  default:
+                    console.log(chalk.red("Unsupported ORM."));
+                    return;
+                }
+                break;
+              case "sqlite":
+                switch (this.orm) {
+                  case "prisma":
+                    this.prismaSQLiteYarn();
+                    break;
+                  case "sequelize":
+                    this.sequelizeYarnJs();
+                    break;
+                  case "typeorm":
+                    this.typeORMYarn();
+                    break;
+                  case "drizzle-orm":
+                    this.drizzleORMYarn();
+                    break;
+                  case "no orm":
+                    this.noDatabaseNoORM();
+                    break;
+                  default:
+                    console.log(chalk.red("Unsupported ORM."));
+                    return;
+                }
+                break;
+              case "mongodb":
+                switch (this.orm) {
+                  case "mongoose":
+                    this.mongooseYarn();
+                    break;
+                  case "no orm":
+                    this.noDatabaseNoORM();
+                    break;
+                  default:
+                    console.log(chalk.red("Unsupported ORM."));
+                    return;
+                }
+                break;
+              default:
+                console.log(chalk.red("Unsupported database."));
+                return;
+            }
+            break;
+          default:
+            console.log(chalk.red("Unsupported package manager."));
+            return;
+        }
+        break;
+      case "typescript":
+        switch (this.packageManager) {
+          case "npm":
+            switch (this.database) {
+              case "mysql":
+                switch (this.orm) {
+                  case "prisma":
+                    this.prismaMySQLNpm();
+                    break;
+                  case "sequelize":
+                    this.sequelizeNpmTs();
+                    break;
+                  case "typeorm":
+                    this.typeORMNpm();
+                    break;
+                  case "drizzle-orm":
+                    this.drizzleORMNpm();
+                    break;
+                  case "no orm":
+                    this.noDatabaseNoORM();
+                    break;
+                  default:
+                    console.log(chalk.red("Unsupported ORM."));
+                    return;
+                }
+                break;
+              case "postgresql":
+                switch (this.orm) {
+                  case "prisma":
+                    this.prismaPostgreSQLNpm();
+                    break;
+                  case "sequelize":
+                    this.sequelizeNpmTs();
+                    break;
+                  case "typeorm":
+                    this.typeORMNpm();
+                    break;
+                  case "drizzle-orm":
+                    this.drizzleORMNpm();
+                    break;
+                  case "no orm":
+                    this.noDatabaseNoORM();
+                    break;
+                  default:
+                    console.log(chalk.red("Unsupported ORM."));
+                    return;
+                }
+                break;
+              case "sqlite":
+                switch (this.orm) {
+                  case "prisma":
+                    this.prismaSQLiteNpm();
+                    break;
+                  case "sequelize":
+                    this.sequelizeNpmTs();
+                    break;
+                  case "typeorm":
+                    this.typeORMNpm();
+                    break;
+                  case "drizzle-orm":
+                    this.drizzleORMNpm();
+                    break;
+                  case "no orm":
+                    this.noDatabaseNoORM();
+                    break;
+                  default:
+                    console.log(chalk.red("Unsupported ORM."));
+                    return;
+                }
+                break;
+              case "mongodb":
+                switch (this.orm) {
+                  case "mongoose":
+                    this.mongooseNpm();
+                    break;
+                  case "no orm":
+                    this.noDatabaseNoORM();
+                    break;
+                  default:
+                    console.log(chalk.red("Unsupported ORM."));
+                    return;
+                }
+                break;
+              default:
+                console.log(chalk.red("Unsupported database."));
+                return;
+            }
+            break;
+          case "yarn":
+            switch (this.database) {
+              case "mysql":
+                switch (this.orm) {
+                  case "prisma":
+                    this.prismaMySQLYarn();
+                    break;
+                  case "sequelize":
+                    this.sequelizeYarnTs();
+                    break;
+                  case "typeorm":
+                    this.typeORMYarn();
+                    break;
+                  case "drizzle-orm":
+                    this.drizzleORMYarn();
+                    break;
+                  case "no orm":
+                    this.noDatabaseNoORM();
+                    break;
+                  default:
+                    console.log(chalk.red("Unsupported ORM."));
+                    return;
+                }
+                break;
+              case "postgresql":
+                switch (this.orm) {
+                  case "prisma":
+                    this.prismaPostgreSQLYarn();
+                    break;
+                  case "sequelize":
+                    this.sequelizeYarnTs();
+                    break;
+                  case "typeorm":
+                    this.typeORMYarn();
+                    break;
+                  case "drizzle-orm":
+                    this.drizzleORMYarn();
+                    break;
+                  case "no orm":
+                    this.noDatabaseNoORM();
+                    break;
+                  default:
+                    console.log(chalk.red("Unsupported ORM."));
+                    return;
+                }
+                break;
+              case "sqlite":
+                switch (this.orm) {
+                  case "prisma":
+                    this.prismaSQLiteYarn();
+                    break;
+                  case "sequelize":
+                    this.sequelizeYarnTs();
+                    break;
+                  case "typeorm":
+                    this.typeORMYarn();
+                    break;
+                  case "drizzle-orm":
+                    this.drizzleORMYarn();
+                    break;
+                  case "no orm":
+                    this.noDatabaseNoORM();
+                    break;
+                  default:
+                    console.log(chalk.red("Unsupported ORM."));
+                    return;
+                }
+                break;
+              case "mongodb":
+                switch (this.orm) {
+                  case "mongoose":
+                    this.mongooseYarn();
+                    break;
+                  case "no orm":
+                    this.noDatabaseNoORM();
+                    break;
+                  default:
+                    console.log(chalk.red("Unsupported ORM."));
+                    return;
+                }
+                break;
+              default:
+                console.log(chalk.red("Unsupported database."));
+                return;
+            }
+            break;
+          default:
+            console.log(chalk.red("Unsupported package manager."));
+            return;
+        }
+        break;
+      default:
+        console.log(chalk.red("Unsupported language."));
+        return;
+    }
+  }
 }

@@ -139,7 +139,7 @@ async function askQuestions() {
         "Sequelize",
         "TypeORM",
         "Mongoose",
-        "Drizzle ORM",
+        "Drizzle-ORM",
         "No ORM",
       ],
       validate: function (value) {
