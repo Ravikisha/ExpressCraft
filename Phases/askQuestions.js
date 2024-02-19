@@ -154,7 +154,7 @@ async function askQuestions() {
       name: "testing",
       type: "list",
       message: "What is your project testing?",
-      choices: ["No Testing", "Jest", "Mocha", "Chai", "Jasmine"],
+      choices: ["No Testing", "Jest", "Mocha + Chai", "Jasmine"],
       validate: function (value) {
         if (value.length) {
           return true;
