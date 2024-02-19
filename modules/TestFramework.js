@@ -323,4 +323,17 @@ export default class TestFramework {
       console.log(chalk.red(e));
     }
   }
+
+  /**
+   * No Testing Framework
+   * Npm package manager
+   * Language: JavaScript
+   */
+  noTesting() {
+    console.log(chalk.yellow("No Testing Framework selected"));
+  }
+
+  /**
+   * Mapping the testing framework to the respective function
+   */
 }
