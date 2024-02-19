@@ -338,4 +338,65 @@ export default class DatabaseSetup {
       return;
     }
   }
+
+  /**
+   * Language = javascript/typescript
+   * Package Manager = npm
+   * Database = mysql, postgresql, sqlite
+   * ORM = "Drizzle ORM"
+   */
+
+  drizzleORMNpm() {
+    try {
+      execSync("npm install drizzle-orm");
+      switch (this.database) {
+        case "mysql":
+          execSync("npm install mysql");
+          break;
+        case "postgresql":
+          execSync("npm install pg");
+          break;
+        case "sqlite":
+          execSync("npm install sqlite3");
+          break;
+        default:
+          console.log(chalk.red("Unsupported database."));
+          return;
+      }
+    } catch (err) {
+      console.log(chalk.red("Something went wrong to install drizzle-orm."));
+      return;
+    }
+  }
+
+  /**
+   * Language = javascript/typescript
+   * Package Manager = yarn
+   * Database = mysql, postgresql, sqlite
+   * ORM = "Drizzle ORM"
+   */
+
+  drizzleORMYarn() {
+    try {
+      execSync("yarn add drizzle-orm");
+      switch (this.database) {
+        case "mysql":
+          execSync("yarn add mysql");
+          break;
+        case "postgresql":
+          execSync("yarn add pg");
+          break;
+        case "sqlite":
+          execSync("yarn add sqlite3");
+          break;
+        default:
+          console.log(chalk.red("Unsupported database."));
+          return;
+      }
+    } catch (err) {
+      console.log(chalk.red("Something went wrong to install drizzle-orm."));
+      return;
+    }
+  }
+
 }
