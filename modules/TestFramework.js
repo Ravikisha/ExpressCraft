@@ -22,9 +22,7 @@ export default class TestFramework {
    */
   jestNpmJs() {
     try {
-      execSync("npm i jest supertest cross-env --save-dev", {
-        stdio: "inherit",
-      });
+      execSync("npm i jest supertest cross-env --save-dev");
       // update the package.json file
       const data = fs.readFileSync("package.json", "utf8");
       const packageJson = JSON.parse(data);
@@ -47,7 +45,7 @@ export default class TestFramework {
    */
   jestYarnJs() {
     try {
-      execSync("yarn add jest supertest cross-env --dev", { stdio: "inherit" });
+      execSync("yarn add jest supertest cross-env --dev");
       // update the package.json file
       const data = fs.readFileSync("package.json", "utf8");
       const packageJson = JSON.parse(data);
@@ -71,9 +69,7 @@ export default class TestFramework {
   jestNpmTs() {
     try {
       execSync(
-        "npm i jest ts-jest supertest cross-env @types/jest @types/supertest --save-dev",
-        { stdio: "inherit" }
-      );
+        "npm i jest ts-jest supertest cross-env @types/jest @types/supertest --save-dev");
       // update the tsconfig.json file
       const data = fs.readFileSync("tsconfig.json", "utf8");
       const tsconfig = JSON.parse(data);
@@ -90,7 +86,7 @@ export default class TestFramework {
         "utf-8"
       );
       // add jest.config.js file
-      execSync("npx ts-jest config:init", { stdio: "inherit" });
+      execSync("npx ts-jest config:init");
       // update the package.json file
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test = "cross-env NODE_ENV=test jest --watchAll";
@@ -108,9 +104,7 @@ export default class TestFramework {
   jestYarnTs() {
     try {
       execSync(
-        "yarn add jest ts-jest supertest cross-env @types/jest @types/supertest --dev",
-        { stdio: "inherit" }
-      );
+        "yarn add jest ts-jest supertest cross-env @types/jest @types/supertest --dev");
       // update the tsconfig.json file
       const data = fs.readFileSync("tsconfig.json", "utf8");
       const tsconfig = JSON.parse(data);
@@ -127,7 +121,7 @@ export default class TestFramework {
         "utf-8"
       );
       // add jest.config.js file
-      execSync("npx ts-jest config:init", { stdio: "inherit" });
+      execSync("npx ts-jest config:init");
       // update the package.json file
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test = "cross-env NODE_ENV=test jest --watchAll";
@@ -145,9 +139,7 @@ export default class TestFramework {
 
   mochaNpmJs() {
     try {
-      execSync("npm i mocha chai request supertest --save-dev", {
-        stdio: "inherit",
-      });
+      execSync("npm i mocha chai request supertest --save-dev");
       // update the package.json file
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test = "mocha --reporter spec";
@@ -164,9 +156,7 @@ export default class TestFramework {
    */
   mochaYarnJs() {
     try {
-      execSync("yarn add mocha chai request supertest --dev", {
-        stdio: "inherit",
-      });
+      execSync("yarn add mocha chai request supertest --dev");
       // update the package.json file
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test = "mocha --reporter spec";
@@ -184,9 +174,7 @@ export default class TestFramework {
   mochaNpmTs() {
     try {
       execSync(
-        "npm i mocha chai request supertest ts-node @types/mocha @types/chai --save-dev",
-        { stdio: "inherit" }
-      );
+        "npm i mocha chai request supertest ts-node @types/mocha @types/chai --save-dev");
       // update the package.json file
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test =
@@ -205,9 +193,7 @@ export default class TestFramework {
   mochaYarnTs() {
     try {
       execSync(
-        "yarn add mocha chai request supertest ts-node @types/mocha @types/chai --dev",
-        { stdio: "inherit" }
-      );
+        "yarn add mocha chai request supertest ts-node @types/mocha @types/chai --dev");
       // update the package.json file
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test =
@@ -225,9 +211,7 @@ export default class TestFramework {
    */
   jasmineNpmJs() {
     try {
-      execSync("npm i jasmine jasmine-node request supertest --save-dev", {
-        stdio: "inherit",
-      });
+      execSync("npm i jasmine jasmine-node request supertest --save-dev");
       // update the package.json file
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test = "./node_modules/.bin/jasmine-node spec";
@@ -244,9 +228,7 @@ export default class TestFramework {
    */
   jasmineYarnJs() {
     try {
-      execSync("yarn add jasmine jasmine-node request supertest --dev", {
-        stdio: "inherit",
-      });
+      execSync("yarn add jasmine jasmine-node request supertest --dev");
       // update the package.json file
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test = "./node_modules/.bin/jasmine-node spec";
@@ -264,9 +246,7 @@ export default class TestFramework {
   jasmineNpmTs() {
     try {
       execSync(
-        "npm i jasmine jasmine-node jasmine-ts jasmine-spec-reporter request supertest ts-node @types/jasmine @types/jasmine-node --save-dev",
-        { stdio: "inherit" }
-      );
+        "npm i jasmine jasmine-node jasmine-ts jasmine-spec-reporter request supertest ts-node @types/jasmine @types/jasmine-node --save-dev");
       // update the package.json file
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test = "jasmine-ts --config=jasmine.json";
@@ -298,9 +278,7 @@ export default class TestFramework {
   jasmineYarnTs() {
     try {
       execSync(
-        "yarn add jasmine jasmine-node jasmine-ts jasmine-spec-reporter request supertest ts-node @types/jasmine @types/jasmine-node --dev",
-        { stdio: "inherit" }
-      );
+        "yarn add jasmine jasmine-node jasmine-ts jasmine-spec-reporter request supertest ts-node @types/jasmine @types/jasmine-node --dev");
       // update the package.json file
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test = "jasmine-ts --config=jasmine.json";
@@ -336,4 +314,82 @@ export default class TestFramework {
   /**
    * Mapping the testing framework to the respective function
    */
+  testSetup() {
+    switch (this.language) {
+      case "javascript":
+        switch (this.TestFramework) {
+          case "jest":
+            switch (this.packageManager) {
+              case "npm":
+                this.jestNpmJs();
+                break;
+              case "yarn":
+                this.jestYarnJs();
+                break;
+            }
+            break;
+          case "mocha + chai":
+            switch (this.packageManager) {
+              case "npm":
+                this.mochaNpmJs();
+                break;
+              case "yarn":
+                this.mochaYarnJs();
+                break;
+            }
+            break;
+          case "jasmine":
+            switch (this.packageManager) {
+              case "npm":
+                this.jasmineNpmJs();
+                break;
+              case "yarn":
+                this.jasmineYarnJs();
+                break;
+            }
+            break;
+          case "none":
+            this.noTesting();
+            break;
+        }
+        break;
+      case "typescript":
+        switch (this.TestFramework) {
+          case "jest":
+            switch (this.packageManager) {
+              case "npm":
+                this.jestNpmTs();
+                break;
+              case "yarn":
+                this.jestYarnTs();
+                break;
+            }
+            break;
+          case "mocha + chai":
+            switch (this.packageManager) {
+              case "npm":
+                this.mochaNpmTs();
+                break;
+              case "yarn":
+                this.mochaYarnTs();
+                break;
+            }
+            break;
+          case "jasmine":
+            switch (this.packageManager) {
+              case "npm":
+                this.jasmineNpmTs();
+                break;
+              case "yarn":
+                this.jasmineYarnTs();
+                break;
+            }
+            break;
+          case "none":
+            this.noTesting();
+            break;
+        }
+        break;
+    }
+  }
 }
