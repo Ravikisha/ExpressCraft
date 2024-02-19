@@ -349,6 +349,7 @@ export default class DatabaseSetup {
   drizzleORMNpm() {
     try {
       execSync("npm install drizzle-orm");
+      execSync("npm install drizzle-kit -D");
       switch (this.database) {
         case "mysql":
           execSync("npm install mysql");
@@ -379,6 +380,7 @@ export default class DatabaseSetup {
   drizzleORMYarn() {
     try {
       execSync("yarn add drizzle-orm");
+      execSync("yarn add drizzle-kit -D");
       switch (this.database) {
         case "mysql":
           execSync("yarn add mysql");
@@ -397,6 +399,16 @@ export default class DatabaseSetup {
       console.log(chalk.red("Something went wrong to install drizzle-orm."));
       return;
     }
+  }
+
+  /**
+   * Language = javascript/typescript
+   * Package Manager = npm
+   * Database = "No Database"
+   * ORM = "No ORM"
+   */
+  noDatabaseNoORM() {
+    console.log(chalk.yellow("No database and ORM selected."));
   }
 
 }
