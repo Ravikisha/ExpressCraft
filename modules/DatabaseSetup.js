@@ -30,9 +30,9 @@ export default class DatabaseSetup {
     try {
       execSync("npm install @prisma/client prisma");
       execSync("npx prisma init --datasource-provider=mysql");
-      execSync("npx prisma generate");
-      console.log("Run the following command to pull the database schema:");
-      console.log(highlight("npx prisma db pull", { language: "bash" }));
+
+      console.log("Run the following command to generate the database schema:");
+      console.log(highlight("npx prisma generate", { language: "bash" }));
     } catch (err) {
       console.log(chalk.red("Something went wrong to install prisma."));
       return;
@@ -49,9 +49,9 @@ export default class DatabaseSetup {
     try {
       execSync("npm install @prisma/client prisma");
       execSync("npx prisma init --datasource-provider=postgresql");
-      execSync("npx prisma generate");
-      console.log("Run the following command to pull the database schema:");
-      console.log(highlight("npx prisma db pull", { language: "bash" }));
+
+      console.log("Run the following command to generate the database schema:");
+      console.log(highlight("npx prisma generate", { language: "bash" }));
     } catch (err) {
       console.log(chalk.red("Something went wrong to install prisma."));
       return;
@@ -68,9 +68,9 @@ export default class DatabaseSetup {
     try {
       execSync("npm install @prisma/client prisma");
       execSync("npx prisma init --datasource-provider=sqlite");
-      execSync("npx prisma generate");
-      console.log("Run the following command to pull the database schema:");
-      console.log(highlight("npx prisma db pull", { language: "bash" }));
+
+      console.log("Run the following command to generate the database schema:");
+      console.log(highlight("npx prisma generate", { language: "bash" }));
     } catch (err) {
       console.log(chalk.red("Something went wrong to install prisma."));
       return;
@@ -117,9 +117,9 @@ export default class DatabaseSetup {
     try {
       execSync("yarn add @prisma/client prisma");
       execSync("npx prisma init --datasource-provider=mysql");
-      execSync("npx prisma generate");
-      console.log("Run the following command to pull the database schema:");
-      console.log(highlight("npx prisma db pull", { language: "bash" }));
+
+      console.log("Run the following command to generate the database schema:");
+      console.log(highlight("npx prisma generate", { language: "bash" }));
     } catch (err) {
       console.log(chalk.red("Something went wrong to install prisma."));
       return;
@@ -136,9 +136,9 @@ export default class DatabaseSetup {
     try {
       execSync("yarn add @prisma/client prisma");
       execSync("npx prisma init --datasource-provider=postgresql");
-      execSync("npx prisma generate");
-      console.log("Run the following command to pull the database schema:");
-      console.log(highlight("npx prisma db pull", { language: "bash" }));
+
+      console.log("Run the following command to generate the database schema:");
+      console.log(highlight("npx prisma generate", { language: "bash" }));
     } catch (err) {
       console.log(chalk.red("Something went wrong to install prisma."));
       return;
@@ -155,9 +155,9 @@ export default class DatabaseSetup {
     try {
       execSync("yarn add @prisma/client prisma");
       execSync("npx prisma init --datasource-provider=sqlite");
-      execSync("npx prisma generate");
-      console.log("Run the following command to pull the database schema:");
-      console.log(highlight("npx prisma db pull", { language: "bash" }));
+
+      console.log("Run the following command to generate the database schema:");
+      console.log(highlight("npx prisma generate", { language: "bash" }));
     } catch (err) {
       console.log(chalk.red("Something went wrong to install prisma."));
       return;
@@ -778,5 +778,6 @@ export default class DatabaseSetup {
         console.log(chalk.red("Unsupported language."));
         return;
     }
+    console.log(chalk.green("Database and ORM setup complete."));
   }
 }
