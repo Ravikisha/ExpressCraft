@@ -98,19 +98,19 @@ async function askQuestions() {
         }
       },
     },
-    {
-      name: "cssPreprocessor",
-      type: "list",
-      message: "What is your project CSS Preprocessor?",
-      choices: ["No CSS Preprocessor", "Sass", "Less", "PostCSS", "Stylus"],
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please select your project CSS Preprocessor.";
-        }
-      },
-    },
+    // {
+    //   name: "cssPreprocessor",
+    //   type: "list",
+    //   message: "What is your project CSS Preprocessor?",
+    //   choices: ["No CSS Preprocessor", "Sass", "Less", "PostCSS", "Stylus"],
+    //   validate: function (value) {
+    //     if (value.length) {
+    //       return true;
+    //     } else {
+    //       return "Please select your project CSS Preprocessor.";
+    //     }
+    //   },
+    // },
     {
       name: "database",
       type: "list",
@@ -177,19 +177,19 @@ async function askQuestions() {
       },
     },
 
-    {
-      name: "taskRunner",
-      type: "list",
-      message: "What is your project Task Runner?",
-      choices: ["No Task Runner", "Gulp", "Grunt"],
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please select your project Task Runner.";
-        }
-      },
-    },
+    // {
+    //   name: "taskRunner",
+    //   type: "list",
+    //   message: "What is your project Task Runner?",
+    //   choices: ["No Task Runner", "Gulp", "Grunt"],
+    //   validate: function (value) {
+    //     if (value.length) {
+    //       return true;
+    //     } else {
+    //       return "Please select your project Task Runner.";
+    //     }
+    //   },
+    // },
 
     {
       name: "apiDocumentation",
@@ -204,19 +204,19 @@ async function askQuestions() {
         }
       },
     },
-    {
-      name: "hosting",
-      type: "list",
-      message: "What is your project Hosting?",
-      choices: ["No Hosting", "Heroku", "Digital Ocean", "AWS", "Google Cloud"],
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please select your project Hosting.";
-        }
-      },
-    },
+    // {
+    //   name: "hosting",
+    //   type: "list",
+    //   message: "What is your project Hosting?",
+    //   choices: ["No Hosting", "Heroku", "Digital Ocean", "AWS", "Google Cloud"],
+    //   validate: function (value) {
+    //     if (value.length) {
+    //       return true;
+    //     } else {
+    //       return "Please select your project Hosting.";
+    //     }
+    //   },
+    // },
   ];
   return inquirer.prompt(questions);
 }
