@@ -82,6 +82,7 @@ async function assignAnswers(answers) {
   versionControl = answers.versionControl.toLowerCase();
   apiDocumentation = answers.apiDocumentation.toLowerCase();
   hosting = answers.hosting.toLowerCase();
+  linting = answers.linting.toLowerCase();
 }
 
 async function generateProject() {

@@ -176,6 +176,19 @@ async function askQuestions() {
         }
       },
     },
+    {
+      name: "linting",
+      type: "list",
+      message: "What is your project linting?",
+      choices: ["No Linting", "ESLint", "TSLint"],
+      validate: function (value) {
+        if (value.length) {
+          return true;
+        } else {
+          return "Please select your project linting.";
+        }
+      },
+    },
 
     // {
     //   name: "taskRunner",
