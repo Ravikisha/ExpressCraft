@@ -22,6 +22,7 @@ import DatabaseSetup from "./modules/DatabaseSetup.js";
 import TestFramework from "./modules/TestFramework.js";
 import Authentication from "./modules/Authentication.js";
 import Linting from "./modules/Linting.js";
+import Documentation from "./modules/Documentation.js";
 
 /**
  * Trying to make a CLI tool for myself to generate a new project with a template in express js with all the necessary files, folders and dependencies.
@@ -44,6 +45,7 @@ let packageManager = "";
 let versionControl = "";
 let apiDocumentation = "";
 let hosting = "";
+let linting = "";
 
 // Application Start
 welcome();
@@ -118,4 +120,7 @@ async function generateProject() {
   // Linting Setup
   let lint = new Linting(linting, packageManager, jsOrTs);
   await lint.setupLinting();
+  // Documentation Setup
+  let doc = new Documentation(apiDocumentation, packageManager, jsOrTs);
+  await doc.setupDocumentation();
 }
