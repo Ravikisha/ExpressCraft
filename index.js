@@ -20,6 +20,8 @@ import CssFramework from "./modules/CSSFramework.js";
 import CSSPreprocessor from "./modules/CSSPreprocessor.js";
 import DatabaseSetup from "./modules/DatabaseSetup.js";
 import TestFramework from "./modules/TestFramework.js";
+import Authentication from "./modules/Authentication.js";
+import Linting from "./modules/Linting.js";
 
 /**
  * Trying to make a CLI tool for myself to generate a new project with a template in express js with all the necessary files, folders and dependencies.
@@ -110,4 +112,10 @@ async function generateProject() {
   // Testing Setup
   let testSetup = new TestFramework(jsOrTs,packageManager,testing)
   await testSetup.testSetup();
+  // Authentication Setup
+  let auth = new Authentication(authentication, packageManager, jsOrTs);
+  await auth.setupAuth();
+  // Linting Setup
+  let lint = new Linting(linting, packageManager, jsOrTs);
+  await lint.setupLinting();
 }
