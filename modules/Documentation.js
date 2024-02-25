@@ -22,9 +22,9 @@ export default class Documentation{
     swaggerNPM(){
         try{
             execSync("npm install swagger-ui-express");
-            console.log(chalk.green("swagger installed successfully"));
+            console.log("✅ Swagger installed successfully");
         }catch(err){
-            console.log(chalk.red("Error installing swagger"))
+            console.log("❌ Error installing Swagger")
             return
         }
     }
@@ -35,9 +35,9 @@ export default class Documentation{
     swaggerTypeScript(){
         try{
             execSync("npm install swagger-ui-express @types/swagger-ui-express");
-            console.log(chalk.green("swagger installed successfully"));
+            console.log("✅ Swagger installed successfully");
         }catch(err){
-            console.log(chalk.red("Error installing swagger"))
+            console.log("❌ Error installing Swagger")
             return
         }
     }
@@ -48,9 +48,9 @@ export default class Documentation{
     postmanNPM(){
         try{
             execSync("npm install newman");
-            console.log(chalk.green("postman installed successfully"));
+            console.log("✅ Postman installed successfully");
         }catch(err){
-            console.log(chalk.red("Error installing postman"))
+            console.log("❌ Error installing Postman")
             return
         }
     }
@@ -61,9 +61,9 @@ export default class Documentation{
     postmanTypeScript(){
         try{
             execSync("npm install newman");
-            console.log(chalk.green("postman installed successfully"));
+            console.log("✅ Postman installed successfully");
         }catch(err){
-            console.log(chalk.red("Error installing postman"))
+            console.log("❌ Error installing Postman")
             return
         }
     }
@@ -74,9 +74,9 @@ export default class Documentation{
     swaggerYarn(){
         try{
             execSync("yarn add swagger-ui-express");
-            console.log(chalk.green("swagger installed successfully"));
+            console.log("✅ Swagger installed successfully");
         }catch(err){
-            console.log(chalk.red("Error installing swagger"))
+            console.log("❌ Error installing Swagger")
             return
         }
     }
@@ -87,9 +87,9 @@ export default class Documentation{
     postmanYarn(){
         try{
             execSync("yarn add newman");
-            console.log(chalk.green("postman installed successfully"));
+            console.log("✅ Postman installed successfully");
         }catch(err){
-            console.log(chalk.red("Error installing postman"))
+            console.log("❌ Error installing Postman")
             return
         }
     }
@@ -100,9 +100,9 @@ export default class Documentation{
     swaggerYarnTypeScript(){
         try{
             execSync("yarn add swagger-ui-express @types/swagger-ui-express");
-            console.log(chalk.green("swagger installed successfully"));
+            console.log("✅ Swagger installed successfully");
         }catch(err){
-            console.log(chalk.red("Error installing swagger"))
+            console.log("❌ Error installing Swagger")
             return
         }
     }
@@ -113,9 +113,9 @@ export default class Documentation{
     postmanYarnTypeScript(){
         try{
             execSync("yarn add newman");
-            console.log(chalk.green("postman installed successfully"));
+            console.log("✅ Postman installed successfully");
         }catch(err){
-            console.log(chalk.red("Error installing postman"))
+            console.log("❌ Error installing Postman")
             return
         }
     }
@@ -141,7 +141,7 @@ export default class Documentation{
         }else if(this.apiDocumentation === "postman" && this.packageManager === "yarn" && this.language === "typescript"){
             this.postmanYarnTypeScript()
         }else {
-            console.log(chalk.red("Error installing API Documentation"))
+            console.log("❌ Error installing API Documentation")
         }
     }
 

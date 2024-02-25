@@ -22,9 +22,9 @@ export default class Linting {
     eslintNPM() {
         try {
             execSync("npm install eslint");
-            console.log(chalk.green("eslint installed successfully"));
+            console.log("✅ ESLint installed successfully");
         } catch (err) {
-            console.log(chalk.red("Error installing eslint"))
+            console.log("❌ Error installing ESLint")
             return
         }
     }
@@ -35,9 +35,9 @@ export default class Linting {
     eslintTypeScript() {
         try {
             execSync("npm install eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin");
-            console.log(chalk.green("eslint installed successfully"));
+            console.log("✅ ESLint installed successfully");
         } catch (err) {
-            console.log(chalk.red("Error installing eslint"))
+            console.log("❌ Error installing ESLint")
             return
         }
     }
@@ -48,9 +48,9 @@ export default class Linting {
     tslintNPM() {
         try {
             execSync("npm install tslint");
-            console.log(chalk.green("tslint installed successfully"));
+            console.log("✅ TSLint installed successfully");
         } catch (err) {
-            console.log(chalk.red("Error installing tslint"))
+            console.log("❌ Error installing TSLint")
             return
         }
     }
@@ -61,9 +61,9 @@ export default class Linting {
     tslintTypeScript() {
         try {
             execSync("npm install tslint typescript");
-            console.log(chalk.green("tslint installed successfully"));
+            console.log("✅ TSLint installed successfully");
         } catch (err) {
-            console.log(chalk.red("Error installing tslint"))
+            console.log("❌ Error installing TSLint")
             return
         }
     }
@@ -74,9 +74,9 @@ export default class Linting {
     eslintYarn() {
         try {
             execSync("yarn add eslint");
-            console.log(chalk.green("eslint installed successfully"));
+            console.log("✅ ESLint installed successfully");
         } catch (err) {
-            console.log(chalk.red("Error installing eslint"))
+            console.log("❌ Error installing ESLint")
             return
         }
     }
@@ -87,9 +87,9 @@ export default class Linting {
     eslintTypeScriptYarn() {
         try {
             execSync("yarn add eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin");
-            console.log(chalk.green("eslint installed successfully"));
+            console.log("✅ ESLint installed successfully");
         } catch (err) {
-            console.log(chalk.red("Error installing eslint"))
+            console.log("❌ Error installing ESLint")
             return
         }
     }
@@ -100,9 +100,9 @@ export default class Linting {
     tslintYarn() {
         try {
             execSync("yarn add tslint");
-            console.log(chalk.green("tslint installed successfully"));
+            console.log("✅ TSLint installed successfully");
         } catch (err) {
-            console.log(chalk.red("Error installing tslint"))
+            console.log("❌ Error installing TSLint")
             return
         }
     }
@@ -113,9 +113,9 @@ export default class Linting {
     tslintTypeScriptYarn() {
         try {
             execSync("yarn add tslint typescript");
-            console.log(chalk.green("tslint installed successfully"));
+            console.log("✅ TSLint installed successfully");
         } catch (err) {
-            console.log(chalk.red("Error installing tslint"))
+            console.log("❌ Error installing TSLint")
             return
         }
     }

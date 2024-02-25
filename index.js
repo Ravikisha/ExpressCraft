@@ -88,7 +88,7 @@ async function assignAnswers(answers) {
 
 function generateProject() {
   console.log("✅ Generating Project ....");
-  
+
   // Folder Creating
   folderCreating(packageManager, projectName);
 
@@ -129,12 +129,15 @@ function generateProject() {
   // Testing Setup
   let testSetup = new TestFramework(jsOrTs, packageManager, testing);
   testSetup.testSetup();
+  
   // Authentication Setup
   let auth = new Authentication(authentication, packageManager, jsOrTs);
   auth.setupAuth();
+  
   // Linting Setup
   let lint = new Linting(linting, packageManager, jsOrTs);
   lint.setupLinting();
+  
   // Documentation Setup
   let doc = new Documentation(apiDocumentation, packageManager, jsOrTs);
   doc.setupDocumentation();

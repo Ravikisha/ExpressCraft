@@ -24,9 +24,9 @@ export default class Authentication {
         try{
             execSync("npm install passport passport-local");
             execSync("npm install express-session");
-            console.log(chalk.green("passportjs dependencies installed successfully"));
+            console.log("✅ Passportjs dependencies installed successfully");
         }catch(err){
-            console.log(chalk.red("Error installing passportjs dependencies"))
+            console.log("❌ Error installing passportjs dependencies")
             return
         }
     }
@@ -38,9 +38,9 @@ export default class Authentication {
         try{
             execSync("npm install passport passport-local @types/passport @types/passport-local");
             execSync("npm install express-session");
-            console.log(chalk.green("passportjs dependencies installed successfully"));
+            console.log("✅ Passportjs dependencies installed successfully");
         }catch(err){
-            console.log(chalk.red("Error installing passportjs dependencies"))
+            console.log("❌ Error installing passportjs dependencies");
             return
         }
     }
@@ -51,9 +51,9 @@ export default class Authentication {
     jwtNPM() {
         try{
             execSync("npm install jsonwebtoken passport-jwt");
-            console.log(chalk.green("jwt dependencies installed successfully"));
+            console.log("✅ jwt dependencies installed successfully");
         }catch(err){
-            console.log(chalk.red("Error installing jwt dependencies"))
+            console.log("❌ Error installing jwt dependencies");
             return
         }
     }
@@ -64,9 +64,9 @@ export default class Authentication {
     jwtTypeScript() {
         try{
             execSync("npm install jsonwebtoken passport-jwt @types/jsonwebtoken @types/passport-jwt");
-            console.log(chalk.green("jwt dependencies installed successfully"));
+            console.log("✅ jwt dependencies installed successfully");
         }catch(err){
-            console.log(chalk.red("Error installing jwt dependencies"))
+            console.log("❌ Error installing jwt dependencies");
             return
         }
     }
@@ -78,9 +78,9 @@ export default class Authentication {
         try{
             execSync("yarn add passport passport-local");
             execSync("yarn add express-session");
-            console.log(chalk.green("passportjs dependencies installed successfully"));
+            console.log("✅ Passportjs dependencies installed successfully");
         }catch(err){
-            console.log(chalk.red("Error installing passportjs dependencies"))
+            console.log("❌ Error installing passportjs dependencies");
             return
         }
     }
@@ -92,9 +92,9 @@ export default class Authentication {
         try{
             execSync("yarn add passport passport-local @types/passport @types/passport-local");
             execSync("yarn add express-session");
-            console.log(chalk.green("passportjs dependencies installed successfully"));
+            console.log("✅ Passportjs dependencies installed successfully");
         }catch(err){
-            console.log(chalk.red("Error installing passportjs dependencies"))
+            console.log("❌ Error installing passportjs dependencies");
             return
         }
     }
@@ -105,9 +105,9 @@ export default class Authentication {
     jwtYarn() {
         try{
             execSync("yarn add jsonwebtoken passport-jwt");
-            console.log(chalk.green("jwt dependencies installed successfully"));
+            console.log("✅ jwt dependencies installed successfully");
         }catch(err){
-            console.log(chalk.red("Error installing jwt dependencies"))
+            console.log("❌ Error installing jwt dependencies");
             return
         }
     }
@@ -118,9 +118,9 @@ export default class Authentication {
     jwtTypeScriptYarn() {
         try{
             execSync("yarn add jsonwebtoken passport-jwt @types/jsonwebtoken @types/passport-jwt");
-            console.log(chalk.green("jwt dependencies installed successfully"));
+            console.log("✅ jwt dependencies installed successfully");
         }catch(err){
-            console.log(chalk.red("Error installing jwt dependencies"))
+            console.log("❌ Error installing jwt dependencies");
             return
         }
     }
