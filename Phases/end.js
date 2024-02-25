@@ -1,25 +1,47 @@
 import chalk from "chalk";
-import chalkAnimation from 'chalk-animation';
 
-async function end(projectName, projectDescription, projectAuthor, packageManager) {
-
-  console.log(chalk.green("\nThank you for using Express Generator CLI tool."));
+async function end(
+  projectName,
+  packageManager
+) {
+  console.log("\n💗 Thanks for using ExpressCraft .....");
   // show project name and author and ways to run the project
-  console.log(chalk.green("Your project is created with the following details:"));
-  console.log(chalk.green("Project Name: " + projectName));
-  console.log(chalk.green("Project Description: " + projectDescription));
-  console.log(chalk.green("Project Author: " + projectAuthor));
-  console.log(chalk.green("To run the project:"));
+  console.log("\n🚀 Your project is ready!");
+  console.log("\n👉 Get started with the following commands:");
   if (packageManager === "npm") {
-    console.log(chalk.green("Dev Mode: npm run dev"));
-    console.log(chalk.green("Production Mode: npm start"));
+    console.log("\n👍 Run Your Project: ");
+    console.log("\n1️⃣  Open your terminal");
+    console.log("\n2️⃣  Go to your project directory");
+    console.log(chalk.green("-----------------------------------"));
+    console.log(chalk.bold("cd " + projectName));
+    console.log(chalk.green("-----------------------------------"));
+    console.log("\n3️⃣  Run the following command");
+    console.log(chalk.yellow("\n------------ 💻 Dev Mode --------------"));
+    console.log(chalk.bold("npm run dev"));
+    console.log(chalk.yellow("------------ 📈 Production Mode --------------"));
+    console.log(chalk.bold("npm start"));
+    console.log(chalk.yellow("-----------------------------------"));
   } else {
-    console.log(chalk.green("Dev Mode: yarn dev"));
-    console.log(chalk.green("Production Mode: yarn start"));
+    console.log("\n👍 Run Your Project: ");
+    console.log("\n1️⃣  Open your terminal");
+    console.log("\n2️⃣  Go to your project directory");
+    console.log(chalk.green("-----------------------------------"));
+    console.log(chalk.bold("cd " + projectName));
+    console.log(chalk.green("-----------------------------------"));
+    console.log("\n3️⃣  Run the following command");
+    console.log(chalk.yellow("\n------------ 💻 Dev Mode --------------"));
+    console.log(chalk.bold("yarn dev"));
+    console.log(chalk.yellow("------------ 📈 Production Mode --------------"));
+    console.log(chalk.bold("yarn start"));
+    console.log(chalk.yellow("-----------------------------------"));
   }
-  
-  console.log(chalk.green("Happy Coding!"));
-  chalkAnimation.rainbow('Goodbye!').stop();
+
+  console.log("\n😎 Happy Coding! 🎉");
+  console.log(
+    chalk.greenBright(
+      "\n🌟 If you like ExpressCraft, give us a star on GitHub"
+    )
+  );
 }
 
 export default end;

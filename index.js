@@ -49,17 +49,15 @@ let linting = "";
 welcome();
 
 async function welcome() {
-  console.log(gradient.vice(figlet.textSync("Express Generator")));
-  console.log(chalk.greenBright("Welcome to Express Generator CLI tool."));
+  console.log(gradient.vice(figlet.textSync("ExpressCraft")));
+  console.log("\n✨ Welcome to Express Generator CLI tool.✨");
+  console.log("\n🎯 Version: 1.4.0")
+  console.log("🎗️  Author: @Ravikisha")
   console.log(
-    chalk.green(
-      "This tool will help you to generate a new project with a template in express js with all the necessary files, folders and dependencies."
-    )
+    "\nThis tool will help you to generate a new project with a template in Express js with all the necessary files, folders 📁 and dependencies 🗃️."
   );
   console.log(
-    chalk.green(
-      "Please answer the following questions to generate your project."
-    )
+    "\n🕑 Let's get started by asking some questions to setup your project 🚀\n"
   );
   const answers = await askQuestions();
   await assignAnswers(answers);
@@ -87,7 +85,7 @@ async function assignAnswers(answers) {
 }
 
 function generateProject() {
-  console.log("✅ Generating Project ....");
+  console.log("\n\n✅ Generating Project....");
 
   // Folder Creating
   folderCreating(packageManager, projectName);
@@ -143,5 +141,5 @@ function generateProject() {
   doc.setupDocumentation();
 
   // end the process
-  end(projectName, projectDescription, projectAuthor, packageManager);
+  end(projectName,packageManager);
 }

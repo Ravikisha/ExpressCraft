@@ -1,7 +1,4 @@
-import fs from "fs";
 import { execSync } from "child_process";
-import chalk from "chalk";
-import { highlight } from "cli-highlight";
 
 export default class Linting {
     constructor(linting, packageManager, language) {
