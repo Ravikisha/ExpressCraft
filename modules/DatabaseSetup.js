@@ -31,10 +31,12 @@ export default class DatabaseSetup {
       execSync("npm install @prisma/client prisma");
       execSync("npx prisma init --datasource-provider=mysql");
 
-      console.log("Run the following command to generate the database schema:");
+      console.log(chalk.yellow("🔔 Run the following command to generate the database schema:"));
+      console.log(chalk.green("---------------------------"))
       console.log(highlight("npx prisma generate", { language: "bash" }));
+      console.log(chalk.green("---------------------------"))
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install prisma."));
+      console.log("❌ Something went wrong to install prisma.");
       return;
     }
   }
@@ -50,10 +52,12 @@ export default class DatabaseSetup {
       execSync("npm install @prisma/client prisma");
       execSync("npx prisma init --datasource-provider=postgresql");
 
-      console.log("Run the following command to generate the database schema:");
+      console.log(chalk.yellow("🔔 Run the following command to generate the database schema:"));
+      console.log(chalk.green("---------------------------"))
       console.log(highlight("npx prisma generate", { language: "bash" }));
+      console.log(chalk.green("---------------------------"))
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install prisma."));
+      console.log("❌ Something went wrong to install prisma.");
       return;
     }
   }
@@ -69,10 +73,12 @@ export default class DatabaseSetup {
       execSync("npm install @prisma/client prisma");
       execSync("npx prisma init --datasource-provider=sqlite");
 
-      console.log("Run the following command to generate the database schema:");
+      console.log(chalk.yellow("🔔 Run the following command to generate the database schema:"));
+      console.log(chalk.green("---------------------------"))
       console.log(highlight("npx prisma generate", { language: "bash" }));
+      console.log(chalk.green("---------------------------"))
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install prisma."));
+      console.log("❌ Something went wrong to install prisma.");
       return;
     }
   }
@@ -87,7 +93,7 @@ export default class DatabaseSetup {
     try {
       execSync("npm install mongoose");
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install mongoose."));
+      console.log("❌ Something went wrong to install mongoose.");
       return;
     }
   }
@@ -102,7 +108,7 @@ export default class DatabaseSetup {
     try {
       execSync("yarn add mongoose");
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install mongoose."));
+      console.log("❌ Something went wrong to install mongoose.");
       return;
     }
   }
@@ -118,10 +124,12 @@ export default class DatabaseSetup {
       execSync("yarn add @prisma/client prisma");
       execSync("npx prisma init --datasource-provider=mysql");
 
-      console.log("Run the following command to generate the database schema:");
+      console.log(chalk.yellow("🔔 Run the following command to generate the database schema:"));
+      console.log(chalk.green("---------------------------"))
       console.log(highlight("npx prisma generate", { language: "bash" }));
+      console.log(chalk.green("---------------------------"))
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install prisma."));
+      console.log("❌ Something went wrong to install prisma.");
       return;
     }
   }
@@ -137,10 +145,12 @@ export default class DatabaseSetup {
       execSync("yarn add @prisma/client prisma");
       execSync("npx prisma init --datasource-provider=postgresql");
 
-      console.log("Run the following command to generate the database schema:");
+      console.log(chalk.yellow("🔔 Run the following command to generate the database schema:"));
+      console.log(chalk.green("---------------------------"))
       console.log(highlight("npx prisma generate", { language: "bash" }));
+      console.log(chalk.green("---------------------------"))
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install prisma."));
+      console.log("❌ Something went wrong to install prisma.");
       return;
     }
   }
@@ -156,10 +166,12 @@ export default class DatabaseSetup {
       execSync("yarn add @prisma/client prisma");
       execSync("npx prisma init --datasource-provider=sqlite");
 
-      console.log("Run the following command to generate the database schema:");
+      console.log(chalk.yellow("🔔 Run the following command to generate the database schema:"));
+      console.log(chalk.green("---------------------------"))
       console.log(highlight("npx prisma generate", { language: "bash" }));
+      console.log(chalk.green("---------------------------"))
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install prisma."));
+      console.log("❌ Something went wrong to install prisma.");
       return;
     }
   }
@@ -185,11 +197,11 @@ export default class DatabaseSetup {
           execSync("npm install sqlite3");
           break;
         default:
-          console.log(chalk.red("Unsupported database."));
+          console.log("❌ Unsupported database.");
           return;
       }
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install sequelize."));
+      console.log("❌ Something went wrong to install sequelize.");
       return;
     }
   }
@@ -214,11 +226,11 @@ export default class DatabaseSetup {
           execSync("npm install sqlite3");
           break;
         default:
-          console.log(chalk.red("Unsupported database."));
+          console.log("❌ Unsupported database.");
           return;
       }
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install sequelize."));
+      console.log("❌ Something went wrong to install sequelize.");
       return;
     }
   }
@@ -243,11 +255,11 @@ export default class DatabaseSetup {
           execSync("yarn add sqlite3");
           break;
         default:
-          console.log(chalk.red("Unsupported database."));
+          console.log("❌ Unsupported database.");
           return;
       }
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install sequelize."));
+      console.log("❌ Something went wrong to install sequelize.");
       return;
     }
   }
@@ -272,11 +284,11 @@ export default class DatabaseSetup {
           execSync("yarn add sqlite3");
           break;
         default:
-          console.log(chalk.red("Unsupported database."));
+          console.log("❌ Unsupported database.");
           return;
       }
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install sequelize."));
+      console.log("❌ Something went wrong to install sequelize.");
       return;
     }
   }
@@ -301,11 +313,11 @@ export default class DatabaseSetup {
           execSync("npm install sqlite3");
           break;
         default:
-          console.log(chalk.red("Unsupported database."));
+          console.log("❌ Unsupported database.");
           return;
       }
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install typeorm."));
+      console.log("❌ Something went wrong to install typeorm.");
       return;
     }
   }
@@ -330,11 +342,11 @@ export default class DatabaseSetup {
           execSync("yarn add sqlite3");
           break;
         default:
-          console.log(chalk.red("Unsupported database."));
+          console.log("❌ Unsupported database.");
           return;
       }
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install typeorm."));
+      console.log("❌ Something went wrong to install typeorm.");
       return;
     }
   }
@@ -361,11 +373,11 @@ export default class DatabaseSetup {
           execSync("npm install sqlite3");
           break;
         default:
-          console.log(chalk.red("Unsupported database."));
+          console.log("❌ Unsupported database.");
           return;
       }
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install drizzle-orm."));
+      console.log("❌ Something went wrong to install drizzle-orm.");
       return;
     }
   }
@@ -392,11 +404,11 @@ export default class DatabaseSetup {
           execSync("yarn add sqlite3");
           break;
         default:
-          console.log(chalk.red("Unsupported database."));
+          console.log("❌ Unsupported database.");
           return;
       }
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install drizzle-orm."));
+      console.log("❌ Something went wrong to install drizzle-orm.");
       return;
     }
   }
@@ -408,7 +420,7 @@ export default class DatabaseSetup {
    * ORM = "No ORM"
    */
   noDatabaseNoORM() {
-    console.log(chalk.yellow("No database and ORM selected."));
+    console.log(chalk.yellow("🔔 No database and ORM selected."));
   }
 
   /**
@@ -438,7 +450,7 @@ export default class DatabaseSetup {
                     this.noDatabaseNoORM();
                     break;
                   default:
-                    console.log(chalk.red("Unsupported ORM."));
+                    console.log("❌ Unsupported ORM.");
                     return;
                 }
                 break;
@@ -460,7 +472,7 @@ export default class DatabaseSetup {
                     this.noDatabaseNoORM();
                     break;
                   default:
-                    console.log(chalk.red("Unsupported ORM."));
+                    console.log("❌ Unsupported ORM.");
                     return;
                 }
                 break;
@@ -482,7 +494,7 @@ export default class DatabaseSetup {
                     this.noDatabaseNoORM();
                     break;
                   default:
-                    console.log(chalk.red("Unsupported ORM."));
+                    console.log("❌ Unsupported ORM.");
                     return;
                 }
                 break;
@@ -495,12 +507,12 @@ export default class DatabaseSetup {
                     this.noDatabaseNoORM();
                     break;
                   default:
-                    console.log(chalk.red("Unsupported ORM."));
+                    console.log("❌ Unsupported ORM.");
                     return;
                 }
                 break;
               default:
-                console.log(chalk.red("Unsupported database."));
+                console.log("❌ Unsupported database.");
                 return;
             }
             break;
@@ -524,7 +536,7 @@ export default class DatabaseSetup {
                     this.noDatabaseNoORM();
                     break;
                   default:
-                    console.log(chalk.red("Unsupported ORM."));
+                    console.log("❌ Unsupported ORM.");
                     return;
                 }
                 break;
@@ -546,7 +558,7 @@ export default class DatabaseSetup {
                     this.noDatabaseNoORM();
                     break;
                   default:
-                    console.log(chalk.red("Unsupported ORM."));
+                    console.log("❌ Unsupported ORM.");
                     return;
                 }
                 break;
@@ -568,7 +580,7 @@ export default class DatabaseSetup {
                     this.noDatabaseNoORM();
                     break;
                   default:
-                    console.log(chalk.red("Unsupported ORM."));
+                    console.log("❌ Unsupported ORM.");
                     return;
                 }
                 break;
@@ -581,17 +593,17 @@ export default class DatabaseSetup {
                     this.noDatabaseNoORM();
                     break;
                   default:
-                    console.log(chalk.red("Unsupported ORM."));
+                    console.log("❌ Unsupported ORM.");
                     return;
                 }
                 break;
               default:
-                console.log(chalk.red("Unsupported database."));
+                console.log("❌ Unsupported database.");
                 return;
             }
             break;
           default:
-            console.log(chalk.red("Unsupported package manager."));
+            console.log("❌ Unsupported package manager.");
             return;
         }
         break;
@@ -617,7 +629,7 @@ export default class DatabaseSetup {
                     this.noDatabaseNoORM();
                     break;
                   default:
-                    console.log(chalk.red("Unsupported ORM."));
+                    console.log("❌ Unsupported ORM.");
                     return;
                 }
                 break;
@@ -639,7 +651,7 @@ export default class DatabaseSetup {
                     this.noDatabaseNoORM();
                     break;
                   default:
-                    console.log(chalk.red("Unsupported ORM."));
+                    console.log("❌ Unsupported ORM.");
                     return;
                 }
                 break;
@@ -661,7 +673,7 @@ export default class DatabaseSetup {
                     this.noDatabaseNoORM();
                     break;
                   default:
-                    console.log(chalk.red("Unsupported ORM."));
+                    console.log("❌ Unsupported ORM.");
                     return;
                 }
                 break;
@@ -674,12 +686,12 @@ export default class DatabaseSetup {
                     this.noDatabaseNoORM();
                     break;
                   default:
-                    console.log(chalk.red("Unsupported ORM."));
+                    console.log("❌ Unsupported ORM.");
                     return;
                 }
                 break;
               default:
-                console.log(chalk.red("Unsupported database."));
+                console.log("❌ Unsupported database.");
                 return;
             }
             break;
@@ -703,7 +715,7 @@ export default class DatabaseSetup {
                     this.noDatabaseNoORM();
                     break;
                   default:
-                    console.log(chalk.red("Unsupported ORM."));
+                    console.log("❌ Unsupported ORM.");
                     return;
                 }
                 break;
@@ -725,7 +737,7 @@ export default class DatabaseSetup {
                     this.noDatabaseNoORM();
                     break;
                   default:
-                    console.log(chalk.red("Unsupported ORM."));
+                    console.log("❌ Unsupported ORM.");
                     return;
                 }
                 break;
@@ -747,7 +759,7 @@ export default class DatabaseSetup {
                     this.noDatabaseNoORM();
                     break;
                   default:
-                    console.log(chalk.red("Unsupported ORM."));
+                    console.log("❌ Unsupported ORM.");
                     return;
                 }
                 break;
@@ -760,24 +772,24 @@ export default class DatabaseSetup {
                     this.noDatabaseNoORM();
                     break;
                   default:
-                    console.log(chalk.red("Unsupported ORM."));
+                    console.log("❌ Unsupported ORM.");
                     return;
                 }
                 break;
               default:
-                console.log(chalk.red("Unsupported database."));
+                console.log("❌ Unsupported database.");
                 return;
             }
             break;
           default:
-            console.log(chalk.red("Unsupported package manager."));
+            console.log("❌ Unsupported package manager.");
             return;
         }
         break;
       default:
-        console.log(chalk.red("Unsupported language."));
+        console.log("❌ Unsupported language.");
         return;
     }
-    console.log(chalk.green("Database and ORM setup complete."));
+    console.log("✅ Database and ORM setup complete.");
   }
 }

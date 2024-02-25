@@ -88,7 +88,7 @@ async function assignAnswers(answers) {
 
 function generateProject() {
   console.log("✅ Generating Project ....");
-
+  
   // Folder Creating
   folderCreating(packageManager, projectName);
 
@@ -107,13 +107,15 @@ function generateProject() {
   // Template Engine
   let te = new TemplateEngine(templateEngine);
   te.createTemplateEngine();
-  
+
   // CSS Framework
   let cf = new CssFramework(cssFramework);
   cf.createCssFramework();
+  
   // CSS Preprocessor
   // let cp = new CSSPreprocessor(cssPreprocessor, packageManager);
   // cp.createCssPreprocessor();
+  
   // Database Setup
   let db = new DatabaseSetup(
     packageManager,
@@ -123,6 +125,7 @@ function generateProject() {
     orm
   );
   db.databaseSetup();
+  
   // Testing Setup
   let testSetup = new TestFramework(jsOrTs, packageManager, testing);
   testSetup.testSetup();
@@ -135,5 +138,7 @@ function generateProject() {
   // Documentation Setup
   let doc = new Documentation(apiDocumentation, packageManager, jsOrTs);
   doc.setupDocumentation();
+
+  // end the process
   end(projectName, projectDescription, projectAuthor, packageManager);
 }
