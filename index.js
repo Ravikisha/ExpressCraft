@@ -103,9 +103,11 @@ function generateProject() {
   // Version Control
   let vc = new VersionControl(versionControl);
   vc.createVC();
+
   // Template Engine
   let te = new TemplateEngine(templateEngine);
   te.createTemplateEngine();
+  
   // CSS Framework
   let cf = new CssFramework(cssFramework);
   cf.createCssFramework();

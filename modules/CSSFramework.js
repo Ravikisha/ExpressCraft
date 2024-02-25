@@ -15,26 +15,26 @@ export default class CssFramework {
   createCssFramework() {
     if (this.cssFramework === "tailwind css") {
       this.tailwindCss();
-      console.log(chalk.green("Tailwind CSS initialized successfully."));
+      console.log("✅ Tailwind CSS initialized successfully.");
     } else if (this.cssFramework === "bootstrap") {
       this.bootstrap();
-      console.log(chalk.green("Bootstrap initialized successfully."));
+      console.log("✅ Bootstrap initialized successfully.");
     } else if (this.cssFramework === "bulma") {
       this.bulma();
-      console.log(chalk.green("Bulma initialized successfully."));
+      console.log("✅ Bulma initialized successfully.");
     } else if (this.cssFramework === "foundation") {
       this.foundation();
-      console.log(chalk.green("Foundation initialized successfully."));
+      console.log("✅ Foundation initialized successfully.");
     } else if (this.cssFramework === "materialize") {
       this.materialize();
-      console.log(chalk.green("Materialize initialized successfully."));
+      console.log("✅ Materialize initialized successfully.");
     } else if (this.cssFramework === "semantic ui") {
       this.semanticUi();
-      console.log(chalk.green("Semantic UI initialized successfully."));
+      console.log("✅ Semantic UI initialized successfully.");
     } else if (this.cssFramework === "no css framework") {
       this.noCssFramework();
     } else {
-      console.log(chalk.red("Please select a CSS Framework."));
+      console.log("❌ Please select a CSS Framework.");
       return;
     }
   }
@@ -84,23 +84,31 @@ module.exports = {
       ) {
         console.log(
           chalk.yellow(
-            "Please run the following command to generate the tailwind css file."
+            "🔔 Please run the following command to generate the tailwind css file."
           )
         );
-        console.log(chalk.green("npm run build"));
+        console.log(chalk.green(`
+        -------------------
+        npm run build
+        -------------------
+        `));
       } else if (
         this.packageManager === "yarn" &&
         this.cssFramework === "tailwind css"
       ) {
         console.log(
           chalk.yellow(
-            "Please run the following command to generate the tailwind css file."
+            "🔔 Please run the following command to generate the tailwind css file."
           )
         );
-        console.log(chalk.green("yarn run build"));
+        console.log(chalk.green(`
+        -------------------
+        yarn build
+        -------------------
+        `));
       }
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install tailwind css."));
+      console.log("❌ Something went wrong to install tailwind css.");
       return;
     }
   }
@@ -130,11 +138,13 @@ app.use("/js", express.static(path.join(__dirname, "node_modules/jquery/dist")))
         ignoreIllegals: true,
       });
       console.log(
-        chalk.yellow("Please add the following code to your app.js file.")
+        chalk.yellow("🔔 Please add the following code to your app.js file.")
       );
+      console.log(chalk.green("-------------------"));
       console.log(code);
+      console.log(chalk.green("-------------------"));
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install bootstrap."));
+      console.log("❌ Something went wrong to install bootstrap.");
       return;
     }
   }
@@ -157,11 +167,13 @@ app.use("/js", express.static(path.join(__dirname, "node_modules/jquery/dist")))
         ignoreIllegals: true,
       });
       console.log(
-        chalk.yellow("Please add the following code to your index.html file.")
+        chalk.yellow("🔔 Please add the following code to your index.html file.")
       );
+      console.log(chalk.green("-------------------"));
       console.log(code);
+      console.log(chalk.green("-------------------"));
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install bulma."));
+      console.log("❌ Something went wrong to install bulma.");
       return;
     }
   }
@@ -185,11 +197,13 @@ app.use("/js", express.static(path.join(__dirname, "node_modules/jquery/dist")))
       });
 
       console.log(
-        chalk.yellow("Please add the following code to your index.html file.")
+        chalk.yellow("🔔 Please add the following code to your index.html file.")
       );
+      console.log(chalk.green("-------------------"));
       console.log(code);
+      console.log(chalk.green("-------------------"));
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install foundation."));
+      console.log("❌ Something went wrong to install foundation.");
       return;
     }
   }
@@ -213,10 +227,11 @@ app.use("/js", express.static(path.join(__dirname, "node_modules/jquery/dist")))
       });
 
       console.log(
-        chalk.yellow("Please add the following code to your index.html file.")
+        chalk.yellow("🔔 Please add the following code to your index.html file.")
       );
-
+      console.log(chalk.green("-------------------"));
       console.log(code);
+      console.log(chalk.green("-------------------"));
 
       const scriptSegment = `
 <script src="/node_modules/materialize-css/dist/js/materialize.min.js"></script>
@@ -229,12 +244,14 @@ app.use("/js", express.static(path.join(__dirname, "node_modules/jquery/dist")))
 
       console.log(
         chalk.yellow(
-          "Please add the following code to your index.html file before the closing body tag."
+          "🔔 Please add the following code to your index.html file before the closing body tag."
         )
       );
+      console.log(chalk.green("-------------------"));
       console.log(script);
+      console.log(chalk.green("-------------------"));
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install materialize."));
+      console.log("❌ Something went wrong to install materialize.");
       return;
     }
   }
@@ -258,10 +275,11 @@ app.use("/js", express.static(path.join(__dirname, "node_modules/jquery/dist")))
       });
 
       console.log(
-        chalk.yellow("Please add the following code to your index.html file.")
+        chalk.yellow("🔔 Please add the following code to your index.html file.")
       );
-
+      console.log(chalk.green("-------------------"));
       console.log(code);
+      console.log(chalk.green("-------------------"));
 
       const scriptSegment = `
 <script src="/node_modules/semantic-ui/dist/semantic.min.js"></script>
@@ -274,18 +292,20 @@ app.use("/js", express.static(path.join(__dirname, "node_modules/jquery/dist")))
 
       console.log(
         chalk.yellow(
-          "Please add the following code to your index.html file before the closing body tag."
+          "🔔 Please add the following code to your index.html file before the closing body tag."
         )
       );
+      console.log(chalk.green("-------------------"));
       console.log(script);
+      console.log(chalk.green("-------------------"));
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install semantic ui."));
+      console.log("❌ Something went wrong to install semantic ui.");
       return;
     }
   }
 
   // No CSS Framework
   noCssFramework() {
-    console.log(chalk.yellow("No CSS Framework initialized successfully."));
+    console.log(chalk.yellow("🔔 No CSS Framework initialized successfully."));
   }
 }
