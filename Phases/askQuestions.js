@@ -17,12 +17,12 @@ async function askQuestions() {
     {
       name: "projectDescription",
       type: "input",
-      message: "What is your project description?",
+      message: "What is your project description?(optional)",
     },
     {
       name: "projectAuthor",
       type: "input",
-      message: "What is your project author?",
+      message: "What is your project author?(optional)",
     },
     {
       name: "packageManager",

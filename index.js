@@ -14,6 +14,7 @@ import askQuestions from "./Phases/askQuestions.js";
 // Modules
 import folderCreating from "./modules/FolderCreating.js";
 import ProjectCreating from "./modules/ProjectCreating.js";
+import Config from "./modules/Config.js";
 import VersionControl from "./modules/VersionControl.js";
 import TemplateEngine from "./modules/TemplateEngine.js";
 import CssFramework from "./modules/CSSFramework.js";
@@ -39,12 +40,12 @@ let orm = "";
 let testing = "";
 let authentication = "";
 let cssFramework = "";
-let cssPreprocessor = "";
-let taskRunner = "";
+// let cssPreprocessor = "";
+// let taskRunner = "";
 let packageManager = "";
 let versionControl = "";
 let apiDocumentation = "";
-let hosting = "";
+// let hosting = "";
 let linting = "";
 
 // Application Start
@@ -80,12 +81,12 @@ async function assignAnswers(answers) {
   testing = answers.testing.toLowerCase();
   authentication = answers.authentication.toLowerCase();
   cssFramework = answers.cssFramework.toLowerCase();
-  cssPreprocessor = answers.cssPreprocessor.toLowerCase();
-  taskRunner = answers.taskRunner.toLowerCase();
+  // cssPreprocessor = answers.cssPreprocessor.toLowerCase();
+  // taskRunner = answers.taskRunner.toLowerCase();
   packageManager = answers.packageManager.toLowerCase();
   versionControl = answers.versionControl.toLowerCase();
   apiDocumentation = answers.apiDocumentation.toLowerCase();
-  hosting = answers.hosting.toLowerCase();
+  // hosting = answers.hosting.toLowerCase();
   linting = answers.linting.toLowerCase();
 }
 
@@ -96,6 +97,9 @@ async function generateProject() {
   // Project Creating
   let projectCreation = new ProjectCreating(packageManager, jsOrTs);
   await projectCreation.creatingProject();
+  // Setup Details
+  let config = new Config(projectName, projectDescription, projectAuthor);
+  await config.setupDetails();
   // Version Control
   let vc = new VersionControl(versionControl);
   await vc.createVC();
