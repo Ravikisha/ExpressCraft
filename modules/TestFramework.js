@@ -32,9 +32,9 @@ export default class TestFramework {
         JSON.stringify(packageJson, null, 2),
         "utf-8"
       );
-      console.log(chalk.green("Jest installed successfully"));
+      console.log("✅ Jest installed successfully");
     } catch (e) {
-      console.log(chalk.red(e));
+      console.log("❌ Something went wrong to install jest.");
     }
   }
 
@@ -55,9 +55,9 @@ export default class TestFramework {
         JSON.stringify(packageJson, null, 2),
         "utf-8"
       );
-      console.log(chalk.green("Jest installed successfully"));
+      console.log("✅ Jest installed successfully");
     } catch (e) {
-      console.log(chalk.red(e));
+      console.log("❌ Something went wrong to install jest.");
     }
   }
 
@@ -90,9 +90,9 @@ export default class TestFramework {
       // update the package.json file
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test = "cross-env NODE_ENV=test jest --watchAll";
-      console.log(chalk.green("Jest installed successfully"));
+      console.log("✅ Jest installed successfully");
     } catch (e) {
-      console.log(chalk.red(e));
+      console.log("❌ Something went wrong to install jest.");
     }
   }
 
@@ -125,9 +125,9 @@ export default class TestFramework {
       // update the package.json file
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test = "cross-env NODE_ENV=test jest --watchAll";
-      console.log(chalk.green("Jest installed successfully"));
+      console.log("✅ Jest installed successfully");
     } catch (e) {
-      console.log(chalk.red(e));
+      console.log("❌ Something went wrong to install jest.");
     }
   }
 
@@ -143,9 +143,9 @@ export default class TestFramework {
       // update the package.json file
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test = "mocha --reporter spec";
-      console.log(chalk.green("Mocha installed successfully"));
+      console.log("✅ Mocha + Chai installed successfully");
     } catch (e) {
-      console.log(chalk.red(e));
+      console.log("❌ Something went wrong to install mocha + chai");
     }
   }
 
@@ -160,9 +160,9 @@ export default class TestFramework {
       // update the package.json file
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test = "mocha --reporter spec";
-      console.log(chalk.green("Mocha installed successfully"));
+      console.log("✅ Mocha + Chai installed successfully");
     } catch (e) {
-      console.log(chalk.red(e));
+      console.log("❌ Something went wrong to install mocha + chai");
     }
   }
 
@@ -179,9 +179,9 @@ export default class TestFramework {
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test =
         "mocha --reporter spec --require ts-node/register";
-      console.log(chalk.green("Mocha installed successfully"));
+      console.log("✅ Mocha + Chai installed successfully");
     } catch (e) {
-      console.log(chalk.red(e));
+      console.log("❌ Something went wrong to install mocha + chai");
     }
   }
 
@@ -198,9 +198,9 @@ export default class TestFramework {
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test =
         "mocha --reporter spec --require ts-node/register";
-      console.log(chalk.green("Mocha installed successfully"));
+      console.log("✅ Mocha + Chai installed successfully");
     } catch (e) {
-      console.log(chalk.red(e));
+      console.log("❌ Something went wrong to install mocha + chai");
     }
   }
 
@@ -215,9 +215,9 @@ export default class TestFramework {
       // update the package.json file
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test = "./node_modules/.bin/jasmine-node spec";
-      console.log(chalk.green("Jasmine installed successfully"));
+      console.log("✅ Jasmine installed successfully");
     } catch (e) {
-      console.log(chalk.red(e));
+      console.log("❌ Something went wrong to install jasmine");
     }
   }
 
@@ -232,9 +232,9 @@ export default class TestFramework {
       // update the package.json file
       const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
       packageJson.scripts.test = "./node_modules/.bin/jasmine-node spec";
-      console.log(chalk.green("Jasmine installed successfully"));
+      console.log("✅ Jasmine installed successfully");
     } catch (e) {
-      console.log(chalk.red(e));
+      console.log("❌ Something went wrong to install jasmine");
     }
   }
 
@@ -264,9 +264,9 @@ export default class TestFramework {
         "utf-8"
       );
 
-      console.log(chalk.green("Jasmine installed successfully"));
+      console.log("✅ Jasmine installed successfully");
     } catch (e) {
-      console.log(chalk.red(e));
+      console.log("❌ Something went wrong to install jasmine");
     }
   }
 
@@ -296,9 +296,9 @@ export default class TestFramework {
         "utf-8"
       );
 
-      console.log(chalk.green("Jasmine installed successfully"));
+      console.log("✅ Jasmine installed successfully");
     } catch (e) {
-      console.log(chalk.red(e));
+      console.log("❌ Something went wrong to install jasmine");
     }
   }
 
@@ -308,7 +308,7 @@ export default class TestFramework {
    * Language: JavaScript
    */
   noTesting() {
-    console.log(chalk.yellow("No Testing Framework selected"));
+    console.log(chalk.yellow("🔔 No Testing Framework selected"));
   }
 
   /**
