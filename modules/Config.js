@@ -23,5 +23,6 @@ export default class Config {
         }
         packageJson = JSON.stringify(packageJson, null, 2);
         fs.writeFileSync("package.json", packageJson);
+        console.log("✅ Setup Details in Project.");
     }
 }

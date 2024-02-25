@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { chalkAnimation } from 'chalk-animation';
+import chalkAnimation from 'chalk-animation';
 
 async function end(projectName, projectDescription, projectAuthor, packageManager) {
 

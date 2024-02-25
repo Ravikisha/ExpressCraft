@@ -1,6 +1,5 @@
 import { execSync } from "child_process";
 import fs from "fs";
-import chalk from "chalk";
 
 export default class ProjectCreating {
   constructor(packageManager, language) {
@@ -15,10 +14,10 @@ export default class ProjectCreating {
     } else if (this.packageManager === "yarn") {
       this.yarnProjectCreating();
     } else {
-      console.log(chalk.red("Please select a package manager."));
+      console.log("❌ Please select a package manager.");
       return;
     }
-    console.log(chalk.green("Project created successfully."));
+    console.log("✅ Project created successfully.");
   }
 
   // Creating Project with NPM
@@ -28,7 +27,7 @@ export default class ProjectCreating {
     } else if (this.language === "typescript") {
       this.createProjectUsingNpmWithTs();
     } else {
-      console.log(chalk.red("Please select a language."));
+      console.log("❌ Please select a language.");
       return;
     }
   }
@@ -40,7 +39,7 @@ export default class ProjectCreating {
     } else if (this.language === "typescript") {
       this.createProjectUsingYarnWithTs();
     } else {
-      console.log(chalk.red("Please select a language."));
+      console.log("❌ Please select a language.");
       return;
     }
   }
@@ -51,7 +50,7 @@ export default class ProjectCreating {
     try {
       execSync("npm install express nodemon");
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install express."));
+      console.log("❌ Something went wrong to install express.");
       return;
     }
   }
@@ -62,7 +61,7 @@ export default class ProjectCreating {
     try {
       execSync("yarn add express nodemon");
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install express."));
+      console.log("❌ Something went wrong to install express.");
       return;
     }
   }
@@ -90,7 +89,7 @@ export default class ProjectCreating {
       };
       fs.writeFileSync("tsconfig.json", JSON.stringify(config, null, 2));
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install express."));
+      console.log("❌ Something went wrong to install express.");
       return;
     }
   }
@@ -120,7 +119,7 @@ export default class ProjectCreating {
       };
       fs.writeFileSync("tsconfig.json", JSON.stringify(config, null, 2));
     } catch (err) {
-      console.log(chalk.red("Something went wrong to install express."));
+      console.log("❌ Something went wrong to install express.");
       return;
     }
   }

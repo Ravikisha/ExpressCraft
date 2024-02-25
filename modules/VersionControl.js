@@ -11,14 +11,14 @@ export default class VersionControl {
   createVC() {
     if (this.versionControl === "git") {
       this.git();
-      console.log(chalk.green("Git initialized successfully."));
+      console.log("✅ Git initialized successfully.");
     } else if (this.versionControl === "svn") {
       this.svn();
-      console.log(chalk.green("SVN initialized successfully."));
+      console.log("✅ SVN initialized successfully.");
     } else if (this.versionControl === "no version control") {
       this.noVersionControl();
     } else {
-      console.log(chalk.red("Please select a version control."));
+      console.log("❌ Please select a version control.");
       return;
     }
   }
@@ -29,7 +29,7 @@ export default class VersionControl {
       execSync("git init");
       this.createGitIgnore();
     } catch (err) {
-      console.log(chalk.red("Something went wrong to initialize git."));
+      console.log("❌ Something went wrong to initialize git.");
       return;
     }
   }
@@ -39,14 +39,14 @@ export default class VersionControl {
     try {
       execSync("svn init");
     } catch (err) {
-      console.log(chalk.red("Something went wrong to initialize svn."));
+      console.log("❌ Something went wrong to initialize svn.");
       return;
     }
   }
 
   // No Version Control
   noVersionControl() {
-    console.log(chalk.yellow("No Version Control selected."));
+    console.log(chalk.yellow("🔔 No Version Control selected."));
   }
 
   // create .gitignore file
@@ -185,7 +185,7 @@ dist
 .pnp.*`;
       fs.writeFileSync(".gitignore", config);
     } catch (err) {
-      console.log(chalk.red("Something went wrong to create .gitignore file."));
+      console.log("❌ Something went wrong to create .gitignore file.");
       return;
     }
   }

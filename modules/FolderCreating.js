@@ -1,6 +1,5 @@
 import fs from "fs";
 import {execSync} from "child_process";
-import chalk from "chalk";
 
 
 export default function folderCreating(packageManager, projectName){
@@ -9,17 +8,17 @@ export default function folderCreating(packageManager, projectName){
     }else if(packageManager === "yarn"){
         yarnFolderCreating(projectName);
     }else{
-        console.log(chalk.red("Please select a package manager."));
+        console.log("❌ Please select a package manager.");
         return;
     }
-    console.log(chalk.green("Folder created successfully."));
+    console.log("✅ Folder created successfully.");
 }
 
 function npmFolderCreating(projectName){
     try{
         fs.mkdirSync(projectName);
     }catch(err){
-        console.log(chalk.red("Project already exists."));
+        console.log("❌ Project already exists.");
         return;
     }
     process.chdir(projectName);
@@ -30,7 +29,7 @@ function yarnFolderCreating(projectName){
     try{
         fs.mkdirSync(projectName);
     }catch(err){
-        console.log(chalk.red("Project already exists."));
+        console.log("❌ Project already exists.");
         return;
     }
     process.chdir(projectName);

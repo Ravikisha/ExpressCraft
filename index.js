@@ -1,11 +1,8 @@
 #!/usr/bin/env node
 import chalk from "chalk";
-import inquirer from "inquirer";
 import gradient from "gradient-string";
 import figlet from "figlet";
-import chalkAnimation from "chalk-animation";
-import execSync from "child_process";
-import fs from "fs";
+import ora from "ora";
 
 // Phases
 import end from "./Phases/end.js";
@@ -67,13 +64,12 @@ async function welcome() {
   const answers = await askQuestions();
   await assignAnswers(answers);
   await generateProject();
-  end();
 }
 
 async function assignAnswers(answers) {
-  projectName = answers.projectName.toLowerCase();
-  projectDescription = answers.projectDescription.toLowerCase();
-  projectAuthor = answers.projectAuthor.toLowerCase();
+  projectName = answers.projectName;
+  projectDescription = answers.projectDescription;
+  projectAuthor = answers.projectAuthor;
   jsOrTs = answers.jsOrTs.toLowerCase();
   templateEngine = answers.templateEngine.toLowerCase();
   database = answers.database.toLowerCase();
@@ -90,41 +86,52 @@ async function assignAnswers(answers) {
   linting = answers.linting.toLowerCase();
 }
 
-async function generateProject() {
-  console.log(chalk.green("Generating project..."));
+function generateProject() {
+  console.log("✅ Generating Project ....");
+
   // Folder Creating
-  await folderCreating(packageManager, projectName);
+  folderCreating(packageManager, projectName);
+
   // Project Creating
   let projectCreation = new ProjectCreating(packageManager, jsOrTs);
-  await projectCreation.creatingProject();
+  projectCreation.creatingProject();
+  
   // Setup Details
   let config = new Config(projectName, projectDescription, projectAuthor);
-  await config.setupDetails();
+  config.setupDetails();
+  
   // Version Control
   let vc = new VersionControl(versionControl);
-  await vc.createVC();
+  vc.createVC();
   // Template Engine
   let te = new TemplateEngine(templateEngine);
-  await te.createTemplateEngine();
+  te.createTemplateEngine();
   // CSS Framework
   let cf = new CssFramework(cssFramework);
-  await cf.createCssFramework();
+  cf.createCssFramework();
   // CSS Preprocessor
   // let cp = new CSSPreprocessor(cssPreprocessor, packageManager);
-  // await cp.createCssPreprocessor();
+  // cp.createCssPreprocessor();
   // Database Setup
-  let db = new DatabaseSetup(packageManager,projectName, database, jsOrTs, orm);
-  await db.databaseSetup();
+  let db = new DatabaseSetup(
+    packageManager,
+    projectName,
+    database,
+    jsOrTs,
+    orm
+  );
+  db.databaseSetup();
   // Testing Setup
-  let testSetup = new TestFramework(jsOrTs,packageManager,testing)
-  await testSetup.testSetup();
+  let testSetup = new TestFramework(jsOrTs, packageManager, testing);
+  testSetup.testSetup();
   // Authentication Setup
   let auth = new Authentication(authentication, packageManager, jsOrTs);
-  await auth.setupAuth();
+  auth.setupAuth();
   // Linting Setup
   let lint = new Linting(linting, packageManager, jsOrTs);
-  await lint.setupLinting();
+  lint.setupLinting();
   // Documentation Setup
   let doc = new Documentation(apiDocumentation, packageManager, jsOrTs);
-  await doc.setupDocumentation();
+  doc.setupDocumentation();
+  end(projectName, projectDescription, projectAuthor, packageManager);
 }
