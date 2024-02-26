@@ -1,6 +1,13 @@
-# ExpressCraft
-
+![ExpressCraft Logo](./assets/logo.png)
 ExpressCraft is a command-line tool that allows you to quickly generate an Express application scaffold, getting you up and running with a basic Express server structure in no time.
+
+<img src="https://img.shields.io/github/license/ravikisha/expresscraft" alt="License">
+<img src="https://img.shields.io/github/issues/ravikisha/expresscraft" alt="Issues">
+<img src="https://img.shields.io/github/forks/ravikisha/expresscraft" alt="Forks">
+<img src="https://img.shields.io/github/stars/ravikisha/expresscraft" alt="Stars">
+<img src="https://img.shields.io/github/issues-pr/ravikisha/expresscraft" alt="Pull Requests">
+
+
 
 ## Installation
 
