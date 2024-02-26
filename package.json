@@ -10,7 +10,7 @@
   "script": {
     "start": "node index.js"
   },
-  "author": "",
+  "author": "Ravi Kishan",
   "license": "MIT",
   "dependencies": {
     "chalk": "^5.3.0",
@@ -19,5 +19,17 @@
     "gradient-string": "^2.0.2",
     "inquirer": "^9.2.12"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "keywords": [
+    "express",
+    "express.js",
+    "express-generator",
+    "express-cli",
+    "express.js-cli",
+    "express.js-cli-generator",
+    "express.js-cli-generator",
+    "expresscraft",
+    "expresscraft-cli",
+    "Ravi Kishan"
+  ]
 }
