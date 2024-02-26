@@ -227,6 +227,9 @@ npm run dev
 
 This will start the server in development mode, and you can access it by navigating to `http://localhost:3000` in your web browser.
 
+## Author
+This project is created and maintained by [Ravi Kishan](https://github.com/ravikisha).
+
 ## Changelog
 Check out the [CHANGELOG](CHANGELOG.md) for the latest updates and changes to the project.
 
