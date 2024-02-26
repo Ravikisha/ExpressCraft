@@ -1,12 +1,17 @@
-![ExpressCraft Logo](./assets/logo.png)
+<img src="https://ravikisha.github.io/assets/ExpressCraftLogo.png" alt="ExpressCraft" object-fit="contain">
+
 ExpressCraft is a command-line tool that allows you to quickly generate an Express application scaffold, getting you up and running with a basic Express server structure in no time.
-
-<img src="https://img.shields.io/github/license/ravikisha/expresscraft" alt="License">
-<img src="https://img.shields.io/github/issues/ravikisha/expresscraft" alt="Issues">
-<img src="https://img.shields.io/github/forks/ravikisha/expresscraft" alt="Forks">
-<img src="https://img.shields.io/github/stars/ravikisha/expresscraft" alt="Stars">
-<img src="https://img.shields.io/github/issues-pr/ravikisha/expresscraft" alt="Pull Requests">
-
+<div align="center" style="display: flex; justify-content: start; gap: 1rem;flex-wrap: wrap;">
+  <img src="https://img.shields.io/npm/v/expresscraft" alt="Version">
+  <img src="https://img.shields.io/github/last-commit/ravikisha/expresscraft" alt="Last Commit">
+  <img src="https://img.shields.io/github/languages/code-size/ravikisha/expresscraft" alt="Code Size">
+  <img src="https://img.shields.io/github/languages/top/ravikisha/expresscraft" alt="Language">
+  <img src="https://img.shields.io/github/license/ravikisha/expresscraft" alt="License">
+  <img src="https://img.shields.io/github/issues/ravikisha/expresscraft" alt="Issues">
+  <img src="https://img.shields.io/github/forks/ravikisha/expresscraft" alt="Forks">
+  <img src="https://img.shields.io/github/stars/ravikisha/expresscraft" alt="Stars">
+  <img src="https://img.shields.io/github/issues-pr/ravikisha/expresscraft" alt="Pull Requests">
+  </div>
 
 
 ## Installation
@@ -240,3 +245,5 @@ Contributions are welcome! If you find any issues or have suggestions for improv
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+![footer](https://ravikisha.github.io/assets/personalLogo.png)
