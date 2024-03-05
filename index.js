@@ -21,6 +21,7 @@ import TestFramework from "./modules/TestFramework.js";
 import Authentication from "./modules/Authentication.js";
 import Linting from "./modules/Linting.js";
 import Documentation from "./modules/Documentation.js";
+import Readme from "./modules/Readme.js";
 
 /**
  * Trying to make a CLI tool for myself to generate a new project with a template in express js with all the necessary files, folders and dependencies.
@@ -140,6 +141,10 @@ function generateProject() {
   let doc = new Documentation(apiDocumentation, packageManager, jsOrTs);
   doc.setupDocumentation();
 
+  // Readme
+  let readme = new Readme();
+  readme.creatingReadme();
+  
   // end the process
   end(projectName,packageManager);
 }
