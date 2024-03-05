@@ -141,7 +141,7 @@ export default class Documentation{
         }else if(this.apiDocumentation === "postman" && this.packageManager === "yarn" && this.language === "typescript"){
             this.postmanYarnTypeScript()
         }else {
-            console.log("❌ Error installing API Documentation")
+            console.log("🔔 No API Documentation setup")
         }
     }
 

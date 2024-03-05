@@ -1,8 +1,6 @@
 #!/usr/bin/env node
-import chalk from "chalk";
 import gradient from "gradient-string";
 import figlet from "figlet";
-import ora from "ora";
 
 // Phases
 import end from "./Phases/end.js";
@@ -144,7 +142,7 @@ function generateProject() {
   // Readme
   let readme = new Readme();
   readme.creatingReadme();
-  
+
   // end the process
   end(projectName,packageManager);
 }

@@ -7,7 +7,7 @@
   "bin": {
     "expresscraft": "./index.js"
   },
-  "script": {
+  "scripts": {
     "start": "node index.js"
   },
   "author": "Ravi Kishan",
