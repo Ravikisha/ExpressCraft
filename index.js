@@ -94,7 +94,7 @@ function generateProject() {
   projectCreation.creatingProject();
   
   // Setup Details
-  let config = new Config(projectName, projectDescription, projectAuthor);
+  let config = new Config(projectName, projectDescription, projectAuthor, jsOrTs, packageManager);
   config.setupDetails();
   
   // Version Control
