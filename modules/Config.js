@@ -17,7 +17,7 @@ export default class Config {
         packageJson.name = this.projectName;
         packageJson.description = this.projectDescription;
         packageJson.author = this.projectAuthor;
-        packageJson.script = {
+        packageJson.scripts = {
             "start": "node index.js",
             "dev": "nodemon index.js"
         }
