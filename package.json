@@ -15,11 +15,11 @@
   "dependencies": {
     "chalk": "^5.3.0",
     "cli-highlight": "^2.1.11",
+    "expresscraft": "file:",
     "figlet": "^1.7.0",
     "gradient-string": "^2.0.2",
     "inquirer": "^9.2.12"
   },
-  "devDependencies": {},
   "keywords": [
     "express",
     "express.js",
