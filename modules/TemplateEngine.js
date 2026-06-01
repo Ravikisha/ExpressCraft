@@ -1,75 +1,65 @@
-import { execSync } from "child_process";
 import chalk from "chalk";
 
+const ENGINE = {
+  ejs: { dep: "ejs", engine: "ejs", ext: "ejs" },
+  pug: { dep: "pug", engine: "pug", ext: "pug" },
+  twig: { dep: "twig", engine: "twig", ext: "twig" },
+  handlebars: { dep: "handlebars", engine: "hbs", ext: "hbs" },
+};
+
+const SAMPLE = {
+  ejs: `<!DOCTYPE html>
+<html>
+  <head><title><%= title %></title></head>
+  <body><h1><%= title %></h1></body>
+</html>
+`,
+  pug: `doctype html
+html
+  head
+    title= title
+  body
+    h1= title
+`,
+  twig: `<!DOCTYPE html>
+<html>
+  <head><title>{{ title }}</title></head>
+  <body><h1>{{ title }}</h1></body>
+</html>
+`,
+  handlebars: `<!DOCTYPE html>
+<html>
+  <head><title>{{title}}</title></head>
+  <body><h1>{{title}}</h1></body>
+</html>
+`,
+};
+
 export default class TemplateEngine {
-    constructor(templateEngine) {
-        this.templateEngine = templateEngine;
-    }
+  constructor(manifest, templateEngine) {
+    this.manifest = manifest;
+    this.templateEngine = templateEngine;
+  }
 
-    // Template Engine
-    createTemplateEngine() {
-        if (this.templateEngine === "ejs") {
-            this.ejs();
-            console.log("✅ EJS initialized successfully.");
-        } else if (this.templateEngine === "pug") {
-            this.pug();
-            console.log("✅ Pug initialized successfully.");
-        } else if (this.templateEngine === "twig") {
-            this.twig();
-            console.log("✅ Twig initialized successfully.");
-        } else if (this.templateEngine === "handlebars") {
-            this.handlebars();
-            console.log("✅ Handlebars initialized successfully.");
-        } else if (this.templateEngine === "no template engine") {
-            this.noTemplateEngine();
-        } else {
-            console.log("❌ Please select a template engine.");
-            return;
-        }
+  register() {
+    const cfg = ENGINE[this.templateEngine];
+    if (!cfg) {
+      console.log(chalk.yellow("🔔 No Template Engine selected."));
+      return;
     }
+    const m = this.manifest;
+    m.addDep(cfg.dep);
+    if (this.templateEngine === "handlebars") m.addDep("hbs"); // express view adapter
 
-    // EJS
-    ejs() {
-        try {
-            execSync("npm install ejs");
-        } catch (err) {
-            console.log("❌ Something went wrong to install ejs.");
-            return;
-        }
-    }
+    // Wire the view engine into the generated app.
+    m.addAppImport(
+      m.isTs() ? `import path from "path";` : `const path = require("path");`
+    );
+    m.addAppSetup(`app.set("view engine", "${cfg.engine}");`);
+    m.addAppSetup(`app.set("views", path.join(__dirname, "../views"));`);
 
-    // Pug
-    pug() {
-        try {
-            execSync("npm install pug");
-        } catch (err) {
-            console.log("❌ Something went wrong to install pug.");
-            return;
-        }
-    }
-
-    // Twig
-    twig() {
-        try {
-            execSync("npm install twig");
-        } catch (err) {
-            console.log("❌ Something went wrong to install twig.");
-            return;
-        }
-    }
-
-    // Handlebars
-    handlebars() {
-        try {
-            execSync("npm install handlebars");
-        } catch (err) {
-            console.log("❌ Something went wrong to install handlebars.");
-            return;
-        }
-    }
-
-    // No Template Engine
-    noTemplateEngine() {
-        console.log(chalk.yellow("🔔 No Template Engine selected."));
-    }
+    m.addFile(`views/index.${cfg.ext}`, SAMPLE[this.templateEngine]);
+    m.note(`Render a view with: res.render("index", { title: "${m.name}" }).`);
+    console.log(`✅ ${cfg.dep} registered and wired.`);
+  }
 }

@@ -1,124 +1,60 @@
 import fs from "fs";
-import { execSync } from "child_process";
+import path from "path";
+import { fileURLToPath } from "url";
 import chalk from "chalk";
-import { highlight } from "cli-highlight";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default class CSSPreprocessor {
-  constructor(cssPreprocessor, packageManager) {
-    this.cssPreprocessor = cssPreprocessor;
-    this.packageManager = packageManager;
+  constructor(manifest, cssPreprocessor) {
+    this.manifest = manifest;
+    this.cssPreprocessor = cssPreprocessor; // sass | less | stylus | postcss | no css preprocessor
   }
 
-  // CSS Preprocessor
-  createCssPreprocessor() {
-    if (this.cssPreprocessor === "sass") {
-      this.sass();
-      console.log(chalk.green("Sass initialized successfully."));
-    } else if (this.cssPreprocessor === "less") {
-      this.less();
-      console.log(chalk.green("Less initialized successfully."));
-    } else if (this.cssPreprocessor === "stylus") {
-      this.stylus();
-      console.log(chalk.green("Stylus initialized successfully."));
-    } else if (this.cssPreprocessor === "postcss") {
-      this.postcss();
-      console.log(chalk.green("PostCSS initialized successfully."));
-    } else if (this.cssPreprocessor === "no css preprocessor") {
-      this.noCssPreprocessor();
-    } else {
-      console.log(chalk.red("Please select a CSS Preprocessor."));
-      return;
+  register() {
+    switch (this.cssPreprocessor) {
+      case "sass":
+        return this.sass();
+      case "less":
+        return this.simple("less", "Less");
+      case "stylus":
+        return this.simple("stylus", "Stylus");
+      case "postcss":
+        return this.simple("postcss postcss-cli", "PostCSS");
+      case "no css preprocessor":
+      default:
+        console.log(chalk.yellow("🔔 No CSS Preprocessor selected."));
     }
   }
 
-  // Sass
+  simple(deps, label) {
+    this.manifest.addDeps(deps, { dev: true });
+    console.log(`✅ ${label} registered.`);
+  }
+
   sass() {
-    try {
-      if (this.packageManager === "npm") {
-        execSync("npm install -D node-sass glob");
-      } else if (this.packageManager === "yarn") {
-        execSync("yarn add -D node-sass glob");
-      }
+    const m = this.manifest;
+    m.addDeps("sass glob", { dev: true });
 
-      // create a lib folder
-      fs.mkdirSync("lib");
-      // copy the sass_compiler.js file to the lib folder
-      const sassCompiler = fs.readFileSync(
-        "./node_modules/expresscraft/lib/sass_compiler.js",
-        "utf8"
-      );
-
-      fs.writeFileSync("./lib/sass_compiler.js", sassCompiler);
-
-      // update the package.json file
-      const packageJson = JSON.parse(fs.readFileSync("package.json"));
-      packageJson.scripts.sass = "node lib/sass_compiler.js";
-      packageJson.scripts.build =
-        packageJson.scripts.build + " && npm run sass";
-      fs.writeFileSync("package.json", JSON.stringify(packageJson, null, 2));
-
-      // create a styles folder
-      fs.mkdirSync("styles");
-      // create a global.scss file
-      fs.writeFileSync(
-        "styles/global.scss",`
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    // Ship the bundled Dart Sass compiler into the generated project.
+    const compiler = fs.readFileSync(
+      path.resolve(__dirname, "../lib/sass_compiler.js"),
+      "utf8"
+    );
+    m.addFile("lib/sass_compiler.js", compiler);
+    m.addFile(
+      "styles/global.scss",
+      `* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 `
-      );
-    } catch (err) {
-      console.log(chalk.red("Error installing Sass."));
-      return;
-    }
-  }
+    );
 
-  // Less
-  less() {
-    try {
-      if (this.packageManager === "npm") {
-        execSync("npm install less");
-      } else if (this.packageManager === "yarn") {
-        execSync("yarn add less");
-      }
-    } catch (err) {
-      console.log(chalk.red("Error installing Less."));
-      return;
-    }
-  }
-
-  // Stylus
-  stylus() {
-    try {
-      if (this.packageManager === "npm") {
-        execSync("npm install stylus");
-      } else if (this.packageManager === "yarn") {
-        execSync("yarn add stylus");
-      }
-    } catch (err) {
-      console.log(chalk.red("Error installing Stylus."));
-      return;
-    }
-  }
-
-  //postcss
-  postcss() {
-    try {
-      if (this.packageManager === "npm") {
-        execSync("npm install postcss-cli");
-      } else if (this.packageManager === "yarn") {
-        execSync("yarn add postcss-cli");
-      }
-    } catch (err) {
-      console.log(chalk.red("Error installing PostCSS."));
-      return;
-    }
-  }
-
-  // No CSS Preprocessor
-  noCssPreprocessor() {
-    console.log(chalk.yellow("No CSS Preprocessor initialized."));
+    m.setScript("sass", "node lib/sass_compiler.js");
+    m.appendScript("build", "node lib/sass_compiler.js");
+    m.note(`Compile Sass with: ${m.runCommand("sass")}`);
+    console.log("✅ Sass registered.");
   }
 }

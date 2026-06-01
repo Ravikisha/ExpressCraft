@@ -1,22 +1,43 @@
-import { execSync } from "child_process";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 export default class Readme {
-    // creating readme
-    creatingReadme() {
-        const readmeFile = path.resolve(__dirname, "../", "README.md");
-        const targetFile = path.resolve(process.cwd(), "README.md");
-        try {
-            fs.copyFileSync(readmeFile, targetFile);
-        }catch(err){
-            console.log("❌ Error creating README.md");
-            return;
-        }
-        console.log("✅ README.md created successfully");
-    }
+  constructor(manifest) {
+    this.manifest = manifest;
+  }
+
+  creatingReadme() {
+    const m = this.manifest;
+    const install = m.installCommand();
+    const dev = m.runCommand("dev");
+    const start = m.runCommand("start");
+    const build = m.runCommand("build");
+
+    const content = `# ${m.name}
+
+${m.description || "An Express.js project generated with ExpressCraft."}
+
+## Getting Started
+
+\`\`\`bash
+${install}
+${dev}
+\`\`\`
+
+## Scripts
+
+${Object.entries(m.scripts)
+  .map(([name, cmd]) => `- \`${name}\` — \`${cmd}\``)
+  .join("\n")}
+
+## Production
+
+\`\`\`bash
+${m.isTs() ? `${build}\n${start}` : start}
+\`\`\`
+
+${m.author ? `\n_Author: ${m.author}_\n` : ""}
+Generated with [ExpressCraft](https://github.com/Ravikisha/ExpressCraft).
+`;
+
+    this.manifest.addFile("README.md", content);
+    console.log("✅ README registered.");
+  }
 }

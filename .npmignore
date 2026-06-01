@@ -1,11 +1,7 @@
-CONTRIBUTING.md
-Makefile
-SPONSORS.md
-docs/
-examples/
-reports/
-test/
-
+# Publishing uses the "files" allowlist in package.json.
+# This excludes dev-only files in case "files" is ever removed.
+improvements.md
+.prettierrc
+.prettierignore
 .github/
-.jshintrc
-.travis.yml
+node_modules/

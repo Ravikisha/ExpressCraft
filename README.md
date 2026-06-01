@@ -16,29 +16,77 @@ ExpressCraft is a command-line tool that allows you to quickly generate an Expre
 
 ## Installation
 
-To use ExpressCraft, make sure you have Node.js and npm installed on your system. Then, you can install it globally using npm:
+ExpressCraft needs **Node.js >= 16**. Install it globally with your package manager of choice:
 
 ```bash
 npm install -g expresscraft
+# or
+yarn global add expresscraft
+# or
+pnpm add -g expresscraft
 ```
 
-## Usage
-
-To generate a new Express application, simply run the following command:
+Or run it without installing:
 
 ```bash
 npx expresscraft
 ```
 
-This will prompt you to enter the name of your application, and then generate a new directory with the specified name containing the Express application scaffold.
+## Usage
+
+Run the tool and answer the prompts:
+
+```bash
+npx expresscraft
+```
+
+You'll be asked for project metadata (name, description, author) and can either pick a **preset** or fully **customize** every choice. ExpressCraft then:
+
+1. Collects all your answers.
+2. Builds a single `package.json` from them.
+3. Generates a structured project (see [Generated Project Structure](#generated-project-structure)).
+4. Runs **one** dependency install at the end (npm / yarn / pnpm).
+
+### Non-interactive mode
+
+Pass flags to skip the prompts — handy for scripting and CI:
+
+```bash
+expresscraft my-api --preset api --yes
+expresscraft --name blog --preset mvc --pm pnpm --yes
+```
+
+### CLI options
+
+| Flag | Description |
+| ---- | ----------- |
+| `-n, --name <name>` | Project name |
+| `-p, --preset <name>` | Preset: `minimal` \| `api` \| `mvc` \| `fullstack` |
+| `--pm <manager>` | Package manager: `npm` \| `yarn` \| `pnpm` |
+| `--ts` / `--js` | Language (TypeScript / JavaScript) |
+| `-y, --yes` | Non-interactive (use preset/flag defaults) |
+| `-f, --force` | Overwrite an existing folder without asking |
+| `-h, --help` | Show help |
+
+### Presets
+
+| Preset | Language | PM | Stack |
+| ------ | -------- | -- | ----- |
+| `minimal` | JavaScript | npm | Express base only |
+| `api` | TypeScript | npm | PostgreSQL + Prisma, Jest, JWT, ESLint, Swagger |
+| `mvc` | JavaScript | npm | EJS + Bootstrap + Sass, MongoDB + Mongoose, Jest, Passport, ESLint |
+| `fullstack` | TypeScript | pnpm | EJS + Tailwind + Sass, PostgreSQL + Prisma, Jest, JWT, ESLint, Swagger |
 
 ## Features
-You can use ExpressCraft to generate a new Express application with the following features:
 
-- Choose the name of your application
-- Choose the description of your application
-- Choose the author of your application
-- Choose the Modules and Frameworks you want to use in your application
+- **Presets or full customization** of every choice
+- **Interactive prompts** or **non-interactive flags** (CI-friendly)
+- Builds one `package.json` from your choices, then a **single install** at the end
+- **Pinned dependency versions** for reproducible installs
+- Generates a **real project structure** (routes, middleware, config, `.env`)
+- Working **database/auth boilerplate**, not just installed packages
+- Baseline middleware out of the box: **helmet, cors, morgan**, JSON parsing, error handler, `/health` route
+- Overwrite protection + rollback if generation fails
 
 ## Modules and Frameworks
 ExpressCraft supports the following modules and frameworks:
@@ -48,6 +96,7 @@ ExpressCraft supports the following modules and frameworks:
 | --------------- | ----------- |
 |![NPM](https://img.shields.io/npm/v/npm.svg?logo=npm)| NPM is the default package manager for the JavaScript runtime environment Node.js.|
 |![Yarn](https://img.shields.io/npm/v/yarn.svg?logo=yarn)| Yarn is a package manager for your code. It allows you to use and share code with other developers from around the world.|
+|![pnpm](https://img.shields.io/badge/pnpm-9-orange.svg?logo=pnpm)| pnpm is a fast, disk-space-efficient package manager that uses a content-addressable store.|
 
 ### Language
 | Language | Description |
@@ -78,7 +127,18 @@ ExpressCraft supports the following modules and frameworks:
 |![Bulma](https://img.shields.io/badge/Bulma-0.9.3-red.svg?logo=bulma)| Bulma is a free, open-source CSS framework based on Flexbox and used by more than 200,000 developers.|
 |![Foundation](https://img.shields.io/badge/Foundation-6.6.3-blue.svg?logo=foundation)| Foundation is a family of responsive front-end frameworks that make it easy to design beautiful responsive websites, apps, and emails.|
 |![Materialize](https://img.shields.io/badge/Materialize-1.0.0-blue.svg?logo=materialize)| Materialize is a modern responsive front-end framework based on Material Design.|
-|![Semantic UI](https://img.shields.io/badge/Semantic%20UI-2.4.2-blue.svg?logo=semantic-ui)| Semantic is a development framework that helps create beautiful, responsive layouts using human-friendly HTML.|
+|![Semantic UI](https://img.shields.io/badge/Semantic%20UI-2.9-blue.svg?logo=semantic-ui)| Semantic UI (Fomantic UI fork) helps create beautiful, responsive layouts using human-friendly HTML.|
+
+> Tailwind uses the v4 CSS-first workflow (`@import "tailwindcss";` + `@tailwindcss/cli`).
+
+### CSS Preprocessor
+
+| CSS Preprocessor | Description |
+| ---------------- | ----------- |
+|![Sass](https://img.shields.io/badge/Sass-1.77-pink.svg?logo=sass)| Sass (Dart Sass). ExpressCraft ships a compiler script (`lib/sass_compiler.js`) that builds `styles/**/*.scss` into `public/css`.|
+|![Less](https://img.shields.io/badge/Less-4.2-blue.svg?logo=less)| Less is a backwards-compatible language extension for CSS.|
+|![Stylus](https://img.shields.io/badge/Stylus-0.63-green.svg?logo=stylus)| Stylus is an expressive, dynamic, robust CSS preprocessor.|
+|![PostCSS](https://img.shields.io/badge/PostCSS-8.4-red.svg?logo=postcss)| PostCSS is a tool for transforming CSS with JavaScript plugins.|
 
 ### Database
 
@@ -97,7 +157,7 @@ ExpressCraft supports the following modules and frameworks:
 |![Sequelize](https://img.shields.io/badge/Sequelize-6.6.5-blue.svg?logo=sequelize)| Sequelize is a promise-based Node.js ORM for Postgres, MySQL, MariaDB, SQLite, and Microsoft SQL Server.|
 |![TypeORM](https://img.shields.io/badge/TypeORM-0.2.38-blue.svg?logo=typeorm)| TypeORM is an ORM that can run in NodeJS, Browser, Cordova, PhoneGap, Ionic, React Native, NativeScript, Expo, and Electron platforms and can be used with TypeScript and JavaScript.|
 |![Mongoose](https://img.shields.io/badge/Mongoose-6.0.8-blue.svg?logo=mongoose)| Mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment.|
-|![Drizzle](https://img.shields.io/badge/Drizzle-1.0.0-blue.svg?logo=drizzle)| Drizzle is a lightweight, fast, and simple ORM for Node.js, built on top of Knex.|
+|![Drizzle](https://img.shields.io/badge/Drizzle-0.30-green.svg?logo=drizzle)| Drizzle is a lightweight, type-safe TypeScript ORM with a SQL-like query API for Node.js.|
 
 ### Testing
 
@@ -119,7 +179,7 @@ ExpressCraft supports the following modules and frameworks:
 | Linting | Description |
 | ------- | ----------- |
 |![ESLint](https://img.shields.io/badge/ESLint-7.32.0-blue.svg?logo=eslint)| ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.|
-|![TSLint](https://img.shields.io/badge/TSLint-6.1.3-blue.svg?logo=tslint)| TSLint has been deprecated in favor of ESLint.|
+|![TSLint](https://img.shields.io/badge/TSLint-deprecated-lightgrey.svg?logo=tslint)| TSLint is deprecated — selecting it now generates an ESLint setup instead.|
 
 ### API Documentation
 
@@ -130,107 +190,112 @@ ExpressCraft supports the following modules and frameworks:
 
 ## Getting Started
 
-After Installing ExpressCraft, you can create a new Express application by running the following command:
+Run ExpressCraft and answer the prompts (or pass flags):
 
 ```bash
 npx expresscraft
 ```
 
-This will prompt you to enter the name of your application, and then generate a new directory with the specified name containing the Express application scaffold.
+Example session:
 
-Once the application has been generated, you can navigate to the new directory and start the server by running:
-
-```bash
-
-  _____                               ____            __ _   
- | ____|_  ___ __  _ __ ___  ___ ___ / ___|_ __ __ _ / _| |_ 
+```text
+  _____                               ____            __ _
+ | ____|_  ___ __  _ __ ___  ___ ___ / ___|_ __ __ _ / _| |_
  |  _| \ \/ / '_ \| '__/ _ \/ __/ __| |   | '__/ _` | |_| __|
  | |___ >  <| |_) | | |  __/\__ \__ \ |___| | | (_| |  _| |_
  |_____/_/\_\ .__/|_|  \___||___/___/\____|_|  \__,_|_|  \__|
             |_|
 
-✨ Welcome to Express Generator CLI tool.✨
+✨ ExpressCraft v1.4.0 — Express.js generator ✨
 
-🎯 Version: 1.4.0
-🎗️  Author: @Ravikisha
+? What is your project name? ecommerce
+? Project description? (optional) Ecommerce API
+? Project author? (optional) Ravi Kishan
+? Start from a preset, or customize? Preset: api
 
-This tool will help you to generate a new project with a template in Express js with all the necessary files, folders 📁 and dependencies 🗃️.
+📋 Project summary:
+-----------------------------------
+  Name               ecommerce
+  Language           typescript
+  Package manager    npm
+  Version control    git
+  Template engine    no template engine
+  CSS framework      no css framework
+  CSS preprocessor   no css preprocessor
+  Database           postgresql
+  ORM                prisma
+  Testing            jest
+  Authentication     jwt
+  Linting            eslint
+  API docs           swagger
+-----------------------------------
+? Create the project with these settings? Yes
 
-🕑 Let's get started by asking some questions to setup your project 🚀
-
-? What is your project name? Ecommerce
-? What is your project description?(optional) Ecommerce Application for NetFlix
-? What is your project author?(optional) Ravi Kishan
-? What is your project Package Manager? NPM
-? What is your project language? TypeScript
-? What is your project Version Control? Git
-? What is your project template engine? EJS
-? What is your project CSS Framework? Tailwind CSS
-? What is your project database? PostgreSQL
-? What is your project ORM? Prisma
-? What is your project testing? Jest
-? What is your project authentication? Passport.js
-? What is your project linting? TSLint
-? What is your project API Documentation? Swagger
-
-
-✅ Generating Project....
-✅ Folder created successfully.
-✅ Project created successfully.
-✅ Setup Details in Project.
+✅ Generating project...
+✅ Folder created.
+✅ Express base registered.
+✅ Prisma registered.
+✅ Jest registered.
+✅ JWT registered.
+✅ ESLint registered.
+✅ Swagger registered.
+✅ Project scaffold generated.
+✅ README registered.
+✅ package.json created from your choices.
 ✅ Git initialized successfully.
-✅ EJS initialized successfully.
-✅ Tailwind CSS initialized successfully.
-🔔 Run the following command to generate the database schema:
----------------------------
-npx prisma generate
----------------------------
-✅ Database and ORM setup complete.
-
-Jest configuration written to "C:\Users\ravi\Desktop\ExpressCraft\Ecommerce\jest.config.js".
-✅ Jest installed successfully
-npm WARN deprecated tslint@6.1.3: TSLint has been deprecated in favor of ESLint. Please see https://github.com/palantir/tslint/issues/4534 for more information.
-✅ TSLint installed successfully
-✅ Swagger installed successfully
-
-💗 Thanks for using ExpressCraft .....
+✔ Dependencies installed.
 
 🚀 Your project is ready!
 
-👉 Get started with the following commands:
-
-👍 Run Your Project:
-
-1️⃣  Open your terminal
-
-2️⃣  Go to your project directory
------------------------------------
-cd Ecommerce
------------------------------------
-
-3️⃣  Run the following command
-
------------- 💻 Dev Mode --------------
-npm run dev
------------- 📈 Production Mode --------------
-npm start
------------------------------------
-
-😎 Happy Coding! 🎉
-
-🌟 If you like ExpressCraft, give us a star on GitHub
+📝 Next steps / notes:
+  • Initialize Prisma: npx prisma init --datasource-provider=postgresql, then npx prisma migrate dev.
+  • Protect routes with the auth middleware in src/middleware/auth (import authenticate).
+  • Mount Swagger UI: app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(spec)).
 ```
 
-This prompt will ask you a series of questions to set up your project. Once you have answered all the questions, the project will be generated with the specified configuration.
-
-You can then navigate to the new directory and start the server by running:
+Then start the server:
 
 ```bash
-cd Ecommerce
-npm run dev
+cd ecommerce
+npm run dev   # yarn dev / pnpm dev
 ```
 
-This will start the server in development mode, and you can access it by navigating to `http://localhost:3000` in your web browser.
+Visit `http://localhost:3000/health` — it responds `{"status":"ok", ...}`.
+
+## Generated Project Structure
+
+Every project is scaffolded with a sensible structure (extensions are `.ts` for TypeScript):
+
+```text
+my-app/
+├── src/
+│   ├── index.js          # server bootstrap: dotenv, db connect, app.listen
+│   ├── app.js            # express app: helmet, cors, morgan, json, routes, error handler
+│   ├── routes/
+│   │   └── index.js      # GET / and GET /health
+│   ├── middleware/
+│   │   └── errorHandler.js
+│   └── config/           # db.js / prisma.js / passport.js (when applicable)
+├── .env                  # PORT and any selected secrets
+├── .env.example
+├── package.json          # built from your choices, pinned versions
+├── .gitignore            # when Git is selected
+└── README.md             # project-specific
+```
+
+Selected features wire themselves into the right place — e.g. Mongoose adds `connectDB()` to the bootstrap, a template engine adds `app.set("view engine", …)`, and JWT adds an auth middleware.
+
+## Development (contributing to ExpressCraft)
+
+```bash
+git clone https://github.com/ravikisha/expresscraft
+cd expresscraft
+npm install
+
+npm test          # vitest
+npm run lint      # eslint
+npm run format    # prettier --write
+```
 
 ## Author
 This project is created and maintained by [Ravi Kishan](https://github.com/ravikisha).

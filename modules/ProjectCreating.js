@@ -1,126 +1,60 @@
-import { execSync } from "child_process";
-import fs from "fs";
-
+/**
+ * Registers the Express base, language tooling, base scripts and tsconfig.
+ * Installs nothing — only mutates the Manifest.
+ */
 export default class ProjectCreating {
-  constructor(packageManager, language) {
-    this.packageManager = packageManager;
-    this.language = language;
+  constructor(manifest) {
+    this.manifest = manifest;
   }
 
-  // Creating Project
-  creatingProject() {
-    if (this.packageManager === "npm") {
-      this.npmProjectCreating();
-    } else if (this.packageManager === "yarn") {
-      this.yarnProjectCreating();
-    } else {
-      console.log("❌ Please select a package manager.");
-      return;
-    }
-    console.log("✅ Project created successfully.");
-  }
+  register() {
+    const m = this.manifest;
 
-  // Creating Project with NPM
-  npmProjectCreating() {
-    if (this.language === "javascript") {
-      this.createProjectUsingNpmWithJs();
-    } else if (this.language === "typescript") {
-      this.createProjectUsingNpmWithTs();
-    } else {
-      console.log("❌ Please select a language.");
-      return;
-    }
-  }
+    m.addDep("express");
+    m.addDevDep("nodemon");
 
-  // Creating Project with Yarn
-  yarnProjectCreating() {
-    if (this.language === "javascript") {
-      this.createProjectUsingYarnWithJs();
-    } else if (this.language === "typescript") {
-      this.createProjectUsingYarnWithTs();
-    } else {
-      console.log("❌ Please select a language.");
-      return;
-    }
-  }
+    if (m.isTs()) {
+      m.addDevDep("typescript")
+        .addDevDep("@types/express")
+        .addDevDep("@types/node")
+        .addDevDep("ts-node");
 
-  // Creating Project with JS and NPM
-  createProjectUsingNpmWithJs() {
-    // npm init -y is already executed in FolderCreating.js
-    try {
-      execSync("npm install express nodemon");
-    } catch (err) {
-      console.log("❌ Something went wrong to install express.");
-      return;
-    }
-  }
+      m.setScript("build", "tsc")
+        .setScript("start", "node dist/index.js")
+        .setScript("dev", "nodemon src/index.ts");
 
-  // Creating Project with JS and Yarn
-  createProjectUsingYarnWithJs() {
-    // yarn init -y is already executed in FolderCreating.js
-    try {
-      execSync("yarn add express nodemon");
-    } catch (err) {
-      console.log("❌ Something went wrong to install express.");
-      return;
-    }
-  }
-
-  // Creating Project with TS and NPM
-  async createProjectUsingNpmWithTs() {
-    // npm init -y is already executed in FolderCreating.js
-    try {
-      execSync("npm install express");
-      execSync(
-        "npm install -D typescript @types/express ts-node @types/node nodemon"
+      m.addFile(
+        "tsconfig.json",
+        JSON.stringify(
+          {
+            compilerOptions: {
+              target: "es2022",
+              module: "commonjs",
+              moduleResolution: "node",
+              outDir: "./dist",
+              rootDir: "./src",
+              strict: true,
+              esModuleInterop: true,
+              forceConsistentCasingInFileNames: true,
+              skipLibCheck: true,
+              resolveJsonModule: true,
+              emitDecoratorMetadata: true,
+              experimentalDecorators: true,
+            },
+            include: ["src/**/*"],
+            exclude: ["node_modules", "dist"],
+          },
+          null,
+          2
+        )
       );
-      execSync("npx tsc --init");
-      // update tsconfig.json file
-      const config = {
-        compilerOptions: {
-          target: "es6",
-          module: "commonjs",
-          outDir: "./dist",
-          rootDir: "./src",
-          strict: true,
-          esModuleInterop: true,
-          skipLibCheck: true,
-        },
-      };
-      fs.writeFileSync("tsconfig.json", JSON.stringify(config, null, 2));
-    } catch (err) {
-      console.log("❌ Something went wrong to install express.");
-      return;
-    }
-  }
-
-  // Creating Project with TS and Yarn
-  createProjectUsingYarnWithTs() {
-    // yarn init -y is already executed in FolderCreating.js
-    try {
-      execSync("yarn add express");
-      execSync(
-        "yarn add -D typescript @types/express ts-node @types/node nodemon"
+    } else {
+      m.setScript("start", "node src/index.js").setScript(
+        "dev",
+        "nodemon src/index.js"
       );
-      execSync("npx tsc --init");
-      // update tsconfig.json file
-      const config = {
-        compilerOptions: {
-          target: "es6",
-          module: "commonjs",
-          outDir: "./dist",
-          rootDir: "./src",
-          strict: true,
-          esModuleInterop: true,
-          skipLibCheck: true,
-          emitDecoratorMetadata: true,
-          experimentalDecorators: true,
-        },
-      };
-      fs.writeFileSync("tsconfig.json", JSON.stringify(config, null, 2));
-    } catch (err) {
-      console.log("❌ Something went wrong to install express.");
-      return;
     }
+
+    console.log("✅ Express base registered.");
   }
 }

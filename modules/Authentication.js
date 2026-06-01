@@ -1,151 +1,135 @@
-import fs from "fs";
-import { execSync } from "child_process";
 import chalk from "chalk";
-import { highlight } from "cli-highlight";
 
 export default class Authentication {
-    constructor(authentication, packageManager, language) {
-        this.authentication = authentication;
-        this.packageManager = packageManager;
-        this.language = language;
+  constructor(manifest, authentication) {
+    this.manifest = manifest;
+    this.authentication = authentication; // "passport" | "jwt" | "no authentication"
+  }
+
+  register() {
+    switch (this.authentication) {
+      case "passport":
+        return this.passport();
+      case "jwt":
+        return this.jwt();
+      case "no authentication":
+      default:
+        console.log(chalk.yellow("🔔 No Authentication selected."));
     }
+  }
 
-    /**
-     * Package Manager - NPM or Yarn
-     * authentication - passportjs or jwt
-     * language - JavaScript or TypeScript
-     */
+  passport() {
+    const m = this.manifest;
+    m.addDeps("passport passport-local express-session");
+    if (m.isTs())
+      m.addDeps(
+        "@types/passport @types/passport-local @types/express-session",
+        { dev: true }
+      );
+    m.addEnv("SESSION_SECRET", "change-me", "Express session secret");
 
-    /**
-     * NPM - passportjs - JavaScript
-     */
+    m.addFile(
+      `src/config/passport.${m.ext()}`,
+      m.isTs()
+        ? `import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
 
-    passportJsNPM() {
-        try{
-            execSync("npm install passport passport-local");
-            execSync("npm install express-session");
-            console.log("✅ Passportjs dependencies installed successfully");
-        }catch(err){
-            console.log("❌ Error installing passportjs dependencies")
-            return
-        }
+passport.use(
+  new LocalStrategy((username, password, done) => {
+    // TODO: look up the user and verify the password
+    return done(null, { id: 1, username });
+  })
+);
+
+passport.serializeUser((user: any, done) => done(null, user.id));
+passport.deserializeUser((id: any, done) => done(null, { id }));
+
+export default passport;
+`
+        : `const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+
+passport.use(
+  new LocalStrategy((username, password, done) => {
+    // TODO: look up the user and verify the password
+    return done(null, { id: 1, username });
+  })
+);
+
+passport.serializeUser((user, done) => done(null, user.id));
+passport.deserializeUser((id, done) => done(null, { id }));
+
+module.exports = passport;
+`
+    );
+
+    if (m.isTs()) {
+      m.addAppImport(`import session from "express-session";`);
+      m.addAppImport(`import passport from "./config/passport";`);
+    } else {
+      m.addAppImport(`const session = require("express-session");`);
+      m.addAppImport(`const passport = require("./config/passport");`);
     }
+    m.addAppSetup(
+      `app.use(session({ secret: process.env.SESSION_SECRET || "change-me", resave: false, saveUninitialized: false }));`
+    );
+    m.addAppSetup(`app.use(passport.initialize());`);
+    m.addAppSetup(`app.use(passport.session());`);
+    console.log("✅ Passport.js registered and wired.");
+  }
 
-    /**
-     * NPM - passportjs - TypeScript
-     */
-    passportJsTypeScript() {
-        try{
-            execSync("npm install passport passport-local @types/passport @types/passport-local");
-            execSync("npm install express-session");
-            console.log("✅ Passportjs dependencies installed successfully");
-        }catch(err){
-            console.log("❌ Error installing passportjs dependencies");
-            return
-        }
-    }
+  jwt() {
+    const m = this.manifest;
+    m.addDeps("jsonwebtoken passport-jwt");
+    if (m.isTs())
+      m.addDeps("@types/jsonwebtoken @types/passport-jwt", { dev: true });
+    m.addEnv("JWT_SECRET", "change-me", "Secret used to sign JWTs");
 
-    /**
-     * NPM - jwt - JavaScript
-     */
-    jwtNPM() {
-        try{
-            execSync("npm install jsonwebtoken passport-jwt");
-            console.log("✅ jwt dependencies installed successfully");
-        }catch(err){
-            console.log("❌ Error installing jwt dependencies");
-            return
-        }
-    }
+    m.addFile(
+      `src/middleware/auth.${m.ext()}`,
+      m.isTs()
+        ? `import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
 
-    /**
-     * NPM - jwt - TypeScript
-     */
-    jwtTypeScript() {
-        try{
-            execSync("npm install jsonwebtoken passport-jwt @types/jsonwebtoken @types/passport-jwt");
-            console.log("✅ jwt dependencies installed successfully");
-        }catch(err){
-            console.log("❌ Error installing jwt dependencies");
-            return
-        }
-    }
+export function authenticate(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void {
+  const header = req.headers.authorization;
+  if (!header) {
+    res.status(401).json({ error: "No token provided" });
+    return;
+  }
+  try {
+    (req as any).user = jwt.verify(header.split(" ")[1], process.env.JWT_SECRET as string);
+    next();
+  } catch {
+    res.status(401).json({ error: "Invalid token" });
+  }
+}
+`
+        : `const jwt = require("jsonwebtoken");
 
-    /**
-     * Yarn - passportjs - JavaScript
-     */
-    passportJsYarn() {
-        try{
-            execSync("yarn add passport passport-local");
-            execSync("yarn add express-session");
-            console.log("✅ Passportjs dependencies installed successfully");
-        }catch(err){
-            console.log("❌ Error installing passportjs dependencies");
-            return
-        }
-    }
+function authenticate(req, res, next) {
+  const header = req.headers.authorization;
+  if (!header) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+  try {
+    req.user = jwt.verify(header.split(" ")[1], process.env.JWT_SECRET);
+    next();
+  } catch {
+    res.status(401).json({ error: "Invalid token" });
+  }
+}
 
-    /**
-     * Yarn - passportjs - TypeScript
-     */
-    passportJsTypeScriptYarn() {
-        try{
-            execSync("yarn add passport passport-local @types/passport @types/passport-local");
-            execSync("yarn add express-session");
-            console.log("✅ Passportjs dependencies installed successfully");
-        }catch(err){
-            console.log("❌ Error installing passportjs dependencies");
-            return
-        }
-    }
-
-    /**
-     * Yarn - jwt - JavaScript
-     */
-    jwtYarn() {
-        try{
-            execSync("yarn add jsonwebtoken passport-jwt");
-            console.log("✅ jwt dependencies installed successfully");
-        }catch(err){
-            console.log("❌ Error installing jwt dependencies");
-            return
-        }
-    }
-
-    /**
-     * Yarn - jwt - TypeScript
-     */
-    jwtTypeScriptYarn() {
-        try{
-            execSync("yarn add jsonwebtoken passport-jwt @types/jsonwebtoken @types/passport-jwt");
-            console.log("✅ jwt dependencies installed successfully");
-        }catch(err){
-            console.log("❌ Error installing jwt dependencies");
-            return
-        }
-    }
-
-    /**
-     * Install dependencies based on user's selection
-     */
-    setupAuth(){
-        if(this.packageManager === "NPM" && this.authentication === "passportjs" && this.language === "JavaScript"){
-            this.passportJsNPM();
-        }else if(this.packageManager === "NPM" && this.authentication === "passportjs" && this.language === "TypeScript"){
-            this.passportJsTypeScript();
-        }else if(this.packageManager === "NPM" && this.authentication === "jwt" && this.language === "JavaScript"){
-            this.jwtNPM();
-        }else if(this.packageManager === "NPM" && this.authentication === "jwt" && this.language === "TypeScript"){
-            this.jwtTypeScript();
-        }else if(this.packageManager === "Yarn" && this.authentication === "passportjs" && this.language === "JavaScript"){
-            this.passportJsYarn();
-        }else if(this.packageManager === "Yarn" && this.authentication === "passportjs" && this.language === "TypeScript"){
-            this.passportJsTypeScriptYarn();
-        }else if(this.packageManager === "Yarn" && this.authentication === "jwt" && this.language === "JavaScript"){
-            this.jwtYarn();
-        }else if(this.packageManager === "Yarn" && this.authentication === "jwt" && this.language === "TypeScript"){
-            this.jwtTypeScriptYarn();
-        }
-    }
-
+module.exports = authenticate;
+`
+    );
+    m.note(
+      "Protect routes with the auth middleware in src/middleware/auth (import authenticate)."
+    );
+    console.log("✅ JWT registered.");
+  }
 }

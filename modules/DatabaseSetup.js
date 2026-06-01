@@ -1,795 +1,245 @@
-import fs from "fs";
-import { execSync } from "child_process";
 import chalk from "chalk";
-import { highlight } from "cli-highlight";
+
+// SQL driver package per database, per ORM (drizzle/prisma differ slightly).
+const SQL_DRIVERS = {
+  default: {
+    mysql: ["mysql2"],
+    postgresql: ["pg", "pg-hstore"],
+    sqlite: ["sqlite3"],
+  },
+  typeorm: { mysql: ["mysql2"], postgresql: ["pg"], sqlite: ["sqlite3"] },
+  "drizzle-orm": {
+    mysql: ["mysql2"],
+    postgresql: ["pg"],
+    sqlite: ["better-sqlite3"],
+  },
+};
+
+const SEQUELIZE_DIALECT = {
+  mysql: "mysql",
+  postgresql: "postgres",
+  sqlite: "sqlite",
+};
+
+const TYPEORM_TYPE = {
+  mysql: "mysql",
+  postgresql: "postgres",
+  sqlite: "sqlite",
+};
 
 export default class DatabaseSetup {
-  constructor(packageManager, projectName, database, language, orm) {
-    this.packageManager = packageManager;
-    this.projectName = projectName;
+  constructor(manifest, database, orm) {
+    this.manifest = manifest;
     this.database = database;
-    this.language = language;
     this.orm = orm;
   }
 
-  /**
-   * This function creates the project folder and initializes it with the package manager.
-   * Language = javascript/typescript
-   * Package Manager = npm/yarn
-   * Database = "MySQL", "PostgreSQL", "SQLite", "MongoDB",  "No Database"
-   * ORM = "Prisma", "Sequelize", "TypeORM", "Mongoose", "Drizzle ORM", "No ORM"
-   */
-
-  /**
-   * Language = javascript/typescript
-   * Package Manager = npm
-   * Database = "MySQL"
-   * ORM = "Prisma"
-   */
-  prismaMySQLNpm() {
-    try {
-      execSync("npm install @prisma/client prisma");
-      execSync("npx prisma init --datasource-provider=mysql");
-
-      console.log(chalk.yellow("🔔 Run the following command to generate the database schema:"));
-      console.log(chalk.green("---------------------------"))
-      console.log(highlight("npx prisma generate", { language: "bash" }));
-      console.log(chalk.green("---------------------------"))
-    } catch (err) {
-      console.log("❌ Something went wrong to install prisma.");
+  register() {
+    const { database, orm } = this;
+    if (database === "no database" || orm === "no orm") {
+      console.log(chalk.yellow("🔔 No database / ORM selected."));
       return;
     }
-  }
 
-  /**
-   * Language = javascript/typescript
-   * Package Manager = npm
-   * Database = "PostgreSQL"
-   * ORM = "Prisma"
-   */
-  prismaPostgreSQLNpm() {
-    try {
-      execSync("npm install @prisma/client prisma");
-      execSync("npx prisma init --datasource-provider=postgresql");
-
-      console.log(chalk.yellow("🔔 Run the following command to generate the database schema:"));
-      console.log(chalk.green("---------------------------"))
-      console.log(highlight("npx prisma generate", { language: "bash" }));
-      console.log(chalk.green("---------------------------"))
-    } catch (err) {
-      console.log("❌ Something went wrong to install prisma.");
-      return;
-    }
-  }
-
-  /**
-   * Language = javascript/typescript
-   * Package Manager = npm
-   * Database = "SQLite"
-   * ORM = "Prisma"
-   */
-  prismaSQLiteNpm() {
-    try {
-      execSync("npm install @prisma/client prisma");
-      execSync("npx prisma init --datasource-provider=sqlite");
-
-      console.log(chalk.yellow("🔔 Run the following command to generate the database schema:"));
-      console.log(chalk.green("---------------------------"))
-      console.log(highlight("npx prisma generate", { language: "bash" }));
-      console.log(chalk.green("---------------------------"))
-    } catch (err) {
-      console.log("❌ Something went wrong to install prisma.");
-      return;
-    }
-  }
-
-  /**
-   * Language = javascript/typescript
-   * Package Manager = npm
-   * Database = "MongoDB"
-   * ORM = "Mongoose"
-   */
-  mongooseNpm() {
-    try {
-      execSync("npm install mongoose");
-    } catch (err) {
-      console.log("❌ Something went wrong to install mongoose.");
-      return;
-    }
-  }
-
-  /**
-   * Language = javascript/typescript
-   * Package Manager = yarn
-   * Database = "MongoDB"
-   * ORM = "Mongoose"
-   */
-  mongooseYarn() {
-    try {
-      execSync("yarn add mongoose");
-    } catch (err) {
-      console.log("❌ Something went wrong to install mongoose.");
-      return;
-    }
-  }
-
-  /**
-   * Language = javascript/typescript
-   * Package Manager = yarn
-   * Database = "MySQL"
-   * ORM = "Prisma"
-   */
-  prismaMySQLYarn() {
-    try {
-      execSync("yarn add @prisma/client prisma");
-      execSync("npx prisma init --datasource-provider=mysql");
-
-      console.log(chalk.yellow("🔔 Run the following command to generate the database schema:"));
-      console.log(chalk.green("---------------------------"))
-      console.log(highlight("npx prisma generate", { language: "bash" }));
-      console.log(chalk.green("---------------------------"))
-    } catch (err) {
-      console.log("❌ Something went wrong to install prisma.");
-      return;
-    }
-  }
-
-  /**
-   * Language = javascript/typescript
-   * Package Manager = yarn
-   * Database = "PostgreSQL"
-   * ORM = "Prisma"
-   */
-  prismaPostgreSQLYarn() {
-    try {
-      execSync("yarn add @prisma/client prisma");
-      execSync("npx prisma init --datasource-provider=postgresql");
-
-      console.log(chalk.yellow("🔔 Run the following command to generate the database schema:"));
-      console.log(chalk.green("---------------------------"))
-      console.log(highlight("npx prisma generate", { language: "bash" }));
-      console.log(chalk.green("---------------------------"))
-    } catch (err) {
-      console.log("❌ Something went wrong to install prisma.");
-      return;
-    }
-  }
-
-  /**
-   * Language = javascript/typescript
-   * Package Manager = yarn
-   * Database = "SQLite"
-   * ORM = "Prisma"
-   */
-  prismaSQLiteYarn() {
-    try {
-      execSync("yarn add @prisma/client prisma");
-      execSync("npx prisma init --datasource-provider=sqlite");
-
-      console.log(chalk.yellow("🔔 Run the following command to generate the database schema:"));
-      console.log(chalk.green("---------------------------"))
-      console.log(highlight("npx prisma generate", { language: "bash" }));
-      console.log(chalk.green("---------------------------"))
-    } catch (err) {
-      console.log("❌ Something went wrong to install prisma.");
-      return;
-    }
-  }
-
-  /**
-   * Language = javascript
-   * Package Manager = npm
-   * Database = "MySQL", "PostgreSQL", "SQLite",
-   * ORM = "Sequelize"
-   */
-
-  sequelizeNpmJs() {
-    try {
-      execSync("npm install sequelize");
-      switch (this.database) {
-        case "MySQL":
-          execSync("npm install mysql2");
-          break;
-        case "PostgreSQL":
-          execSync("npm install pg pg-hstore");
-          break;
-        case "SQLite":
-          execSync("npm install sqlite3");
-          break;
-        default:
-          console.log("❌ Unsupported database.");
-          return;
-      }
-    } catch (err) {
-      console.log("❌ Something went wrong to install sequelize.");
-      return;
-    }
-  }
-
-  /**
-   * Language = typescript
-   * Package Manager = npm
-   * Database = "MySQL", "PostgreSQL", "SQLite",
-   * ORM = "Sequelize"
-   */
-  sequelizeNpmTs() {
-    try {
-      execSync("npm install sequelize @types/sequelize sequelize-typescript");
-      switch (this.database) {
-        case "mysql":
-          execSync("npm install mysql2");
-          break;
-        case "postgresql":
-          execSync("npm install pg pg-hstore");
-          break;
-        case "sqlite":
-          execSync("npm install sqlite3");
-          break;
-        default:
-          console.log("❌ Unsupported database.");
-          return;
-      }
-    } catch (err) {
-      console.log("❌ Something went wrong to install sequelize.");
-      return;
-    }
-  }
-
-  /**
-   * Language = javascript
-   * Package Manager = yarn
-   * Database = "MySQL", "PostgreSQL", "SQLite",
-   * ORM = "Sequelize"
-   */
-  sequelizeYarnJs() {
-    try {
-      execSync("yarn add sequelize");
-      switch (this.database) {
-        case "MySQL":
-          execSync("yarn add mysql2");
-          break;
-        case "PostgreSQL":
-          execSync("yarn add pg pg-hstore");
-          break;
-        case "SQLite":
-          execSync("yarn add sqlite3");
-          break;
-        default:
-          console.log("❌ Unsupported database.");
-          return;
-      }
-    } catch (err) {
-      console.log("❌ Something went wrong to install sequelize.");
-      return;
-    }
-  }
-
-  /**
-   * Language = typescript
-   * Package Manager = yarn
-   * Database = "MySQL", "PostgreSQL", "SQLite",
-   * ORM = "Sequelize"
-   */
-  sequelizeYarnTs() {
-    try {
-      execSync("yarn add sequelize @types/sequelize sequelize-typescript");
-      switch (this.database) {
-        case "mysql":
-          execSync("yarn add mysql2");
-          break;
-        case "postgresql":
-          execSync("yarn add pg pg-hstore");
-          break;
-        case "sqlite":
-          execSync("yarn add sqlite3");
-          break;
-        default:
-          console.log("❌ Unsupported database.");
-          return;
-      }
-    } catch (err) {
-      console.log("❌ Something went wrong to install sequelize.");
-      return;
-    }
-  }
-
-  /**
-   * Language = javascript/typescript
-   * Package Manager = npm
-   * Database = "MySQL", "PostgreSQL", "SQLite",
-   * ORM = "TypeORM"
-   */
-  typeORMNpm() {
-    try {
-      execSync("npm install typeorm reflect-metadata");
-      switch (this.database) {
-        case "mysql":
-          execSync("npm install mysql");
-          break;
-        case "postgresql":
-          execSync("npm install pg");
-          break;
-        case "sqlite":
-          execSync("npm install sqlite3");
-          break;
-        default:
-          console.log("❌ Unsupported database.");
-          return;
-      }
-    } catch (err) {
-      console.log("❌ Something went wrong to install typeorm.");
-      return;
-    }
-  }
-
-  /**
-   * Language = javascript/typescript
-   * Package Manager = yarn
-   * Database = "MySQL", "PostgreSQL", "SQLite",
-   * ORM = "TypeORM"
-   */
-  typeORMYarn() {
-    try {
-      execSync("yarn add typeorm reflect-metadata");
-      switch (this.database) {
-        case "mysql":
-          execSync("yarn add mysql");
-          break;
-        case "postgresql":
-          execSync("yarn add pg");
-          break;
-        case "sqlite":
-          execSync("yarn add sqlite3");
-          break;
-        default:
-          console.log("❌ Unsupported database.");
-          return;
-      }
-    } catch (err) {
-      console.log("❌ Something went wrong to install typeorm.");
-      return;
-    }
-  }
-
-  /**
-   * Language = javascript/typescript
-   * Package Manager = npm
-   * Database = mysql, postgresql, sqlite
-   * ORM = "Drizzle ORM"
-   */
-
-  drizzleORMNpm() {
-    try {
-      execSync("npm install drizzle-orm");
-      execSync("npm install drizzle-kit -D");
-      switch (this.database) {
-        case "mysql":
-          execSync("npm install mysql");
-          break;
-        case "postgresql":
-          execSync("npm install pg");
-          break;
-        case "sqlite":
-          execSync("npm install sqlite3");
-          break;
-        default:
-          console.log("❌ Unsupported database.");
-          return;
-      }
-    } catch (err) {
-      console.log("❌ Something went wrong to install drizzle-orm.");
-      return;
-    }
-  }
-
-  /**
-   * Language = javascript/typescript
-   * Package Manager = yarn
-   * Database = mysql, postgresql, sqlite
-   * ORM = "Drizzle ORM"
-   */
-
-  drizzleORMYarn() {
-    try {
-      execSync("yarn add drizzle-orm");
-      execSync("yarn add drizzle-kit -D");
-      switch (this.database) {
-        case "mysql":
-          execSync("yarn add mysql");
-          break;
-        case "postgresql":
-          execSync("yarn add pg");
-          break;
-        case "sqlite":
-          execSync("yarn add sqlite3");
-          break;
-        default:
-          console.log("❌ Unsupported database.");
-          return;
-      }
-    } catch (err) {
-      console.log("❌ Something went wrong to install drizzle-orm.");
-      return;
-    }
-  }
-
-  /**
-   * Language = javascript/typescript
-   * Package Manager = npm
-   * Database = "No Database"
-   * ORM = "No ORM"
-   */
-  noDatabaseNoORM() {
-    console.log(chalk.yellow("🔔 No database and ORM selected."));
-  }
-
-  /**
-   * Mapping function to map the database and ORM to the respective functions.
-   */
-  databaseSetup() {
-    switch (this.language) {
-      case "javascript":
-        switch (this.packageManager) {
-          case "npm":
-            switch (this.database) {
-              case "mysql":
-                switch (this.orm) {
-                  case "prisma":
-                    this.prismaMySQLNpm();
-                    break;
-                  case "sequelize":
-                    this.sequelizeNpmJs();
-                    break;
-                  case "typeorm":
-                    this.typeORMNpm();
-                    break;
-                  case "drizzle-orm":
-                    this.drizzleORMNpm();
-                    break;
-                  case "no orm":
-                    this.noDatabaseNoORM();
-                    break;
-                  default:
-                    console.log("❌ Unsupported ORM.");
-                    return;
-                }
-                break;
-              case "postgresql":
-                switch (this.orm) {
-                  case "prisma":
-                    this.prismaPostgreSQLNpm();
-                    break;
-                  case "sequelize":
-                    this.sequelizeNpmJs();
-                    break;
-                  case "typeorm":
-                    this.typeORMNpm();
-                    break;
-                  case "drizzle-orm":
-                    this.drizzleORMNpm();
-                    break;
-                  case "no orm":
-                    this.noDatabaseNoORM();
-                    break;
-                  default:
-                    console.log("❌ Unsupported ORM.");
-                    return;
-                }
-                break;
-              case "sqlite":
-                switch (this.orm) {
-                  case "prisma":
-                    this.prismaSQLiteNpm();
-                    break;
-                  case "sequelize":
-                    this.sequelizeNpmJs();
-                    break;
-                  case "typeorm":
-                    this.typeORMNpm();
-                    break;
-                  case "drizzle-orm":
-                    this.drizzleORMNpm();
-                    break;
-                  case "no orm":
-                    this.noDatabaseNoORM();
-                    break;
-                  default:
-                    console.log("❌ Unsupported ORM.");
-                    return;
-                }
-                break;
-              case "mongodb":
-                switch (this.orm) {
-                  case "mongoose":
-                    this.mongooseNpm();
-                    break;
-                  case "no orm":
-                    this.noDatabaseNoORM();
-                    break;
-                  default:
-                    console.log("❌ Unsupported ORM.");
-                    return;
-                }
-                break;
-              default:
-                console.log("❌ Unsupported database.");
-                return;
-            }
-            break;
-          case "yarn":
-            switch (this.database) {
-              case "mysql":
-                switch (this.orm) {
-                  case "prisma":
-                    this.prismaMySQLYarn();
-                    break;
-                  case "sequelize":
-                    this.sequelizeYarnJs();
-                    break;
-                  case "typeorm":
-                    this.typeORMYarn();
-                    break;
-                  case "drizzle-orm":
-                    this.drizzleORMYarn();
-                    break;
-                  case "no orm":
-                    this.noDatabaseNoORM();
-                    break;
-                  default:
-                    console.log("❌ Unsupported ORM.");
-                    return;
-                }
-                break;
-              case "postgresql":
-                switch (this.orm) {
-                  case "prisma":
-                    this.prismaPostgreSQLYarn();
-                    break;
-                  case "sequelize":
-                    this.sequelizeYarnJs();
-                    break;
-                  case "typeorm":
-                    this.typeORMYarn();
-                    break;
-                  case "drizzle-orm":
-                    this.drizzleORMYarn();
-                    break;
-                  case "no orm":
-                    this.noDatabaseNoORM();
-                    break;
-                  default:
-                    console.log("❌ Unsupported ORM.");
-                    return;
-                }
-                break;
-              case "sqlite":
-                switch (this.orm) {
-                  case "prisma":
-                    this.prismaSQLiteYarn();
-                    break;
-                  case "sequelize":
-                    this.sequelizeYarnJs();
-                    break;
-                  case "typeorm":
-                    this.typeORMYarn();
-                    break;
-                  case "drizzle-orm":
-                    this.drizzleORMYarn();
-                    break;
-                  case "no orm":
-                    this.noDatabaseNoORM();
-                    break;
-                  default:
-                    console.log("❌ Unsupported ORM.");
-                    return;
-                }
-                break;
-              case "mongodb":
-                switch (this.orm) {
-                  case "mongoose":
-                    this.mongooseYarn();
-                    break;
-                  case "no orm":
-                    this.noDatabaseNoORM();
-                    break;
-                  default:
-                    console.log("❌ Unsupported ORM.");
-                    return;
-                }
-                break;
-              default:
-                console.log("❌ Unsupported database.");
-                return;
-            }
-            break;
-          default:
-            console.log("❌ Unsupported package manager.");
-            return;
-        }
-        break;
-      case "typescript":
-        switch (this.packageManager) {
-          case "npm":
-            switch (this.database) {
-              case "mysql":
-                switch (this.orm) {
-                  case "prisma":
-                    this.prismaMySQLNpm();
-                    break;
-                  case "sequelize":
-                    this.sequelizeNpmTs();
-                    break;
-                  case "typeorm":
-                    this.typeORMNpm();
-                    break;
-                  case "drizzle-orm":
-                    this.drizzleORMNpm();
-                    break;
-                  case "no orm":
-                    this.noDatabaseNoORM();
-                    break;
-                  default:
-                    console.log("❌ Unsupported ORM.");
-                    return;
-                }
-                break;
-              case "postgresql":
-                switch (this.orm) {
-                  case "prisma":
-                    this.prismaPostgreSQLNpm();
-                    break;
-                  case "sequelize":
-                    this.sequelizeNpmTs();
-                    break;
-                  case "typeorm":
-                    this.typeORMNpm();
-                    break;
-                  case "drizzle-orm":
-                    this.drizzleORMNpm();
-                    break;
-                  case "no orm":
-                    this.noDatabaseNoORM();
-                    break;
-                  default:
-                    console.log("❌ Unsupported ORM.");
-                    return;
-                }
-                break;
-              case "sqlite":
-                switch (this.orm) {
-                  case "prisma":
-                    this.prismaSQLiteNpm();
-                    break;
-                  case "sequelize":
-                    this.sequelizeNpmTs();
-                    break;
-                  case "typeorm":
-                    this.typeORMNpm();
-                    break;
-                  case "drizzle-orm":
-                    this.drizzleORMNpm();
-                    break;
-                  case "no orm":
-                    this.noDatabaseNoORM();
-                    break;
-                  default:
-                    console.log("❌ Unsupported ORM.");
-                    return;
-                }
-                break;
-              case "mongodb":
-                switch (this.orm) {
-                  case "mongoose":
-                    this.mongooseNpm();
-                    break;
-                  case "no orm":
-                    this.noDatabaseNoORM();
-                    break;
-                  default:
-                    console.log("❌ Unsupported ORM.");
-                    return;
-                }
-                break;
-              default:
-                console.log("❌ Unsupported database.");
-                return;
-            }
-            break;
-          case "yarn":
-            switch (this.database) {
-              case "mysql":
-                switch (this.orm) {
-                  case "prisma":
-                    this.prismaMySQLYarn();
-                    break;
-                  case "sequelize":
-                    this.sequelizeYarnTs();
-                    break;
-                  case "typeorm":
-                    this.typeORMYarn();
-                    break;
-                  case "drizzle-orm":
-                    this.drizzleORMYarn();
-                    break;
-                  case "no orm":
-                    this.noDatabaseNoORM();
-                    break;
-                  default:
-                    console.log("❌ Unsupported ORM.");
-                    return;
-                }
-                break;
-              case "postgresql":
-                switch (this.orm) {
-                  case "prisma":
-                    this.prismaPostgreSQLYarn();
-                    break;
-                  case "sequelize":
-                    this.sequelizeYarnTs();
-                    break;
-                  case "typeorm":
-                    this.typeORMYarn();
-                    break;
-                  case "drizzle-orm":
-                    this.drizzleORMYarn();
-                    break;
-                  case "no orm":
-                    this.noDatabaseNoORM();
-                    break;
-                  default:
-                    console.log("❌ Unsupported ORM.");
-                    return;
-                }
-                break;
-              case "sqlite":
-                switch (this.orm) {
-                  case "prisma":
-                    this.prismaSQLiteYarn();
-                    break;
-                  case "sequelize":
-                    this.sequelizeYarnTs();
-                    break;
-                  case "typeorm":
-                    this.typeORMYarn();
-                    break;
-                  case "drizzle-orm":
-                    this.drizzleORMYarn();
-                    break;
-                  case "no orm":
-                    this.noDatabaseNoORM();
-                    break;
-                  default:
-                    console.log("❌ Unsupported ORM.");
-                    return;
-                }
-                break;
-              case "mongodb":
-                switch (this.orm) {
-                  case "mongoose":
-                    this.mongooseYarn();
-                    break;
-                  case "no orm":
-                    this.noDatabaseNoORM();
-                    break;
-                  default:
-                    console.log("❌ Unsupported ORM.");
-                    return;
-                }
-                break;
-              default:
-                console.log("❌ Unsupported database.");
-                return;
-            }
-            break;
-          default:
-            console.log("❌ Unsupported package manager.");
-            return;
-        }
-        break;
+    switch (orm) {
+      case "prisma":
+        return this.prisma();
+      case "sequelize":
+        return this.sequelize();
+      case "typeorm":
+        return this.typeorm();
+      case "drizzle-orm":
+        return this.drizzle();
+      case "mongoose":
+        return this.mongoose();
       default:
-        console.log("❌ Unsupported language.");
-        return;
+        console.log("❌ Unsupported ORM.");
     }
-    console.log("✅ Database and ORM setup complete.");
+  }
+
+  sqlDrivers(ormKey = "default") {
+    const table = SQL_DRIVERS[ormKey] || SQL_DRIVERS.default;
+    const drivers = table[this.database];
+    if (!drivers) {
+      console.log(`❌ ${this.orm} does not support "${this.database}".`);
+      return [];
+    }
+    return drivers;
+  }
+
+  configPath() {
+    return `src/config/db.${this.manifest.ext()}`;
+  }
+
+  prisma() {
+    const m = this.manifest;
+    m.addDep("@prisma/client").addDevDep("prisma");
+    const provider =
+      this.database === "postgresql" ? "postgresql" : this.database;
+    m.addEnv(
+      "DATABASE_URL",
+      this.database === "sqlite" ? "file:./dev.db" : "",
+      "Prisma datasource connection string"
+    );
+
+    const file = m.isTs()
+      ? `import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+export default prisma;
+`
+      : `const { PrismaClient } = require("@prisma/client");
+
+const prisma = new PrismaClient();
+
+module.exports = prisma;
+`;
+    m.addFile(`src/config/prisma.${m.ext()}`, file);
+    m.note(
+      `Initialize Prisma: npx prisma init --datasource-provider=${provider}, then npx prisma migrate dev.`
+    );
+    console.log("✅ Prisma registered.");
+  }
+
+  sequelize() {
+    const m = this.manifest;
+    m.addDep("sequelize");
+    if (m.isTs())
+      m.addDevDep("@types/sequelize").addDep("sequelize-typescript");
+    this.sqlDrivers("default").forEach((d) => m.addDep(d));
+
+    const dialect = SEQUELIZE_DIALECT[this.database];
+    const init =
+      this.database === "sqlite"
+        ? `new Sequelize({ dialect: "sqlite", storage: process.env.DATABASE_URL || "./data.sqlite", logging: false })`
+        : `new Sequelize(process.env.DATABASE_URL as string, { dialect: "${dialect}", logging: false })`;
+    const initJs = init.replace(" as string", "");
+
+    if (this.database !== "sqlite")
+      m.addEnv("DATABASE_URL", "", "Sequelize connection string");
+
+    m.addFile(
+      this.configPath(),
+      m.isTs()
+        ? `import { Sequelize } from "sequelize";
+
+const sequelize = ${init};
+
+export default sequelize;
+`
+        : `const { Sequelize } = require("sequelize");
+
+const sequelize = ${initJs};
+
+module.exports = sequelize;
+`
+    );
+    this.wireSql("sequelize", "await sequelize.authenticate();");
+    console.log("✅ Sequelize registered.");
+  }
+
+  typeorm() {
+    const m = this.manifest;
+    m.addDep("typeorm").addDep("reflect-metadata");
+    this.sqlDrivers("typeorm").forEach((d) => m.addDep(d));
+    const type = TYPEORM_TYPE[this.database];
+    if (this.database !== "sqlite")
+      m.addEnv("DATABASE_URL", "", "TypeORM connection string");
+
+    const opts =
+      this.database === "sqlite"
+        ? `{ type: "sqlite", database: process.env.DATABASE_URL || "./data.sqlite", entities: [], synchronize: true }`
+        : `{ type: "${type}", url: process.env.DATABASE_URL, entities: [], synchronize: true }`;
+
+    m.addFile(
+      `src/config/data-source.${m.ext()}`,
+      m.isTs()
+        ? `import "reflect-metadata";
+import { DataSource } from "typeorm";
+
+export const AppDataSource = new DataSource(${opts});
+`
+        : `require("reflect-metadata");
+const { DataSource } = require("typeorm");
+
+const AppDataSource = new DataSource(${opts});
+
+module.exports = { AppDataSource };
+`
+    );
+    if (m.isTs())
+      m.addServerImport(
+        `import { AppDataSource } from "./config/data-source";`
+      );
+    else
+      m.addServerImport(
+        `const { AppDataSource } = require("./config/data-source");`
+      );
+    m.addBootstrap("await AppDataSource.initialize();");
+    m.addBootstrap('console.log("Data source initialized");');
+    console.log("✅ TypeORM registered.");
+  }
+
+  drizzle() {
+    const m = this.manifest;
+    m.addDep("drizzle-orm").addDevDep("drizzle-kit");
+    this.sqlDrivers("drizzle-orm").forEach((d) => m.addDep(d));
+    m.addEnv(
+      "DATABASE_URL",
+      this.database === "sqlite" ? "./data.sqlite" : "",
+      "Drizzle connection string"
+    );
+    m.note(
+      "Define your Drizzle schema in src/db/schema and configure drizzle.config for migrations."
+    );
+    console.log("✅ Drizzle ORM registered.");
+  }
+
+  mongoose() {
+    const m = this.manifest;
+    if (this.database !== "mongodb") {
+      console.log("❌ Mongoose requires MongoDB.");
+      return;
+    }
+    m.addDep("mongoose");
+    m.addEnv(
+      "MONGO_URI",
+      "mongodb://localhost:27017/" + m.name,
+      "MongoDB connection string"
+    );
+    m.addFile(
+      this.configPath(),
+      m.isTs()
+        ? `import mongoose from "mongoose";
+
+export async function connectDB(): Promise<void> {
+  await mongoose.connect(process.env.MONGO_URI as string);
+  console.log("MongoDB connected");
+}
+`
+        : `const mongoose = require("mongoose");
+
+async function connectDB() {
+  await mongoose.connect(process.env.MONGO_URI);
+  console.log("MongoDB connected");
+}
+
+module.exports = { connectDB };
+`
+    );
+    if (m.isTs()) m.addServerImport(`import { connectDB } from "./config/db";`);
+    else m.addServerImport(`const { connectDB } = require("./config/db");`);
+    m.addBootstrap("await connectDB();");
+    console.log("✅ Mongoose registered.");
+  }
+
+  // Shared wiring for SQL ORMs that export a default instance from config/db.
+  wireSql(varName, bootstrapLine) {
+    const m = this.manifest;
+    if (m.isTs()) m.addServerImport(`import ${varName} from "./config/db";`);
+    else m.addServerImport(`const ${varName} = require("./config/db");`);
+    m.addBootstrap(bootstrapLine);
+    m.addBootstrap(`console.log("Database connected");`);
   }
 }

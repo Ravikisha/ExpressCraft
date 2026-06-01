@@ -28,7 +28,7 @@ export default class VersionControl {
     try {
       execSync("git init");
       this.createGitIgnore();
-    } catch (err) {
+    } catch {
       console.log("❌ Something went wrong to initialize git.");
       return;
     }
@@ -38,7 +38,7 @@ export default class VersionControl {
   svn() {
     try {
       execSync("svn init");
-    } catch (err) {
+    } catch {
       console.log("❌ Something went wrong to initialize svn.");
       return;
     }
@@ -184,7 +184,7 @@ dist
 .yarn/install-state.gz
 .pnp.*`;
       fs.writeFileSync(".gitignore", config);
-    } catch (err) {
+    } catch {
       console.log("❌ Something went wrong to create .gitignore file.");
       return;
     }

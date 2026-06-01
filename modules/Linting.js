@@ -1,145 +1,64 @@
-import { execSync } from "child_process";
+import chalk from "chalk";
 
 export default class Linting {
-    constructor(linting, packageManager, language) {
-        this.linting = linting;
-        this.packageManager = packageManager;
-        this.language = language;
+  constructor(manifest, linting) {
+    this.manifest = manifest;
+    this.linting = linting; // "eslint" | "tslint" | "no linting"
+  }
+
+  register() {
+    if (this.linting === "no linting" || !this.linting) {
+      console.log(chalk.yellow("🔔 No Linting selected."));
+      return;
     }
-
-    /**
-     * Package Manager - NPM or Yarn
-     * linting - eslint or tslint
-     * language - JavaScript or TypeScript
-     */
-
-    /**
-     * NPM - eslint - JavaScript
-     */
-    eslintNPM() {
-        try {
-            execSync("npm install eslint");
-            console.log("✅ ESLint installed successfully");
-        } catch (err) {
-            console.log("❌ Error installing ESLint")
-            return
-        }
+    if (this.linting === "tslint") {
+      console.log(
+        chalk.yellow("🔔 TSLint is deprecated — registering ESLint instead.")
+      );
     }
+    this.eslint();
+  }
 
-    /**
-     * NPM - eslint - TypeScript
-     */
-    eslintTypeScript() {
-        try {
-            execSync("npm install eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin");
-            console.log("✅ ESLint installed successfully");
-        } catch (err) {
-            console.log("❌ Error installing ESLint")
-            return
-        }
+  eslint() {
+    const m = this.manifest;
+    m.addDevDep("eslint");
+    m.setScript("lint", "eslint .");
+
+    if (m.isTs()) {
+      m.addDeps("@typescript-eslint/parser @typescript-eslint/eslint-plugin", {
+        dev: true,
+      });
+      m.addFile(
+        ".eslintrc.json",
+        JSON.stringify(
+          {
+            parser: "@typescript-eslint/parser",
+            plugins: ["@typescript-eslint"],
+            extends: [
+              "eslint:recommended",
+              "plugin:@typescript-eslint/recommended",
+            ],
+            env: { node: true, es2021: true },
+            parserOptions: { ecmaVersion: "latest", sourceType: "module" },
+          },
+          null,
+          2
+        )
+      );
+    } else {
+      m.addFile(
+        ".eslintrc.json",
+        JSON.stringify(
+          {
+            extends: ["eslint:recommended"],
+            env: { node: true, es2021: true },
+            parserOptions: { ecmaVersion: "latest", sourceType: "module" },
+          },
+          null,
+          2
+        )
+      );
     }
-
-    /**
-     * NPM - tslint - JavaScript
-     */
-    tslintNPM() {
-        try {
-            execSync("npm install tslint");
-            console.log("✅ TSLint installed successfully");
-        } catch (err) {
-            console.log("❌ Error installing TSLint")
-            return
-        }
-    }
-
-    /**
-     * NPM - tslint - TypeScript
-     */
-    tslintTypeScript() {
-        try {
-            execSync("npm install tslint typescript");
-            console.log("✅ TSLint installed successfully");
-        } catch (err) {
-            console.log("❌ Error installing TSLint")
-            return
-        }
-    }
-
-    /**
-     * Yarn - eslint - JavaScript
-     */
-    eslintYarn() {
-        try {
-            execSync("yarn add eslint");
-            console.log("✅ ESLint installed successfully");
-        } catch (err) {
-            console.log("❌ Error installing ESLint")
-            return
-        }
-    }
-
-    /**
-     * Yarn - eslint - TypeScript
-     */
-    eslintTypeScriptYarn() {
-        try {
-            execSync("yarn add eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin");
-            console.log("✅ ESLint installed successfully");
-        } catch (err) {
-            console.log("❌ Error installing ESLint")
-            return
-        }
-    }
-
-    /**
-     * Yarn - tslint - JavaScript
-     */
-    tslintYarn() {
-        try {
-            execSync("yarn add tslint");
-            console.log("✅ TSLint installed successfully");
-        } catch (err) {
-            console.log("❌ Error installing TSLint")
-            return
-        }
-    }
-
-    /**
-     * Yarn - tslint - TypeScript
-     */
-    tslintTypeScriptYarn() {
-        try {
-            execSync("yarn add tslint typescript");
-            console.log("✅ TSLint installed successfully");
-        } catch (err) {
-            console.log("❌ Error installing TSLint")
-            return
-        }
-    }
-
-    /**
-     * Linting Setup
-     */
-    setupLinting() {
-        if (this.packageManager === "npm" && this.linting === "eslint" && this.language === "javascript") {
-            this.eslintNPM();
-        } else if (this.packageManager === "npm" && this.linting === "eslint" && this.language === "typescript") {
-            this.eslintTypeScript();
-        } else if (this.packageManager === "npm" && this.linting === "tslint" && this.language === "javascript") {
-            this.tslintNPM();
-        } else if (this.packageManager === "npm" && this.linting === "tslint" && this.language === "typescript") {
-            this.tslintTypeScript();
-        } else if (this.packageManager === "yarn" && this.linting === "eslint" && this.language === "javascript") {
-            this.eslintYarn();
-        } else if (this.packageManager === "yarn" && this.linting === "eslint" && this.language === "typescript") {
-            this.eslintTypeScriptYarn();
-        } else if (this.packageManager === "yarn" && this.linting === "tslint" && this.language === "javascript") {
-            this.tslintYarn();
-        } else if (this.packageManager === "yarn" && this.linting === "tslint" && this.language === "typescript") {
-            this.tslintTypeScriptYarn();
-        }
-    }
-
-
-
+    console.log("✅ ESLint registered.");
+  }
 }

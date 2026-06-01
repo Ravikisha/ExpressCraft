@@ -1,85 +1,78 @@
 import inquirer from "inquirer";
+import { PRESET_NAMES } from "../modules/presets.js";
 
-async function askQuestions() {
-  const questions = [
+// Folder/package-name safe: letters, numbers, dot, dash, underscore.
+export const validProjectName = (value) => {
+  const v = (value || "").trim();
+  if (!v) return "Please enter your project name.";
+  if (!/^[A-Za-z0-9._-]+$/.test(v))
+    return "Use only letters, numbers, '.', '-' or '_' (no spaces or slashes).";
+  if (/^[._]/.test(v)) return "Project name cannot start with '.' or '_'.";
+  return true;
+};
+
+// Project metadata + optional preset selection.
+export async function askProjectMeta() {
+  return inquirer.prompt([
     {
       name: "projectName",
       type: "input",
       message: "What is your project name?",
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please enter your project name.";
-        }
-      },
+      validate: validProjectName,
     },
     {
       name: "projectDescription",
       type: "input",
-      message: "What is your project description?(optional)",
+      message: "Project description? (optional)",
     },
     {
       name: "projectAuthor",
       type: "input",
-      message: "What is your project author?(optional)",
+      message: "Project author? (optional)",
     },
+    {
+      name: "preset",
+      type: "list",
+      message: "Start from a preset, or customize?",
+      choices: [
+        { name: "Custom (answer all questions)", value: "custom" },
+        ...PRESET_NAMES.map((p) => ({ name: `Preset: ${p}`, value: p })),
+      ],
+    },
+  ]);
+}
+
+// The full feature questionnaire (used when preset === "custom").
+export async function askFeatures() {
+  return inquirer.prompt([
     {
       name: "packageManager",
       type: "list",
-      message: "What is your project Package Manager?",
-      choices: ["NPM", "Yarn"],
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please select your project Package Manager.";
-        }
-      },
+      message: "Which package manager?",
+      choices: ["NPM", "Yarn", "pnpm"],
     },
     {
       name: "jsOrTs",
       type: "list",
-      message: "What is your project language?",
+      message: "Which language?",
       choices: ["JavaScript", "TypeScript"],
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please select your project language.";
-        }
-      },
     },
     {
       name: "versionControl",
       type: "list",
-      message: "What is your project Version Control?",
+      message: "Which version control?",
       choices: ["Git", "SVN", "No Version Control"],
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please select your project Version Control.";
-        }
-      },
     },
     {
       name: "templateEngine",
       type: "list",
-      message: "What is your project template engine?",
-      choices: ["No Template Engine", "EJS", "Pug", "Twig", "handlebars"],
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please select your project template engine.";
-        }
-      },
+      message: "Which template engine?",
+      choices: ["No Template Engine", "EJS", "Pug", "Twig", "Handlebars"],
     },
     {
       name: "cssFramework",
       type: "list",
-      message: "What is your project CSS Framework?",
+      message: "Which CSS framework?",
       choices: [
         "No CSS Framework",
         "Tailwind CSS",
@@ -88,150 +81,53 @@ async function askQuestions() {
         "Foundation",
         "Materialize",
         "Semantic UI",
-        
       ],
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please select your project CSS Framework.";
-        }
-      },
     },
-    // {
-    //   name: "cssPreprocessor",
-    //   type: "list",
-    //   message: "What is your project CSS Preprocessor?",
-    //   choices: ["No CSS Preprocessor", "Sass", "Less", "PostCSS", "Stylus"],
-    //   validate: function (value) {
-    //     if (value.length) {
-    //       return true;
-    //     } else {
-    //       return "Please select your project CSS Preprocessor.";
-    //     }
-    //   },
-    // },
+    {
+      name: "cssPreprocessor",
+      type: "list",
+      message: "Which CSS preprocessor?",
+      choices: ["No CSS Preprocessor", "Sass", "Less", "Stylus", "PostCSS"],
+    },
     {
       name: "database",
       type: "list",
-      message: "What is your project database?",
-      choices: [
-        "MySQL",
-        "PostgreSQL",
-        "SQLite",
-        "MongoDB",
-        "No Database",
-      ],
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please select your project database.";
-        }
-      },
+      message: "Which database?",
+      choices: ["No Database", "MySQL", "PostgreSQL", "SQLite", "MongoDB"],
     },
     {
       name: "orm",
       type: "list",
-      message: "What is your project ORM?",
-      choices: [
-        "Prisma",
-        "Sequelize",
-        "TypeORM",
-        "Mongoose",
-        "Drizzle-ORM",
-        "No ORM",
-      ],
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please select your project ORM.";
-        }
-      },
+      message: "Which ORM?",
+      when: (answers) => answers.database !== "No Database",
+      choices: (answers) =>
+        answers.database === "MongoDB"
+          ? ["Mongoose", "Prisma", "No ORM"]
+          : ["Prisma", "Sequelize", "TypeORM", "Drizzle-ORM", "No ORM"],
     },
     {
       name: "testing",
       type: "list",
-      message: "What is your project testing?",
+      message: "Which testing framework?",
       choices: ["No Testing", "Jest", "Mocha + Chai", "Jasmine"],
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please select your project testing.";
-        }
-      },
     },
     {
       name: "authentication",
       type: "list",
-      message: "What is your project authentication?",
+      message: "Which authentication?",
       choices: ["No Authentication", "Passport.js", "JWT"],
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please select your project authentication.";
-        }
-      },
     },
     {
       name: "linting",
       type: "list",
-      message: "What is your project linting?",
+      message: "Which linting?",
       choices: ["No Linting", "ESLint", "TSLint"],
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please select your project linting.";
-        }
-      },
     },
-
-    // {
-    //   name: "taskRunner",
-    //   type: "list",
-    //   message: "What is your project Task Runner?",
-    //   choices: ["No Task Runner", "Gulp", "Grunt"],
-    //   validate: function (value) {
-    //     if (value.length) {
-    //       return true;
-    //     } else {
-    //       return "Please select your project Task Runner.";
-    //     }
-    //   },
-    // },
-
     {
       name: "apiDocumentation",
       type: "list",
-      message: "What is your project API Documentation?",
+      message: "Which API documentation?",
       choices: ["No API Documentation", "Swagger", "Postman"],
-      validate: function (value) {
-        if (value.length) {
-          return true;
-        } else {
-          return "Please select your project API Documentation.";
-        }
-      },
     },
-    // {
-    //   name: "hosting",
-    //   type: "list",
-    //   message: "What is your project Hosting?",
-    //   choices: ["No Hosting", "Heroku", "Digital Ocean", "AWS", "Google Cloud"],
-    //   validate: function (value) {
-    //     if (value.length) {
-    //       return true;
-    //     } else {
-    //       return "Please select your project Hosting.";
-    //     }
-    //   },
-    // },
-  ];
-  return inquirer.prompt(questions);
+  ]);
 }
-
-export default askQuestions;
