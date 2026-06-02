@@ -49,7 +49,49 @@ The full **build-package.json-from-choices → single-install-at-end** architect
 
 **Verified (round 3):** all files `node --check` + ESLint clean (0 errors); Prettier clean; 13/13 Vitest pass; real `--preset minimal` run installs and the generated server **boots + answers `/health` and `/` with 200** (helmet/cors/morgan active); real `--preset api` (TypeScript, Prisma + JWT + Swagger) **type-checks with `tsc --noEmit` exit 0**.
 
-**Still open (deferred):** Docker/CI/husky/logger add-on prompts; `views/` render route wired into generated routes; update-notifier; per-route controller scaffolding; regenerate the tool's own README to document presets/flags/structure.
+### Round 4 (add-to-existing-project — Phase 1)
+
+New **`expresscraft add`** subcommand augments an existing project safely (no source edits):
+- **`modules/ProjectContext.js`** — detects package manager (lockfile), language (tsconfig/`*.ts`/dep), existing deps/scripts, entry file, git-dirty state, existing `.env` keys.
+- **`modules/AddProject.js`** — computes a change plan and applies it: merges `package.json` (existing versions/scripts win, `package.json.bak` backup), writes only missing files (skips existing + warns, `--force` overrides), appends missing `.env` keys, emits **`EXPRESSCRAFT_SETUP.md`** with the manual wiring (imports/middleware/bootstrap) since source files are never edited.
+- **`Phases/addQuestions.js`** — capability multiselect + per-category sub-prompts; `featuresFromFlags` for non-interactive use.
+- **`modules/args.js`** — `add` subcommand, category flags (`--db --orm --auth --testing --linting --docs --template --css --preprocessor`), `--dry-run`, `--inject` (reserved for Phase 3), updated HELP.
+- **`index.js`** — `runAdd`/`runCreate` dispatch; add-mode skips ProjectCreating/Scaffold/VersionControl/Readme and reuses feature modules + `install`.
+
+**Verified (round 4):** eslint + prettier clean; **22/22 Vitest** (9 new add-mode tests: detection, dep/script/file/env merge rules, idempotency, setup-guide); real e2e on a hand-made legacy project — `--dry-run` previews correctly and writes nothing; real apply **merges deps (express version preserved), adds scripts/files/env, leaves `app.js` untouched, writes backup + setup guide, installs**; re-run is **idempotent** ("Nothing to add").
+
+### Round 5 (add-to-existing-project — Phase 3, `--inject`)
+
+**`modules/Injector.js`** — best-effort, dependency-free wiring into the existing entry file:
+- Locates the file defining `const <app> = express()` across common candidates (entry/`src/app`/`src/index`/`app.js`/`server.js`); captures the real app variable name.
+- Inserts new **imports** after the last import/require, and **middleware** (`app.use`/`app.set`) after the last existing one (or right after the app definition), rewriting the `app.` prefix to the detected variable.
+- **Backs up** the target to `<file>.bak`, **idempotent** (skips lines already present), and **never injects bootstrap** (`await …`) since async placement isn't guaranteed — those stay in the guide.
+- On any uncertainty (no `express()` found) → no edit, full fallback to `EXPRESSCRAFT_SETUP.md`.
+
+Wired through `AddProject` (consumes injected groups, writes the guide for the remainder + reports the edited file) and `index.js`/`args.js` (`--inject`).
+
+**Verified (round 5):** eslint + prettier clean; **26/26 Vitest** (4 new injector tests: import+middleware placement, app-var rename, no-express no-op, idempotent no-dup); real e2e — `add --auth passport --db mongodb --inject` edits `src/app.js` in place (session/passport `app.use` after `express.json()`, imports after `require("express")`, route/`listen` untouched), writes `.bak`, leaves `connectDB()` bootstrap in the guide, and the **injected file passes `node --check`**.
+
+### Round 6 (extras + update-notifier)
+
+New optional add-ons, available via the create-mode **"extras" checkbox**, `--docker/--ci/--hooks/--logger` flags (create or add mode), and presets (`api` → ci+hooks+logger; `fullstack` → +docker):
+- **`modules/Docker.js`** — `Dockerfile` (TS builds + runs `dist`), `.dockerignore`, `docker-compose.yml` with a matching DB service (postgres/mysql/mongo) when a database is selected.
+- **`modules/CI.js`** — GitHub Actions `ci.yml`; steps derived from the scripts that exist (lint/test/build), with a pnpm setup step when needed.
+- **`modules/GitHooks.js`** — Husky + lint-staged + Prettier, `prepare: husky` script, `.husky/pre-commit`, `.lintstagedrc.json`.
+- **`modules/Logger.js`** — pino + pino-http middleware fragment (wired into the app in create mode, into the guide in add mode) + pino-pretty.
+- **update-notifier** — the CLI now notifies when a newer ExpressCraft is published.
+
+Wired through create (`generateProject`, after Scaffold so CI sees final scripts; Logger before Scaffold so its fragment lands in the app) and add mode (`runAdd` + extras flags/picker). Summary table shows enabled extras.
+
+**Verified (round 6):** eslint + prettier clean; **34/34 Vitest** (8 new extras tests: disabled no-op, Docker compose db service + TS build, CI script-gating + pnpm step, Husky files/script, pino deps+fragment); real e2e — `create --preset minimal --docker --ci --hooks --logger` generates all files, wires `app.use(pinoHttp())`, installs (Husky self-initializes via `prepare`), and the server **boots with structured pino logs + helmet/cors headers on `/health`**.
+
+### Round 7 (controller scaffolding)
+
+`Scaffold` now splits route handlers into a controller: `src/controllers/home.(js|ts)` exports `index`/`health`, and `src/routes/index` imports + wires them (`router.get("/", home.index)`). Cleaner separation, ready for users to add more controllers.
+
+**Verified (round 7):** eslint + prettier clean; **34/34 Vitest** (generate test asserts the controllers file + `exports.health`); TS e2e — `tsc --noEmit` passes, build + boot returns 200 on `/` and `/health` through the controller.
+
+**Still open (deferred):** multi-file inject when the express app and `app.listen` live in separate files (current `--inject` targets a single file).
 
 ---
 

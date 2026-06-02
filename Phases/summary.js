@@ -23,5 +23,9 @@ export default function summary(opts) {
     const value = opts[key] || "—";
     console.log(`  ${label.padEnd(18)} ${chalk.cyan(value)}`);
   }
+  const extras = ["docker", "ci", "hooks", "logger"].filter((k) => opts[k]);
+  console.log(
+    `  ${"Extras".padEnd(18)} ${chalk.cyan(extras.length ? extras.join(", ") : "—")}`
+  );
   console.log(chalk.green("-----------------------------------"));
 }

@@ -15,12 +15,14 @@ export default class Manifest {
     author = "",
     language,
     packageManager,
+    mode = "create",
   }) {
     this.name = name;
     this.description = description;
     this.author = author;
     this.language = language; // "javascript" | "typescript"
     this.packageManager = packageManager; // "npm" | "yarn" | "pnpm"
+    this.mode = mode; // "create" | "add"
 
     // name -> version range
     this.dependencies = new Map();

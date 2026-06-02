@@ -66,7 +66,42 @@ expresscraft --name blog --preset mvc --pm pnpm --yes
 | `--ts` / `--js` | Language (TypeScript / JavaScript) |
 | `-y, --yes` | Non-interactive (use preset/flag defaults) |
 | `-f, --force` | Overwrite an existing folder without asking |
+| `--docker` | Add Dockerfile + docker-compose |
+| `--ci` | Add a GitHub Actions workflow |
+| `--hooks` | Add Husky + lint-staged pre-commit |
+| `--logger` | Add a pino HTTP logger |
 | `-h, --help` | Show help |
+
+### Add to an existing project
+
+Already have an Express app? Run `expresscraft add` **inside it** to layer on features without touching your source files:
+
+```bash
+cd my-existing-app
+expresscraft add                                   # interactive picker
+expresscraft add --db postgresql --orm prisma --yes
+expresscraft add --auth jwt --testing jest --dry-run
+```
+
+It detects your package manager (from the lockfile) and language (TypeScript/JavaScript), then:
+
+- **Merges** new dependencies and scripts into your `package.json` (your existing versions/scripts win; a `package.json.bak` backup is written).
+- **Writes only new files** — existing files are skipped with a warning (`--force` to overwrite).
+- **Appends** any missing keys to `.env` / `.env.example`.
+- Writes **`EXPRESSCRAFT_SETUP.md`** with the exact imports/middleware/bootstrap lines to paste into your app (ExpressCraft never edits your source).
+- Runs a single install at the end.
+
+Use `--dry-run` to preview every change without writing anything.
+
+**Auto-wiring (`--inject`)**: instead of only printing instructions, ExpressCraft can insert the safe parts directly into your entry file (the one with `const app = express()`):
+
+```bash
+expresscraft add --auth passport --inject --yes
+```
+
+- Inserts new **imports** after your last import/require and **middleware** (`app.use`/`app.set`) after your last existing one — matching your actual app variable name.
+- Backs the file up to `<file>.bak`, skips lines already present (idempotent), and **falls back to the guide** if it can't confidently locate the app.
+- **Bootstrap lines** (e.g. `await connectDB()`) are never injected — they need an async context — so they stay in `EXPRESSCRAFT_SETUP.md` for you to place.
 
 ### Presets
 
@@ -77,6 +112,8 @@ expresscraft --name blog --preset mvc --pm pnpm --yes
 | `mvc` | JavaScript | npm | EJS + Bootstrap + Sass, MongoDB + Mongoose, Jest, Passport, ESLint |
 | `fullstack` | TypeScript | pnpm | EJS + Tailwind + Sass, PostgreSQL + Prisma, Jest, JWT, ESLint, Swagger |
 
+> `api` adds CI + Husky + logger; `fullstack` adds Docker + CI + Husky + logger on top.
+
 ## Features
 
 - **Presets or full customization** of every choice
@@ -86,7 +123,9 @@ expresscraft --name blog --preset mvc --pm pnpm --yes
 - Generates a **real project structure** (routes, middleware, config, `.env`)
 - Working **database/auth boilerplate**, not just installed packages
 - Baseline middleware out of the box: **helmet, cors, morgan**, JSON parsing, error handler, `/health` route
+- Optional **extras**: Docker, GitHub Actions CI, Husky + lint-staged, pino logger
 - Overwrite protection + rollback if generation fails
+- Update notifier — tells you when a newer ExpressCraft is available
 
 ## Modules and Frameworks
 ExpressCraft supports the following modules and frameworks:
@@ -188,6 +227,17 @@ ExpressCraft supports the following modules and frameworks:
 |![Swagger](https://img.shields.io/badge/Swagger-3.0.0-blue.svg?logo=swagger)| Swagger is a set of open-source tools built around the OpenAPI Specification that can help you design, build, document, and consume REST APIs.|
 |![Postman](https://img.shields.io/badge/Postman-8.10.0-blue?logo=postman)| Postman is a collaboration platform for API development.|
 
+### Extras
+
+Optional add-ons (interactive checkbox, `--docker/--ci/--hooks/--logger` flags, or via a preset):
+
+| Extra | What you get |
+| ----- | ------------ |
+|![Docker](https://img.shields.io/badge/Docker-blue.svg?logo=docker)| `Dockerfile`, `.dockerignore`, and a `docker-compose.yml` (with a matching DB service when a database is selected).|
+|![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-CI-blue.svg?logo=githubactions)| A `ci.yml` workflow that installs deps and runs your lint/test/build scripts (only the ones that exist).|
+|![Husky](https://img.shields.io/badge/Husky-+%20lint--staged-green.svg?logo=git)| A `pre-commit` hook running lint-staged (Prettier), installed automatically via the `prepare` script.|
+|![pino](https://img.shields.io/badge/pino-logger-green.svg?logo=pino)| `pino` + `pino-http` structured request logging wired into the app, with `pino-pretty` for dev.|
+
 ## Getting Started
 
 Run ExpressCraft and answer the prompts (or pass flags):
@@ -273,6 +323,8 @@ my-app/
 │   ├── app.js            # express app: helmet, cors, morgan, json, routes, error handler
 │   ├── routes/
 │   │   └── index.js      # GET / and GET /health
+│   ├── controllers/
+│   │   └── home.js       # index + health handlers
 │   ├── middleware/
 │   │   └── errorHandler.js
 │   └── config/           # db.js / prisma.js / passport.js (when applicable)

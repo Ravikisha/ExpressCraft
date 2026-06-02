@@ -31,6 +31,9 @@ const PRESETS = {
     authentication: "jwt",
     linting: "eslint",
     apiDocumentation: "swagger",
+    ci: true,
+    hooks: true,
+    logger: true,
   },
   mvc: {
     ...base,
@@ -58,6 +61,10 @@ const PRESETS = {
     authentication: "jwt",
     linting: "eslint",
     apiDocumentation: "swagger",
+    docker: true,
+    ci: true,
+    hooks: true,
+    logger: true,
   },
 };
 

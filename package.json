@@ -35,7 +35,8 @@
     "figlet": "^1.7.0",
     "gradient-string": "^2.0.2",
     "inquirer": "^9.2.12",
-    "ora": "^8.0.1"
+    "ora": "^8.0.1",
+    "update-notifier": "^7.0.0"
   },
   "devDependencies": {
     "eslint": "^9.0.0",

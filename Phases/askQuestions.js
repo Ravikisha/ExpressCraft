@@ -129,5 +129,16 @@ export async function askFeatures() {
       message: "Which API documentation?",
       choices: ["No API Documentation", "Swagger", "Postman"],
     },
+    {
+      name: "extras",
+      type: "checkbox",
+      message: "Optional extras?",
+      choices: [
+        { name: "Docker (Dockerfile + compose)", value: "docker" },
+        { name: "GitHub Actions CI", value: "ci" },
+        { name: "Husky + lint-staged", value: "hooks" },
+        { name: "Pino HTTP logger", value: "logger" },
+      ],
+    },
   ]);
 }

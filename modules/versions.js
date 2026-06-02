@@ -97,4 +97,14 @@ export default {
   "swagger-ui-express": "^5.0.0",
   "@types/swagger-ui-express": "^4.1.6",
   newman: "^6.1.0",
+
+  // logger
+  pino: "^9.0.0",
+  "pino-http": "^10.0.0",
+  "pino-pretty": "^11.0.0",
+
+  // git hooks / formatting
+  husky: "^9.0.0",
+  "lint-staged": "^15.2.0",
+  prettier: "^3.3.0",
 };

@@ -24,6 +24,7 @@ export default class Scaffold {
     m.addFile(`src/app.${m.ext()}`, this.appFile());
     m.addFile(`src/index.${m.ext()}`, this.serverFile());
     m.addFile(`src/routes/index.${m.ext()}`, this.routesFile());
+    m.addFile(`src/controllers/home.${m.ext()}`, this.controllerFile());
     m.addFile(
       `src/middleware/errorHandler.${m.ext()}`,
       this.errorHandlerFile()
@@ -118,36 +119,52 @@ start();
 
   routesFile() {
     const m = this.manifest;
-    const greeting = `Welcome to ${m.name}!`;
     if (m.isTs()) {
-      return `import { Router, Request, Response } from "express";
+      return `import { Router } from "express";
+import * as home from "../controllers/home";
 
 const router = Router();
 
-router.get("/", (req: Request, res: Response) => {
-  res.json({ message: "${greeting}" });
-});
-
-router.get("/health", (req: Request, res: Response) => {
-  res.json({ status: "ok", uptime: process.uptime() });
-});
+router.get("/", home.index);
+router.get("/health", home.health);
 
 export default router;
 `;
     }
     return `const { Router } = require("express");
+const home = require("../controllers/home");
 
 const router = Router();
 
-router.get("/", (req, res) => {
-  res.json({ message: "${greeting}" });
-});
-
-router.get("/health", (req, res) => {
-  res.json({ status: "ok", uptime: process.uptime() });
-});
+router.get("/", home.index);
+router.get("/health", home.health);
 
 module.exports = router;
+`;
+  }
+
+  controllerFile() {
+    const m = this.manifest;
+    const greeting = `Welcome to ${m.name}!`;
+    if (m.isTs()) {
+      return `import { Request, Response } from "express";
+
+export const index = (_req: Request, res: Response): void => {
+  res.json({ message: "${greeting}" });
+};
+
+export const health = (_req: Request, res: Response): void => {
+  res.json({ status: "ok", uptime: process.uptime() });
+};
+`;
+    }
+    return `exports.index = (_req, res) => {
+  res.json({ message: "${greeting}" });
+};
+
+exports.health = (_req, res) => {
+  res.json({ status: "ok", uptime: process.uptime() });
+};
 `;
   }
 

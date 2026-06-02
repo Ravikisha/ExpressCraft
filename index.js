@@ -2,6 +2,8 @@
 import gradient from "gradient-string";
 import figlet from "figlet";
 import inquirer from "inquirer";
+import chalk from "chalk";
+import updateNotifier from "update-notifier";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -12,6 +14,7 @@ import {
   askFeatures,
   validProjectName,
 } from "./Phases/askQuestions.js";
+import { askAddFeatures, featuresFromFlags } from "./Phases/addQuestions.js";
 import summary from "./Phases/summary.js";
 import install from "./Phases/install.js";
 import end from "./Phases/end.js";
@@ -20,6 +23,8 @@ import end from "./Phases/end.js";
 import Manifest from "./modules/Manifest.js";
 import { parseArgs, HELP } from "./modules/args.js";
 import { getPreset, PRESET_NAMES } from "./modules/presets.js";
+import ProjectContext from "./modules/ProjectContext.js";
+import AddProject from "./modules/AddProject.js";
 import folderCreating from "./modules/FolderCreating.js";
 import ProjectCreating from "./modules/ProjectCreating.js";
 import VersionControl from "./modules/VersionControl.js";
@@ -33,16 +38,28 @@ import Linting from "./modules/Linting.js";
 import Documentation from "./modules/Documentation.js";
 import Readme from "./modules/Readme.js";
 import Scaffold from "./modules/Scaffold.js";
+import Logger from "./modules/Logger.js";
+import Docker from "./modules/Docker.js";
+import CI from "./modules/CI.js";
+import GitHooks from "./modules/GitHooks.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-function toolVersion() {
+function toolPkg() {
   try {
     return JSON.parse(
       fs.readFileSync(path.resolve(__dirname, "package.json"), "utf8")
-    ).version;
+    );
   } catch {
-    return "unknown";
+    return { version: "unknown" };
+  }
+}
+
+function checkForUpdate() {
+  try {
+    updateNotifier({ pkg: toolPkg() }).notify({ isGlobal: true });
+  } catch {
+    /* offline / no cache dir — ignore */
   }
 }
 
@@ -53,6 +70,7 @@ function normalizeFeatures(a) {
     JWT: "jwt",
     "No Authentication": "no authentication",
   };
+  const ex = new Set(a.extras || []);
   return {
     packageManager: a.packageManager.toLowerCase(),
     language: a.jsOrTs.toLowerCase(),
@@ -66,12 +84,18 @@ function normalizeFeatures(a) {
     authentication: auth[a.authentication] ?? "no authentication",
     linting: a.linting.toLowerCase(),
     apiDocumentation: a.apiDocumentation.toLowerCase(),
+    docker: ex.has("docker"),
+    ci: ex.has("ci"),
+    hooks: ex.has("hooks"),
+    logger: ex.has("logger"),
   };
 }
 
 function applyFlagOverrides(features, args) {
   if (args.pm) features.packageManager = args.pm.toLowerCase();
   if (args.language) features.language = args.language;
+  for (const k of ["docker", "ci", "hooks", "logger"])
+    if (args[k]) features[k] = true;
   return features;
 }
 
@@ -166,11 +190,129 @@ async function welcome() {
     return;
   }
 
+  checkForUpdate();
   console.log(gradient.vice(figlet.textSync("ExpressCraft")));
   console.log(
-    `\n✨ ExpressCraft v${toolVersion()} — Express.js generator ✨\n`
+    `\n✨ ExpressCraft v${toolPkg().version} — Express.js generator ✨\n`
   );
 
+  if (args.command === "add") {
+    await runAdd(args);
+    return;
+  }
+  await runCreate(args);
+}
+
+async function runAdd(args) {
+  let ctx;
+  try {
+    ctx = ProjectContext.detect();
+  } catch (e) {
+    console.log(`❌ ${e.message}`);
+    process.exit(1);
+  }
+
+  const language = args.language || ctx.language;
+  const packageManager = args.pm ? args.pm.toLowerCase() : ctx.packageManager;
+  console.log(
+    `🔎 Detected: ${language}, ${packageManager}${ctx.entryFile ? `, entry ${ctx.entryFile}` : ""}`
+  );
+
+  if (ctx.gitDirty && !args.yes && !args.force && !args.dryRun) {
+    const { go } = await inquirer.prompt([
+      {
+        name: "go",
+        type: "confirm",
+        message: "Git working tree is dirty. Continue anyway?",
+        default: false,
+      },
+    ]);
+    if (!go) {
+      console.log("🛑 Aborted.");
+      return;
+    }
+  }
+
+  const extrasFlagged = args.docker || args.ci || args.hooks || args.logger;
+  const hasFlags = Object.keys(args.categories).length > 0 || extrasFlagged;
+  let features;
+  if (hasFlags) features = featuresFromFlags(args.categories);
+  else if (args.yes) {
+    console.log(
+      "❌ Non-interactive add needs flags, e.g. --db postgresql --auth jwt --docker."
+    );
+    process.exit(1);
+  } else features = await askAddFeatures();
+
+  // Extras flags override (work in both interactive and flag mode).
+  for (const k of ["docker", "ci", "hooks", "logger"])
+    if (args[k]) features[k] = true;
+
+  const manifest = new Manifest({
+    name: ctx.name,
+    language,
+    packageManager,
+    mode: "add",
+  });
+
+  new TemplateEngine(manifest, features.templateEngine).register();
+  new CssFramework(manifest, features.cssFramework).register();
+  new CSSPreprocessor(manifest, features.cssPreprocessor).register();
+  new DatabaseSetup(manifest, features.database, features.orm).register();
+  new TestFramework(manifest, features.testing).register();
+  new Authentication(manifest, features.authentication).register();
+  new Linting(manifest, features.linting).register();
+  new Documentation(manifest, features.apiDocumentation).register();
+  new Logger(manifest, { enabled: features.logger }).register();
+  new Docker(manifest, {
+    enabled: features.docker,
+    database: features.database,
+  }).register();
+  new CI(manifest, { enabled: features.ci }).register();
+  new GitHooks(manifest, { enabled: features.hooks }).register();
+
+  const adder = new AddProject(manifest, ctx, {
+    force: args.force,
+    dryRun: args.dryRun,
+    inject: args.inject,
+  });
+  const plan = adder.computePlan();
+
+  if (!adder.hasChanges(plan)) {
+    console.log("\n✅ Nothing to add — selected features are already present.");
+    return;
+  }
+
+  adder.printPlan(plan);
+
+  if (args.dryRun) {
+    console.log(chalk.gray("\n(dry run — nothing was written)"));
+    return;
+  }
+
+  if (!args.yes) {
+    const { confirmed } = await inquirer.prompt([
+      {
+        name: "confirmed",
+        type: "confirm",
+        message: "Apply these changes?",
+        default: true,
+      },
+    ]);
+    if (!confirmed) {
+      console.log("🛑 Aborted. No changes made.");
+      return;
+    }
+  }
+
+  console.log("");
+  adder.apply(plan);
+  install(packageManager);
+
+  console.log("\n🎉 Done. Review EXPRESSCRAFT_SETUP.md for any manual wiring.");
+}
+
+async function runCreate(args) {
   const opts = await collectOptions(args);
   summary(opts);
 
@@ -219,10 +361,19 @@ async function generateProject(opts, { overwrite }) {
     new Authentication(manifest, opts.authentication).register();
     new Linting(manifest, opts.linting).register();
     new Documentation(manifest, opts.apiDocumentation).register();
+    new Logger(manifest, { enabled: opts.logger }).register();
 
     // Scaffold renders app/server/routes from the collected fragments — last.
     new Scaffold(manifest).register();
     new Readme(manifest).creatingReadme();
+
+    // Extras that depend on populated scripts/structure run after the scaffold.
+    new Docker(manifest, {
+      enabled: opts.docker,
+      database: opts.database,
+    }).register();
+    new CI(manifest, { enabled: opts.ci }).register();
+    new GitHooks(manifest, { enabled: opts.hooks }).register();
 
     // Write everything, then version control, then one install.
     writeFiles(manifest);

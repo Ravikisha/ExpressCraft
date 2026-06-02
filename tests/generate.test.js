@@ -59,12 +59,14 @@ describe("generation pipeline", () => {
         "src/app.js",
         "src/index.js",
         "src/routes/index.js",
+        "src/controllers/home.js",
         "src/middleware/errorHandler.js",
         ".env",
         ".env.example",
       ])
     );
     expect(file(m, "src/routes/index.js")).toContain("/health");
+    expect(file(m, "src/controllers/home.js")).toContain("exports.health");
   });
 
   it("mongoose wires the connection into the server bootstrap", () => {
