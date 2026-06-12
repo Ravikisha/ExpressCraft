@@ -27,5 +27,15 @@ export default function summary(opts) {
   console.log(
     `  ${"Extras".padEnd(18)} ${chalk.cyan(extras.length ? extras.join(", ") : "—")}`
   );
+  const ai = opts.aiAssistants || [];
+  console.log(
+    `  ${"AI assistants".padEnd(18)} ${chalk.cyan(ai.length ? ai.join(", ") : "—")}`
+  );
+  if (ai.length) {
+    const skills = Array.isArray(opts.aiSkills)
+      ? `${opts.aiSkills.length} selected`
+      : "all for stack";
+    console.log(`  ${"AI skills".padEnd(18)} ${chalk.cyan(skills)}`);
+  }
   console.log(chalk.green("-----------------------------------"));
 }

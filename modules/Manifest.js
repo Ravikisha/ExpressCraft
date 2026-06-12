@@ -30,6 +30,10 @@ export default class Manifest {
 
     this.scripts = {};
 
+    // package.json metadata
+    this.license = "MIT";
+    this.keywords = new Set(["express", "expresscraft", "nodejs"]);
+
     // files to write before install: [{ path, content }]
     this.files = [];
 
@@ -67,6 +71,19 @@ export default class Manifest {
 
   setScript(name, command) {
     this.scripts[name] = command;
+    return this;
+  }
+
+  // Add package.json keyword(s) / tags. Accepts a string or array.
+  addKeyword(name) {
+    if (name) this.keywords.add(String(name).toLowerCase());
+    return this;
+  }
+
+  addKeywords(list) {
+    (Array.isArray(list) ? list : String(list).split(/\s+/))
+      .filter(Boolean)
+      .forEach((k) => this.addKeyword(k));
     return this;
   }
 
@@ -150,10 +167,14 @@ export default class Manifest {
     return {
       name: this.name,
       version: "1.0.0",
-      description: this.description,
+      description:
+        this.description || "An Express.js project generated with ExpressCraft.",
       author: this.author,
+      license: this.license,
+      keywords: [...this.keywords].sort(),
       main: this.isTs() ? "dist/index.js" : "src/index.js",
       type: "commonjs",
+      engines: { node: ">=16" },
       scripts: this.scripts,
       dependencies: Manifest.mapToObject(this.dependencies),
       devDependencies: Manifest.mapToObject(this.devDependencies),

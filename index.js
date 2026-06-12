@@ -42,6 +42,10 @@ import Logger from "./modules/Logger.js";
 import Docker from "./modules/Docker.js";
 import CI from "./modules/CI.js";
 import GitHooks from "./modules/GitHooks.js";
+import AIAssistants from "./modules/AIAssistants.js";
+import SkillFetcher from "./modules/SkillFetcher.js";
+import { skillIdsFor } from "./modules/skillsCatalog.js";
+import { claudeGuide } from "./modules/claudeGuide.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -88,6 +92,9 @@ function normalizeFeatures(a) {
     ci: ex.has("ci"),
     hooks: ex.has("hooks"),
     logger: ex.has("logger"),
+    aiAssistants: a.aiAssistants || [],
+    aiSkills: a.aiSkills ?? null,
+    fetchSkills: !!a.fetchSkills,
   };
 }
 
@@ -96,6 +103,8 @@ function applyFlagOverrides(features, args) {
   if (args.language) features.language = args.language;
   for (const k of ["docker", "ci", "hooks", "logger"])
     if (args[k]) features[k] = true;
+  if (args.aiAssistants?.length) features.aiAssistants = args.aiAssistants;
+  if (args.aiSkills?.length) features.aiSkills = args.aiSkills;
   return features;
 }
 
@@ -105,6 +114,31 @@ function writeFiles(manifest) {
     if (dir && dir !== ".") fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(filePath, content);
   }
+}
+
+// Derive package.json keywords/tags from the selected stack.
+function buildKeywords(opts) {
+  const k = new Set(["rest-api", "backend", "server"]);
+  const addIf = (v) => {
+    if (v && !/^no /.test(v)) v.split(/\s+/).forEach((w) => k.add(w));
+  };
+  if (opts.language) k.add(opts.language);
+  addIf(opts.templateEngine);
+  addIf(opts.cssFramework);
+  addIf(opts.cssPreprocessor);
+  addIf(opts.database);
+  addIf(opts.orm);
+  addIf(opts.testing);
+  addIf(opts.apiDocumentation);
+  if (opts.authentication && opts.authentication !== "no authentication") {
+    k.add("authentication");
+    k.add(opts.authentication);
+  }
+  if (opts.linting && opts.linting !== "no linting") k.add(opts.linting);
+  if (opts.docker) k.add("docker");
+  if (opts.ci) k.add("ci");
+  if (opts.logger) k.add("logging");
+  return [...k];
 }
 
 function writePackageJson(manifest) {
@@ -137,6 +171,7 @@ async function collectOptions(args) {
       projectDescription: "",
       projectAuthor: "",
       ...applyFlagOverrides(preset, args),
+      fetchSkills: !!args.fetchSkills,
       _interactive: false,
     };
   }
@@ -152,6 +187,7 @@ async function collectOptions(args) {
     projectDescription: meta.projectDescription || "",
     projectAuthor: meta.projectAuthor || "",
     ...applyFlagOverrides(features, args),
+    fetchSkills: !!(features.fetchSkills || args.fetchSkills),
     _interactive: true,
   };
 }
@@ -247,6 +283,8 @@ async function runAdd(args) {
   // Extras flags override (work in both interactive and flag mode).
   for (const k of ["docker", "ci", "hooks", "logger"])
     if (args[k]) features[k] = true;
+  if (args.aiAssistants?.length) features.aiAssistants = args.aiAssistants;
+  if (args.aiSkills?.length) features.aiSkills = args.aiSkills;
 
   const manifest = new Manifest({
     name: ctx.name,
@@ -270,6 +308,11 @@ async function runAdd(args) {
   }).register();
   new CI(manifest, { enabled: features.ci }).register();
   new GitHooks(manifest, { enabled: features.hooks }).register();
+  new AIAssistants(manifest, {
+    services: features.aiAssistants,
+    skillIds: features.aiSkills,
+    features: { ...features, language },
+  }).register();
 
   const adder = new AddProject(manifest, ctx, {
     force: args.force,
@@ -308,6 +351,11 @@ async function runAdd(args) {
   console.log("");
   adder.apply(plan);
   install(packageManager);
+
+  if ((args.fetchSkills || features.fetchSkills) && features.aiAssistants?.length) {
+    const ids = features.aiSkills ?? skillIdsFor({ ...features, language });
+    new SkillFetcher().fetchAll(ids);
+  }
 
   console.log("\n🎉 Done. Review EXPRESSCRAFT_SETUP.md for any manual wiring.");
 }
@@ -365,7 +413,19 @@ async function generateProject(opts, { overwrite }) {
 
     // Scaffold renders app/server/routes from the collected fragments — last.
     new Scaffold(manifest).register();
-    new Readme(manifest).creatingReadme();
+    manifest.addKeywords(buildKeywords(opts));
+    new Readme(manifest, opts).creatingReadme();
+
+    // Always drop a baseline CLAUDE.md; AIAssistants overrides it with a
+    // skills-aware version when the "claude" service is selected.
+    manifest.addFile(
+      "CLAUDE.md",
+      claudeGuide({
+        name: manifest.name,
+        ext: manifest.ext(),
+        lang: manifest.isTs() ? "TypeScript" : "JavaScript",
+      })
+    );
 
     // Extras that depend on populated scripts/structure run after the scaffold.
     new Docker(manifest, {
@@ -374,12 +434,22 @@ async function generateProject(opts, { overwrite }) {
     }).register();
     new CI(manifest, { enabled: opts.ci }).register();
     new GitHooks(manifest, { enabled: opts.hooks }).register();
+    new AIAssistants(manifest, {
+      services: opts.aiAssistants,
+      skillIds: opts.aiSkills,
+      features: opts,
+    }).register();
 
     // Write everything, then version control, then one install.
     writeFiles(manifest);
     writePackageJson(manifest);
     new VersionControl(opts.versionControl).createVC();
     install(opts.packageManager);
+
+    if (opts.fetchSkills && opts.aiAssistants?.length) {
+      const ids = opts.aiSkills ?? skillIdsFor(opts);
+      new SkillFetcher().fetchAll(ids);
+    }
 
     end(manifest);
   } catch (err) {

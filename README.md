@@ -70,6 +70,9 @@ expresscraft --name blog --preset mvc --pm pnpm --yes
 | `--ci` | Add a GitHub Actions workflow |
 | `--hooks` | Add Husky + lint-staged pre-commit |
 | `--logger` | Add a pino HTTP logger |
+| `--ai <list>` | Generate AI assistant configs (skills + agents): `claude` \| `copilot` \| `cursor` \| `agents` (comma-separated) |
+| `--ai-skills <list>` | Limit AI skills to specific ids (default: all for your stack), e.g. `express,prisma,jwt` |
+| `--fetch-skills` | Download official skills (where they exist) via `npx skills add` |
 | `-h, --help` | Show help |
 
 ### Add to an existing project
@@ -89,6 +92,7 @@ It detects your package manager (from the lockfile) and language (TypeScript/Jav
 - **Writes only new files** — existing files are skipped with a warning (`--force` to overwrite).
 - **Appends** any missing keys to `.env` / `.env.example`.
 - Writes **`EXPRESSCRAFT_SETUP.md`** with the exact imports/middleware/bootstrap lines to paste into your app (ExpressCraft never edits your source).
+- Optionally generates **AI assistant skills + agents** for the features you add (`--ai`, see [AI assistant skills & agents](#ai-assistant-skills--agents)).
 - Runs a single install at the end.
 
 Use `--dry-run` to preview every change without writing anything.
@@ -118,12 +122,14 @@ expresscraft add --auth passport --inject --yes
 
 - **Presets or full customization** of every choice
 - **Interactive prompts** or **non-interactive flags** (CI-friendly)
-- Builds one `package.json` from your choices, then a **single install** at the end
+- Builds one `package.json` from your choices — with **keywords/tags, license, and `engines`** derived from your stack — then a **single install** at the end
 - **Pinned dependency versions** for reproducible installs
+- Generates a **comprehensive project README** (tech stack, prerequisites, env vars, run/build commands, scripts, structure, setup notes)
 - Generates a **real project structure** (routes, middleware, config, `.env`)
 - Working **database/auth boilerplate**, not just installed packages
 - Baseline middleware out of the box: **helmet, cors, morgan**, JSON parsing, error handler, `/health` route
 - Optional **extras**: Docker, GitHub Actions CI, Husky + lint-staged, pino logger
+- **AI assistant configs**: per-tool skills + agents for Claude, Copilot, Cursor, or `AGENTS.md` — with optional download of official skills from [officialskills.sh](https://officialskills.sh)
 - Overwrite protection + rollback if generation fails
 - Update notifier — tells you when a newer ExpressCraft is available
 
@@ -238,6 +244,39 @@ Optional add-ons (interactive checkbox, `--docker/--ci/--hooks/--logger` flags, 
 |![Husky](https://img.shields.io/badge/Husky-+%20lint--staged-green.svg?logo=git)| A `pre-commit` hook running lint-staged (Prettier), installed automatically via the `prepare` script.|
 |![pino](https://img.shields.io/badge/pino-logger-green.svg?logo=pino)| `pino` + `pino-http` structured request logging wired into the app, with `pino-pretty` for dev.|
 
+## AI assistant skills & agents
+
+ExpressCraft can generate **skills** (reusable task recipes) and **agents** (reviewer personas) for your AI coding tools, scoped to the exact stack you picked. Choose Prisma → get a Prisma skill + agent; choose Jest → a Jest skill + agent; and so on for every tool.
+
+Pick the target services interactively, or pass `--ai`:
+
+```bash
+expresscraft my-api --preset api --ai claude,copilot --yes
+expresscraft my-api --preset fullstack --ai claude,cursor,agents --ai-skills express,prisma,jwt --yes
+expresscraft add --db mongodb --ai claude --fetch-skills --yes
+```
+
+Each chosen service gets the same skills rendered in its own format:
+
+| Service (`--ai` value) | Files generated |
+| ---------------------- | --------------- |
+| `claude` | `CLAUDE.md`, `.claude/skills/<tool>/SKILL.md`, `.claude/agents/<tool>-agent.md` |
+| `copilot` | `.github/copilot-instructions.md`, `.github/prompts/<tool>.prompt.md`, `.github/chatmodes/<tool>.chatmode.md` |
+| `cursor` | `.cursor/rules/<tool>.mdc`, `.cursor/rules/<tool>-agent.mdc` |
+| `agents` | a single aggregated `AGENTS.md` |
+
+Skills are derived from your selected tools (`--ai-skills` narrows the set). Covered tools include Express, TypeScript, every template engine / CSS framework / preprocessor, all databases & ORMs, test frameworks, Passport/JWT, ESLint, Swagger/Postman, and the extras (Docker, CI, Husky, pino). Agents are generated for the high-value ones (Express, Prisma, JWT, Passport, Jest, Docker).
+
+### Official vs. starter skills
+
+The generated skill files are **ExpressCraft-authored starters** — they are **not** downloaded from a registry. Where an official, community-maintained skill exists on [officialskills.sh](https://officialskills.sh) (e.g. PostgreSQL → Supabase, MongoDB → MongoDB), ExpressCraft:
+
+- annotates the generated file with the official source URL and its `npx skills add …` command,
+- lists every source in a generated **`AI_SKILLS.md`** at the project root, and
+- can **download the official versions** for you (runs `npx skills add <repo> --skill <name>`).
+
+When your selected tools include one with an official skill, ExpressCraft **asks whether to download them** during the interactive run. In non-interactive mode, pass `--fetch-skills` to opt in. Either way, if you decline nothing is downloaded — you just get the starters plus the commands (in `AI_SKILLS.md`) to fetch the official ones whenever you want.
+
 ## Getting Started
 
 Run ExpressCraft and answer the prompts (or pass flags):
@@ -332,7 +371,15 @@ my-app/
 ├── .env.example
 ├── package.json          # built from your choices, pinned versions
 ├── .gitignore            # when Git is selected
-└── README.md             # project-specific
+├── README.md             # project-specific
+├── CLAUDE.md             # always: project guide for Claude Code (skills listed when --ai claude)
+│
+│   # when --ai is used (depending on chosen services):
+├── .claude/              # claude: skills/ + agents/
+├── .github/              # copilot: copilot-instructions.md, prompts/, chatmodes/
+├── .cursor/rules/        # cursor: per-tool .mdc rules
+├── AGENTS.md             # agents: aggregated skills + agents
+└── AI_SKILLS.md          # skill sources + how to fetch official versions
 ```
 
 Selected features wire themselves into the right place — e.g. Mongoose adds `connectDB()` to the bootstrap, a template engine adds `app.set("view engine", …)`, and JWT adds an auth middleware.

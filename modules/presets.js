@@ -13,6 +13,7 @@ const base = {
   authentication: "no authentication",
   linting: "no linting",
   apiDocumentation: "no api documentation",
+  aiAssistants: [],
 };
 
 const PRESETS = {

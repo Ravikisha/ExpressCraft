@@ -1,4 +1,5 @@
 import inquirer from "inquirer";
+import { skillChoices, anyOfficial } from "../modules/skillsCatalog.js";
 
 // Defaults mean "don't add this category".
 export const NONE = {
@@ -15,6 +16,9 @@ export const NONE = {
   ci: false,
   hooks: false,
   logger: false,
+  aiAssistants: [],
+  aiSkills: null,
+  fetchSkills: false,
 };
 
 const CATEGORIES = [
@@ -30,6 +34,7 @@ const CATEGORIES = [
   { name: "GitHub Actions CI", value: "ci" },
   { name: "Husky + lint-staged", value: "hooks" },
   { name: "Pino logger", value: "logger" },
+  { name: "AI assistant configs (skills + agents)", value: "aiAssistants" },
 ];
 
 const AUTH = {
@@ -156,6 +161,41 @@ export async function askAddFeatures() {
       },
     ]);
     out.cssPreprocessor = cssPreprocessor.toLowerCase();
+  }
+
+  if (picked.includes("aiAssistants")) {
+    const { aiAssistants, aiSkills, fetchSkills } = await inquirer.prompt([
+      {
+        name: "aiAssistants",
+        type: "checkbox",
+        message: "Which AI assistant configs?",
+        choices: [
+          { name: "Claude / Claude Code", value: "claude" },
+          { name: "GitHub Copilot", value: "copilot" },
+          { name: "Cursor", value: "cursor" },
+          { name: "AGENTS.md (generic / other tools)", value: "agents" },
+        ],
+        validate: (a) => (a.length ? true : "Select at least one."),
+      },
+      {
+        name: "aiSkills",
+        type: "checkbox",
+        message: "Which tool skills + agents should the assistants get?",
+        // Skills are derived from the categories chosen above (in `out`).
+        choices: () => skillChoices(out),
+      },
+      {
+        name: "fetchSkills",
+        type: "confirm",
+        message:
+          "Some of those tools have official skills on officialskills.sh. Download them now (npx skills add)?",
+        default: false,
+        when: (a) => anyOfficial(a.aiSkills || []),
+      },
+    ]);
+    out.aiAssistants = aiAssistants;
+    out.aiSkills = aiSkills;
+    out.fetchSkills = !!fetchSkills;
   }
 
   return out;

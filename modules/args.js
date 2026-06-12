@@ -31,6 +31,9 @@ export function parseArgs(argv = process.argv.slice(2)) {
     ci: false,
     hooks: false,
     logger: false,
+    aiAssistants: [], // ["claude","copilot","cursor","agents"]
+    aiSkills: [], // explicit skill ids; empty => all skills for chosen tools
+    fetchSkills: false, // download official skills via `npx skills add`
     categories: {}, // canonical-ish category -> raw value (add mode)
   };
 
@@ -91,6 +94,21 @@ export function parseArgs(argv = process.argv.slice(2)) {
       case "--logger":
         out.logger = true;
         break;
+      case "--ai":
+        out.aiAssistants = String(next() || "")
+          .split(",")
+          .map((s) => s.trim().toLowerCase())
+          .filter(Boolean);
+        break;
+      case "--ai-skills":
+        out.aiSkills = String(next() || "")
+          .split(",")
+          .map((s) => s.trim().toLowerCase())
+          .filter(Boolean);
+        break;
+      case "--fetch-skills":
+        out.fetchSkills = true;
+        break;
       case "-h":
       case "--help":
         out.help = true;
@@ -121,6 +139,12 @@ Extras (create or add):
       --ci               Add a GitHub Actions workflow
       --hooks            Add Husky + lint-staged pre-commit
       --logger           Add a pino HTTP logger
+      --ai <list>        AI assistant configs (skills + agents), comma-separated:
+                         claude | copilot | cursor | agents
+      --ai-skills <list> Limit AI skills to these ids (default: all for your
+                         chosen tools), e.g. express,prisma,jwt,jest,docker
+      --fetch-skills     Download official skills (where they exist) from
+                         officialskills.sh via "npx skills add"
 
 Add options (run inside an existing project):
       --db <name>        Database: mysql | postgresql | sqlite | mongodb
@@ -141,6 +165,7 @@ Common:
 
 Examples:
   expresscraft my-api --preset api --yes
+  expresscraft my-api --preset api --ai claude,copilot --yes
   expresscraft add --db postgresql --orm prisma --testing jest --yes
-  expresscraft add --auth jwt --dry-run
+  expresscraft add --ai claude --auth jwt --dry-run
 `;

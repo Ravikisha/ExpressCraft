@@ -1,5 +1,11 @@
 import inquirer from "inquirer";
 import { PRESET_NAMES } from "../modules/presets.js";
+import {
+  skillChoices,
+  canonicalizeRaw,
+  skillIdsFor,
+  anyOfficial,
+} from "../modules/skillsCatalog.js";
 
 // Folder/package-name safe: letters, numbers, dot, dash, underscore.
 export const validProjectName = (value) => {
@@ -139,6 +145,38 @@ export async function askFeatures() {
         { name: "Husky + lint-staged", value: "hooks" },
         { name: "Pino HTTP logger", value: "logger" },
       ],
+    },
+    {
+      name: "aiAssistants",
+      type: "checkbox",
+      message: "AI assistant configs (skills + agents)?",
+      choices: [
+        { name: "Claude / Claude Code", value: "claude" },
+        { name: "GitHub Copilot", value: "copilot" },
+        { name: "Cursor", value: "cursor" },
+        { name: "AGENTS.md (generic / other tools)", value: "agents" },
+      ],
+    },
+    {
+      name: "aiSkills",
+      type: "checkbox",
+      message: "Which tool skills + agents should the assistants get?",
+      when: (a) => (a.aiAssistants || []).length > 0,
+      choices: (a) => skillChoices(canonicalizeRaw(a)),
+    },
+    {
+      name: "fetchSkills",
+      type: "confirm",
+      message:
+        "Some of those tools have official skills on officialskills.sh. Download them now (npx skills add)?",
+      default: false,
+      when: (a) => {
+        if (!(a.aiAssistants || []).length) return false;
+        const ids = a.aiSkills && a.aiSkills.length
+          ? a.aiSkills
+          : skillIdsFor(canonicalizeRaw(a));
+        return anyOfficial(ids);
+      },
     },
   ]);
 }
